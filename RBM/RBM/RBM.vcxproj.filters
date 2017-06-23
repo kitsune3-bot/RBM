@@ -19,12 +19,27 @@
     <Filter Include="ヘッダー ファイル\RBM">
       <UniqueIdentifier>{f1316b68-d768-46d3-80ea-e10dafbc969c}</UniqueIdentifier>
     </Filter>
+    <Filter Include="ソース ファイル\GeneralizedRBM">
+      <UniqueIdentifier>{42802727-228e-4e51-9fd5-4b67717f9c8b}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="ヘッダー ファイル\GeneralizedRBM">
+      <UniqueIdentifier>{7b37cbe0-f946-4c7f-8518-d70ea80dc264}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="ソース ファイル\Common">
+      <UniqueIdentifier>{601ea150-c2eb-4ad1-945a-29fbd55aef5e}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="ヘッダー ファイル\Common">
+      <UniqueIdentifier>{6c52e9ab-3d48-4271-b01a-8886de8a00c9}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="ソース ファイル\RBMBase">
+      <UniqueIdentifier>{fe50a1a7-7eea-42da-8972-a53f7151367b}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="ヘッダー ファイル\RBMBase">
+      <UniqueIdentifier>{6bbd5112-1bc3-4142-bb80-47fe93fdd215}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="RBM.h">
-      <Filter>ヘッダー ファイル\RBM</Filter>
-    </ClInclude>
-    <ClInclude Include="RBMMath.h">
       <Filter>ヘッダー ファイル\RBM</Filter>
     </ClInclude>
     <ClInclude Include="RBMNode.h">
@@ -39,12 +54,12 @@
     <ClInclude Include="RBMTrainer.h">
       <Filter>ヘッダー ファイル\RBM</Filter>
     </ClInclude>
+    <ClInclude Include="RBMMath.h">
+      <Filter>ヘッダー ファイル\Common</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="RBM.cpp">
-      <Filter>ソース ファイル\RBM</Filter>
-    </ClCompile>
-    <ClCompile Include="RBMMath.cpp">
       <Filter>ソース ファイル\RBM</Filter>
     </ClCompile>
     <ClCompile Include="RBMNode.cpp">
@@ -58,6 +73,9 @@
     </ClCompile>
     <ClCompile Include="RBMTrainer.cpp">
       <Filter>ソース ファイル\RBM</Filter>
+    </ClCompile>
+    <ClCompile Include="RBMMath.cpp">
+      <Filter>ソース ファイル\Common</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>
