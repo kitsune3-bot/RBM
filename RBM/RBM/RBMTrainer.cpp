@@ -66,6 +66,13 @@ void RBMTrainer::initSampleMean() {
     sampleMean.hidden.setConstant(0.0);
 }
 
+void RBMTrainer::train(RBM *rbm, std::vector<std::vector<double>> & dataset) {
+    for (int e = 0; e < epoch; e++) {
+        trainOnce(rbm, dataset);
+    }
+}
+
+
 // 1回だけ学習
 void RBMTrainer::trainOnce(RBM *rbm,  std::vector<std::vector<double>> & dataset) {
     
@@ -88,7 +95,7 @@ void RBMTrainer::trainOnce(RBM *rbm,  std::vector<std::vector<double>> & dataset
     calcContrastiveDivergence(rbm, dataset, minibatch_indexes);
 
     // モーメンタムの更新
-    updateMomentum();
+    updateMomentum(rbm);
 
     // 勾配の更新
     updateParams(rbm);
@@ -103,7 +110,7 @@ void RBMTrainer::calcContrastiveDivergence(RBM *rbm, std::vector<std::vector<dou
     calcSampleMean(rbm, dataset, data_indexes);
 
     // 勾配計算
-    calcGradient(data_indexes);
+    calcGradient(rbm, data_indexes);
 }
 
 void RBMTrainer::calcDataMean(RBM *rbm, std::vector<std::vector<double>> & dataset, std::vector<int> & data_indexes) {
@@ -149,10 +156,57 @@ void RBMTrainer::calcSampleMean(RBM *rbm, std::vector<std::vector<double>> & dat
         }
 
         // 結果を格納
-        dataMean.visible += rbm->nodes.v;
-        dataMean.hidden += rbm->nodes.h;
+        sampleMean.visible += rbm->nodes.v;
+        sampleMean.hidden += rbm->nodes.h;
     }
 
-    dataMean.visible /= static_cast<double>(data_indexes.size());
-    dataMean.hidden /= static_cast<double>(data_indexes.size());
+    sampleMean.visible /= static_cast<double>(data_indexes.size());
+    sampleMean.hidden /= static_cast<double>(data_indexes.size());
+}
+
+// 勾配の計算
+void RBMTrainer::calcGradient(RBM *rbm, std::vector<int> & data_indexes) {
+    // 勾配ベクトルリセット
+    initGradient();
+
+    for (int i = 0; i < rbm->getVisibleSize(); i++) {
+        gradient.vBias(i) = dataMean.visible(i) - sampleMean.visible(i);
+
+        for (int j = 0; j < rbm->getHiddenSize(); j++) {
+            gradient.weight(i, j) = dataMean.visible(i) * dataMean.hidden(j) - sampleMean.visible(i) * sampleMean.hidden(j);
+        }
+    }
+
+    for (int j = 0; j < rbm->getHiddenSize(); j++) {
+        gradient.hBias(j) = dataMean.hidden(j) - sampleMean.hidden(j);
+    }
+}
+
+void RBMTrainer::updateMomentum(RBM *rbm) {
+    for (int i = 0; i < rbm->getVisibleSize(); i++) {
+        momentum.vBias(i) = momentumRate * momentum.vBias(i) + learningRate * gradient.vBias(i);
+
+        for (int j = 0; j < rbm->getHiddenSize(); j++) {
+            momentum.weight(i, j) = momentumRate * momentum.weight(i, j) + learningRate * gradient.weight(i, j);
+        }
+    }
+
+    for (int j = 0; j < rbm->getHiddenSize(); j++) {
+        momentum.hBias(j) = momentumRate * momentum.hBias(j) + learningRate * gradient.hBias(j);
+    }
+}
+
+// パラメータの更新
+void RBMTrainer::updateParams(RBM *rbm) {
+    for (int i = 0; i < rbm->getVisibleSize(); i++) {
+        rbm->params.b(i) += momentum.vBias(i);
+
+        for (int j = 0; j < rbm->getHiddenSize(); j++) {
+            rbm->params.w(i, j) += momentum.weight(i, j);
+        }
+    }
+
+    for (int j = 0; j < rbm->getHiddenSize(); j++) {
+        rbm->params.c(j) += momentum.hBias(j);
+    }
 }

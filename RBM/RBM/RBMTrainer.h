@@ -71,7 +71,7 @@ public:
     void initSampleMean();
 
     // 学習
-    void train(RBM *rbm);
+    void train(RBM *rbm, std::vector<std::vector<double>> & dataset);
 
     // 1回だけ学習
     void trainOnce(RBM *rbm, std::vector<std::vector<double>> & dataset);
@@ -86,10 +86,10 @@ public:
     void calcSampleMean(RBM *rbm, std::vector<std::vector<double>> & dataset, std::vector<int> & data_indexes);
 
     // 勾配の計算
-    void calcGradient(std::vector<int> & data_indexes);
+    void calcGradient(RBM *rbm, std::vector<int> & data_indexes);
 
     // モーメンタム更新
-    void updateMomentum();
+    void updateMomentum(RBM *rbm);
 
     // 勾配更新
     void updateParams(RBM *rbm);
