@@ -1,0 +1,63 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <Filter Include="ソース ファイル">
+      <UniqueIdentifier>{4FC737F1-C7A5-4376-A066-2A32D752A2FF}</UniqueIdentifier>
+      <Extensions>cpp;c;cc;cxx;def;odl;idl;hpj;bat;asm;asmx</Extensions>
+    </Filter>
+    <Filter Include="ヘッダー ファイル">
+      <UniqueIdentifier>{93995380-89BD-4b04-88EB-625FBE52EBFB}</UniqueIdentifier>
+      <Extensions>h;hh;hpp;hxx;hm;inl;inc;xsd</Extensions>
+    </Filter>
+    <Filter Include="リソース ファイル">
+      <UniqueIdentifier>{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}</UniqueIdentifier>
+      <Extensions>rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx;tiff;tif;png;wav;mfcribbon-ms</Extensions>
+    </Filter>
+    <Filter Include="ソース ファイル\RBM">
+      <UniqueIdentifier>{78523649-9f0a-4533-a9af-97b2d18b5089}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="ヘッダー ファイル\RBM">
+      <UniqueIdentifier>{f1316b68-d768-46d3-80ea-e10dafbc969c}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="RBM.h">
+      <Filter>ヘッダー ファイル\RBM</Filter>
+    </ClInclude>
+    <ClInclude Include="RBMMath.h">
+      <Filter>ヘッダー ファイル\RBM</Filter>
+    </ClInclude>
+    <ClInclude Include="RBMNode.h">
+      <Filter>ヘッダー ファイル\RBM</Filter>
+    </ClInclude>
+    <ClInclude Include="RBMParamator.h">
+      <Filter>ヘッダー ファイル\RBM</Filter>
+    </ClInclude>
+    <ClInclude Include="RBMSampler.h">
+      <Filter>ヘッダー ファイル\RBM</Filter>
+    </ClInclude>
+    <ClInclude Include="RBMTrainer.h">
+      <Filter>ヘッダー ファイル\RBM</Filter>
+    </ClInclude>
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="RBM.cpp">
+      <Filter>ソース ファイル\RBM</Filter>
+    </ClCompile>
+    <ClCompile Include="RBMMath.cpp">
+      <Filter>ソース ファイル\RBM</Filter>
+    </ClCompile>
+    <ClCompile Include="RBMNode.cpp">
+      <Filter>ソース ファイル\RBM</Filter>
+    </ClCompile>
+    <ClCompile Include="RBMParamator.cpp">
+      <Filter>ソース ファイル\RBM</Filter>
+    </ClCompile>
+    <ClCompile Include="RBMSampler.cpp">
+      <Filter>ソース ファイル\RBM</Filter>
+    </ClCompile>
+    <ClCompile Include="RBMTrainer.cpp">
+      <Filter>ソース ファイル\RBM</Filter>
+    </ClCompile>
+  </ItemGroup>
+</Project>
