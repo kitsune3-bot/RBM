@@ -57,6 +57,36 @@
     <ClInclude Include="RBMMath.h">
       <Filter>ヘッダー ファイル\Common</Filter>
     </ClInclude>
+    <ClInclude Include="RBMBase.h">
+      <Filter>ヘッダー ファイル\RBMBase</Filter>
+    </ClInclude>
+    <ClInclude Include="RBMNodeBase.h">
+      <Filter>ヘッダー ファイル\RBMBase</Filter>
+    </ClInclude>
+    <ClInclude Include="RBMParamatorBase.h">
+      <Filter>ヘッダー ファイル\RBMBase</Filter>
+    </ClInclude>
+    <ClInclude Include="RBMSamplerBase.h">
+      <Filter>ヘッダー ファイル\RBMBase</Filter>
+    </ClInclude>
+    <ClInclude Include="RBMTrainerBase.h">
+      <Filter>ヘッダー ファイル\RBMBase</Filter>
+    </ClInclude>
+    <ClInclude Include="GeneralizedRBM.h">
+      <Filter>ヘッダー ファイル\GeneralizedRBM</Filter>
+    </ClInclude>
+    <ClInclude Include="GeneralizedRBMNode.h">
+      <Filter>ヘッダー ファイル\GeneralizedRBM</Filter>
+    </ClInclude>
+    <ClInclude Include="GeneralizedRBMParamator.h">
+      <Filter>ヘッダー ファイル\GeneralizedRBM</Filter>
+    </ClInclude>
+    <ClInclude Include="GeneralizedRBMSampler.h">
+      <Filter>ヘッダー ファイル\GeneralizedRBM</Filter>
+    </ClInclude>
+    <ClInclude Include="GeneralizedRBMTrainer.h">
+      <Filter>ヘッダー ファイル</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="RBM.cpp">
@@ -76,6 +106,21 @@
     </ClCompile>
     <ClCompile Include="RBMMath.cpp">
       <Filter>ソース ファイル\Common</Filter>
+    </ClCompile>
+    <ClCompile Include="GeneralizedRBM.cpp">
+      <Filter>ソース ファイル\GeneralizedRBM</Filter>
+    </ClCompile>
+    <ClCompile Include="GeneralizedRBMNode.cpp">
+      <Filter>ソース ファイル\GeneralizedRBM</Filter>
+    </ClCompile>
+    <ClCompile Include="GeneralizedRBMParamator.cpp">
+      <Filter>ソース ファイル\GeneralizedRBM</Filter>
+    </ClCompile>
+    <ClCompile Include="GeneralizedRBMSampler.cpp">
+      <Filter>ソース ファイル\GeneralizedRBM</Filter>
+    </ClCompile>
+    <ClCompile Include="GeneralizedRBMTrainer.cpp">
+      <Filter>ソース ファイル\GeneralizedRBM</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

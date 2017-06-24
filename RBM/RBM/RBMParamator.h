@@ -1,8 +1,8 @@
 ﻿#pragma once
+#include "RBMParamatorBase.h"
 #include <Eigen/Core>
 
-class RBMParamator
-{
+class RBMParamator : RBMParamatorBase {
 private:
     size_t vSize;
     size_t hSize;

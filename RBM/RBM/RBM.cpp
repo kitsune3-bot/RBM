@@ -24,20 +24,18 @@ size_t RBM::getHiddenSize() {
 
 
 // 規格化を返します
-/*
 double RBM::getNormalConstant() {
     // 未実装なので保留
     throw;
 }
-*/
+
 
 // エネルギー関数を返します
-/*
 double RBM::getEnergy() {
     // まだ必要ないため実装保留
     throw;
 }
-*/
+
 
 // 自由エネルギーを返します
 double RBM::getFreeEnergy() {

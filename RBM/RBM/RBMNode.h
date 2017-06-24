@@ -1,9 +1,9 @@
 ﻿#pragma once
+#include "RBMNodeBase.h"
 #include <Eigen/Core>
 #include <vector>
 
-class RBMNode
-{
+class RBMNode : RBMNodeBase{
 private:
     size_t vSize = 0;
     size_t hSize = 0;

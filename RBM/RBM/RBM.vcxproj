@@ -122,14 +122,29 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClInclude Include="GeneralizedRBM.h" />
+    <ClInclude Include="GeneralizedRBMNode.h" />
+    <ClInclude Include="GeneralizedRBMParamator.h" />
+    <ClInclude Include="GeneralizedRBMSampler.h" />
+    <ClInclude Include="GeneralizedRBMTrainer.h" />
     <ClInclude Include="RBM.h" />
+    <ClInclude Include="RBMBase.h" />
     <ClInclude Include="RBMMath.h" />
     <ClInclude Include="RBMNode.h" />
+    <ClInclude Include="RBMNodeBase.h" />
     <ClInclude Include="RBMParamator.h" />
+    <ClInclude Include="RBMParamatorBase.h" />
     <ClInclude Include="RBMSampler.h" />
+    <ClInclude Include="RBMSamplerBase.h" />
     <ClInclude Include="RBMTrainer.h" />
+    <ClInclude Include="RBMTrainerBase.h" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="GeneralizedRBM.cpp" />
+    <ClCompile Include="GeneralizedRBMNode.cpp" />
+    <ClCompile Include="GeneralizedRBMParamator.cpp" />
+    <ClCompile Include="GeneralizedRBMSampler.cpp" />
+    <ClCompile Include="GeneralizedRBMTrainer.cpp" />
     <ClCompile Include="RBM.cpp" />
     <ClCompile Include="RBMMath.cpp" />
     <ClCompile Include="RBMNode.cpp" />
