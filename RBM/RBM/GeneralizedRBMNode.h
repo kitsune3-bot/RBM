@@ -3,7 +3,7 @@
 #include <Eigen/Core>
 #include <vector>
 
-class RBMNode : RBMNodeBase{
+class GeneralizedRBMNode : RBMNodeBase {
 private:
     size_t vSize = 0;
     size_t hSize = 0;
@@ -12,9 +12,9 @@ public:
     Eigen::VectorXd h;
 
 public:
-    RBMNode();
-    RBMNode(size_t v_size, size_t h_size);
-    ~RBMNode();
+    GeneralizedRBMNode();
+    GeneralizedRBMNode(size_t v_size, size_t h_size);
+    ~GeneralizedRBMNode();
 
     // 可視変数の総数を返す
     inline size_t getVisibleSize();
@@ -42,32 +42,32 @@ public:
 };
 
 // 可視変数の総数を返す
-inline size_t RBMNode::getVisibleSize() {
+inline size_t GeneralizedRBMNode::getVisibleSize() {
     return vSize;
 }
 
 // 隠れ変数の総数を返す
-inline size_t RBMNode::getHiddenSize() {
+inline size_t GeneralizedRBMNode::getHiddenSize() {
     return hSize;
 }
 
 // 可視層の全てを返す
-inline Eigen::VectorXd RBMNode::getVisibleLayer() {
+inline Eigen::VectorXd GeneralizedRBMNode::getVisibleLayer() {
     return v;
 }
 
 // 隠れ層の全てを返す
-inline Eigen::VectorXd RBMNode::getHiddenLayer() {
+inline Eigen::VectorXd GeneralizedRBMNode::getHiddenLayer() {
     return h;
 }
 
 // 可視変数の値を返す
-inline double RBMNode::getVisibleUnit(int vindex) {
+inline double GeneralizedRBMNode::getVisibleUnit(int vindex) {
     return v(vindex);
 }
 
 // 隠れ変数の値を返す
-inline double RBMNode::getHiddenUnit(int hindex) {
+inline double GeneralizedRBMNode::getHiddenUnit(int hindex) {
     return h(hindex);
 }
 

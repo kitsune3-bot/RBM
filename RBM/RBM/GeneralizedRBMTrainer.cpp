@@ -1,72 +1,72 @@
-﻿#include "RBMTrainer.h"
-#include "RBM.h"
-#include "RBMSampler.h"
+﻿#include "GeneralizedRBMTrainer.h"
+#include "GeneralizedRBM.h"
+#include "GeneralizedRBMSampler.h"
 #include <vector>
 #include <numeric>
 #include <random>
 
-RBMTrainer::RBMTrainer()
+GeneralizedRBMTrainer::GeneralizedRBMTrainer()
 {
 }
 
 
-RBMTrainer::~RBMTrainer()
+GeneralizedRBMTrainer::~GeneralizedRBMTrainer()
 {
 }
 
 
-RBMTrainer::RBMTrainer(RBM & rbm) {
+GeneralizedRBMTrainer::GeneralizedRBMTrainer(GeneralizedRBM & rbm) {
     initMomentum(rbm);
     initGradient(rbm);
     initDataMean(rbm);
     initSampleMean(rbm);
 }
 
-void RBMTrainer::initMomentum(RBM & rbm) {
+void GeneralizedRBMTrainer::initMomentum(GeneralizedRBM & rbm) {
     momentum.vBias.setConstant(rbm.getVisibleSize(), 0.0);
     momentum.hBias.setConstant(rbm.getHiddenSize(), 0.0);
     momentum.weight.setConstant(rbm.getVisibleSize(), rbm.getHiddenSize(), 0.0);
 }
 
-void RBMTrainer::initMomentum() {
+void GeneralizedRBMTrainer::initMomentum() {
     momentum.vBias.setConstant(0.0);
     momentum.hBias.setConstant(0.0);
     momentum.weight.setConstant(0.0);
 }
 
-void RBMTrainer::initGradient(RBM & rbm) {
+void GeneralizedRBMTrainer::initGradient(GeneralizedRBM & rbm) {
     gradient.vBias.setConstant(rbm.getVisibleSize(), 0.0);
     gradient.hBias.setConstant(rbm.getHiddenSize(), 0.0);
     gradient.weight.setConstant(rbm.getVisibleSize(), rbm.getHiddenSize(), 0.0);
 }
 
-void RBMTrainer::initGradient() {
+void GeneralizedRBMTrainer::initGradient() {
     gradient.vBias.setConstant(0.0);
     gradient.hBias.setConstant(0.0);
     gradient.weight.setConstant(0.0);
 }
 
-void RBMTrainer::initDataMean(RBM & rbm) {
+void GeneralizedRBMTrainer::initDataMean(GeneralizedRBM & rbm) {
     dataMean.visible.setConstant(rbm.getVisibleSize(), 0.0);
     dataMean.hidden.setConstant(rbm.getHiddenSize(), 0.0);
 }
 
-void RBMTrainer::initDataMean() {
+void GeneralizedRBMTrainer::initDataMean() {
     dataMean.visible.setConstant(0.0);
     dataMean.hidden.setConstant(0.0);
 }
 
-void RBMTrainer::initSampleMean(RBM & rbm) {
+void GeneralizedRBMTrainer::initSampleMean(GeneralizedRBM & rbm) {
     sampleMean.visible.setConstant(rbm.getVisibleSize(), 0.0);
     sampleMean.hidden.setConstant(rbm.getHiddenSize(), 0.0);
 }
 
-void RBMTrainer::initSampleMean() {
+void GeneralizedRBMTrainer::initSampleMean() {
     sampleMean.visible.setConstant(0.0);
     sampleMean.hidden.setConstant(0.0);
 }
 
-void RBMTrainer::train(RBM & rbm, std::vector<std::vector<double>> & dataset) {
+void GeneralizedRBMTrainer::train(GeneralizedRBM & rbm, std::vector<std::vector<double>> & dataset) {
     for (int e = 0; e < epoch; e++) {
         trainOnce(rbm, dataset);
     }
@@ -74,15 +74,17 @@ void RBMTrainer::train(RBM & rbm, std::vector<std::vector<double>> & dataset) {
 
 
 // 1回だけ学習
-void RBMTrainer::trainOnce(RBM & rbm,  std::vector<std::vector<double>> & dataset) {
-    
+void GeneralizedRBMTrainer::trainOnce(GeneralizedRBM & rbm, std::vector<std::vector<double>> & dataset) {
+    // 勾配初期化
+    initGradient();
+
     // データインデックス集合
     std::vector<int> data_indexes(dataset.size());
-    
+
     // ミニバッチ学習のためにデータインデックスをシャッフルする
     std::iota(data_indexes.begin(), data_indexes.end(), 0);
     std::shuffle(data_indexes.begin(), data_indexes.end(), std::mt19937());
-    
+
     // ミニバッチ
     // バッチサイズの確認
     int batch_size = this->batchSize < dataset.size() ? dataset.size() : this->batchSize;
@@ -102,7 +104,7 @@ void RBMTrainer::trainOnce(RBM & rbm,  std::vector<std::vector<double>> & datase
 
 }
 
-void RBMTrainer::calcContrastiveDivergence(RBM & rbm, std::vector<std::vector<double>> & dataset, std::vector<int> & data_indexes) {
+void GeneralizedRBMTrainer::calcContrastiveDivergence(GeneralizedRBM & rbm, std::vector<std::vector<double>> & dataset, std::vector<int> & data_indexes) {
     // データ平均の計算
     calcDataMean(rbm, dataset, data_indexes);
 
@@ -113,7 +115,7 @@ void RBMTrainer::calcContrastiveDivergence(RBM & rbm, std::vector<std::vector<do
     calcGradient(rbm, data_indexes);
 }
 
-void RBMTrainer::calcDataMean(RBM & rbm, std::vector<std::vector<double>> & dataset, std::vector<int> & data_indexes) {
+void GeneralizedRBMTrainer::calcDataMean(GeneralizedRBM & rbm, std::vector<std::vector<double>> & dataset, std::vector<int> & data_indexes) {
     // 0埋め初期化
     initDataMean();
 
@@ -133,7 +135,7 @@ void RBMTrainer::calcDataMean(RBM & rbm, std::vector<std::vector<double>> & data
     dataMean.hidden /= static_cast<double>(data_indexes.size());
 }
 
-void RBMTrainer::calcSampleMean(RBM & rbm, std::vector<std::vector<double>> & dataset, std::vector<int> & data_indexes) {
+void GeneralizedRBMTrainer::calcSampleMean(GeneralizedRBM & rbm, std::vector<std::vector<double>> & dataset, std::vector<int> & data_indexes) {
     // 0埋め初期化
     initSampleMean();
 
@@ -141,7 +143,7 @@ void RBMTrainer::calcSampleMean(RBM & rbm, std::vector<std::vector<double>> & da
         auto & data = dataset[n];
         Eigen::VectorXd vect = Eigen::Map<Eigen::VectorXd>(data.data(), data.size());
 
-        // RBMの初期値設定
+        // GeneralizedRBMの初期値設定
         rbm.nodes.v = vect;
 
         for (int j = 0; j < rbm.getHiddenSize(); j++) {
@@ -149,7 +151,7 @@ void RBMTrainer::calcSampleMean(RBM & rbm, std::vector<std::vector<double>> & da
         }
 
         // CD-K
-        RBMSampler sampler;
+        GeneralizedRBMSampler sampler;
         for (int k = 0; k < cdk; k++) {
             sampler.updateByBlockedGibbsSamplingVisible(rbm);
             sampler.updateByBlockedGibbsSamplingHidden(rbm);
@@ -165,7 +167,7 @@ void RBMTrainer::calcSampleMean(RBM & rbm, std::vector<std::vector<double>> & da
 }
 
 // 勾配の計算
-void RBMTrainer::calcGradient(RBM & rbm, std::vector<int> & data_indexes) {
+void GeneralizedRBMTrainer::calcGradient(GeneralizedRBM & rbm, std::vector<int> & data_indexes) {
     // 勾配ベクトルリセット
     initGradient();
 
@@ -182,7 +184,7 @@ void RBMTrainer::calcGradient(RBM & rbm, std::vector<int> & data_indexes) {
     }
 }
 
-void RBMTrainer::updateMomentum(RBM & rbm) {
+void GeneralizedRBMTrainer::updateMomentum(GeneralizedRBM & rbm) {
     for (int i = 0; i < rbm.getVisibleSize(); i++) {
         momentum.vBias(i) = momentumRate * momentum.vBias(i) + learningRate * gradient.vBias(i);
 
@@ -197,7 +199,7 @@ void RBMTrainer::updateMomentum(RBM & rbm) {
 }
 
 // パラメータの更新
-void RBMTrainer::updateParams(RBM & rbm) {
+void GeneralizedRBMTrainer::updateParams(GeneralizedRBM & rbm) {
     for (int i = 0; i < rbm.getVisibleSize(); i++) {
         rbm.params.b(i) += momentum.vBias(i);
 

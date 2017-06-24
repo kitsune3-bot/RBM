@@ -2,7 +2,7 @@
 #include "RBMParamatorBase.h"
 #include <Eigen/Core>
 
-class RBMParamator : RBMParamatorBase {
+class GeneralizedRBMParamator : RBMParamatorBase {
 private:
     size_t vSize;
     size_t hSize;
@@ -13,9 +13,9 @@ public:
 
 
 public:
-    RBMParamator();
-    RBMParamator(size_t vsize, size_t hsize);
-    ~RBMParamator();
+    GeneralizedRBMParamator();
+    GeneralizedRBMParamator(size_t vsize, size_t hsize);
+    ~GeneralizedRBMParamator();
 
     // 可視変数の総数を返す
     inline size_t getVisibleSize();
@@ -25,7 +25,7 @@ public:
 
     // 可視変数のバイアスを返す
     inline double getVisibleBias(int vindex);
- 
+
     // 可視変数のバイアスベクトルを返す
     inline Eigen::VectorXd getVisibleBiasVector();
 
@@ -49,41 +49,41 @@ public:
 };
 
 // 可視変数の総数を返す
-inline size_t RBMParamator::getVisibleSize() {
+inline size_t GeneralizedRBMParamator::getVisibleSize() {
     return vSize;
 }
 
 // 隠れ変数の総数を返す
-inline size_t RBMParamator::getHiddenSize() {
+inline size_t GeneralizedRBMParamator::getHiddenSize() {
     return hSize;
 }
 
 // 可視変数のバイアスを返す
-inline double RBMParamator::getVisibleBias(int vindex) {
+inline double GeneralizedRBMParamator::getVisibleBias(int vindex) {
     return b(vindex);
 }
 
 // 可視変数のバイアスベクトルを返す
-inline Eigen::VectorXd RBMParamator::getVisibleBiasVector() {
+inline Eigen::VectorXd GeneralizedRBMParamator::getVisibleBiasVector() {
     return b;
 }
 
 // 隠れ変数のバイアスを返す
-inline double RBMParamator::getHiddenBias(int hindex) {
+inline double GeneralizedRBMParamator::getHiddenBias(int hindex) {
     return c(hindex);
 }
 
 // 隠れ変数のバイアスベクトルを返す
-inline Eigen::VectorXd RBMParamator::getHiddenBiasVector() {
+inline Eigen::VectorXd GeneralizedRBMParamator::getHiddenBiasVector() {
     return c;
 }
 
 // ウェイトパラメータを返す
-inline double RBMParamator::getWeight(int vindex, int hindex) {
+inline double GeneralizedRBMParamator::getWeight(int vindex, int hindex) {
     return w(vindex, hindex);
 }
 
 // ウェイト行列を返す
-inline Eigen::MatrixXd RBMParamator::getWeightMatrix() {
+inline Eigen::MatrixXd GeneralizedRBMParamator::getWeightMatrix() {
     return w;
 }

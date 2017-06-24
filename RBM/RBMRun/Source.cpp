@@ -1,0 +1,48 @@
+#include <iostream>
+#include "RBM.h"
+#include "RBMTrainer.h"
+#include "GeneralizedRBM.h"
+#include "GeneralizedRBMTrainer.h"
+
+int main(int argc, char **argv) {
+    std::vector<std::vector<double>> dataset(10);
+    dataset[0] = std::vector<double>({ 1,1,1,1,1,1,1,0,1,1 });
+    dataset[1] = std::vector<double>({ 0,0,1,1,1,1,1,1,0,1 });
+    dataset[2] = std::vector<double>({ 1,1,0,1,1,1,0,1,1,0 });
+    dataset[3] = std::vector<double>({ 0,1,1,0,1,1,1,1,0,1 });
+    dataset[4] = std::vector<double>({ 1,1,1,1,0,1,1,0,1,1 });
+    dataset[5] = std::vector<double>({ 0,0,1,0,1,1,1,1,1,0 });
+    dataset[6] = std::vector<double>({ 1,1,1,0,1,1,0,1,1,1 });
+    dataset[7] = std::vector<double>({ 1,0,1,1,1,1,1,0,0,1 });
+    dataset[8] = std::vector<double>({ 1,1,1,1,1,1,1,1,1,1 });
+    dataset[9] = std::vector<double>({ 0,1,0,1,0,1,0,0,1,1 });
+
+    RBM rbm(10, 10);
+    RBMTrainer rbm_t(rbm);
+    
+    rbm_t.epoch = 300;
+    rbm_t.cdk = 3;
+    rbm_t.batchSize = 5;
+    rbm_t.learningRate = 0.001;
+    std::cout << rbm.params.w << std::endl;
+    rbm_t.train(rbm, dataset);
+    std::cout << rbm.params.w << std::endl;
+
+
+    GeneralizedRBM grbm(10, 10);
+    GeneralizedRBMTrainer grbm_t(grbm);
+    grbm_t.epoch = 300;
+    grbm_t.cdk = 3;
+    grbm_t.batchSize = 5;
+    grbm_t.learningRate = 0.001;
+    std::cout << grbm.mu(1) << std::endl;
+
+    std::cout << grbm.params.w << std::endl;
+    grbm_t.train(grbm, dataset);
+    std::cout << grbm.params.w << std::endl;
+
+
+
+
+    return 0;
+}
