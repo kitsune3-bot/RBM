@@ -122,6 +122,9 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClInclude Include="GBRBM.h" />
+    <ClInclude Include="GBRBMNode.h" />
+    <ClInclude Include="GBRBMParamator.h" />
     <ClInclude Include="GeneralizedRBM.h" />
     <ClInclude Include="GeneralizedRBMNode.h" />
     <ClInclude Include="GeneralizedRBMParamator.h" />
@@ -140,6 +143,9 @@
     <ClInclude Include="RBMTrainerBase.h" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="GBRBM.cpp" />
+    <ClCompile Include="GBRBMNode.cpp" />
+    <ClCompile Include="GBRBMParamator.cpp" />
     <ClCompile Include="GeneralizedRBM.cpp" />
     <ClCompile Include="GeneralizedRBMNode.cpp" />
     <ClCompile Include="GeneralizedRBMParamator.cpp" />
