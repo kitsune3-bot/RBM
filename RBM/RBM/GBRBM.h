@@ -46,6 +46,9 @@ public:
     // v_iの条件付き確率の規格化定数
     double integralExpVisible(int vindex);
 
+    // v_iの平均
+    double meanVisible(int vindex);
+
     // 隠れ変数に関する外部磁場と相互作用
     double mu(int hindex);
 

@@ -80,6 +80,14 @@ double GBRBM::sumExpLambda(int vindex) {
     return 1.0 + exp(lambda(vindex));
 }
 
+// v_iの平均
+double GBRBM::meanVisible(int vindex) {
+    double inv_var = params.lambda(vindex);;  // 逆分散
+    double mean = lambda(vindex) / inv_var;
+    return mean;
+}
+
+
 // v_iの条件付き確率の規格化定数
 double GBRBM::integralExpVisible(int vindex) {
     return sqrt(2 * 3.141592 / params.lambda(vindex));
@@ -107,7 +115,9 @@ double GBRBM::sumExpMu(int hindex) {
 // 隠れ変数を条件で与えた可視変数の条件付き確率, P(v_i | h)
 double GBRBM::condProbVis(int vindex, double value) {
     double lam = lambda(vindex);
-    return exp(lam * value) / sumExpLambda(vindex);
+    double inv_var = params.lambda[vindex];  // 逆分散
+    double mean = meanVisible(vindex);  // 可視変数期待値
+    return exp(inv_var / 2.0 * pow(value - mean, 2)) / integralExpVisible(vindex);
 }
 
 // 可視変数を条件で与えた隠れ変数の条件付き確率, P(h_j | v)

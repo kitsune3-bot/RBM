@@ -102,6 +102,12 @@
     <ClInclude Include="GBRBMParamator.h">
       <Filter>ヘッダー ファイル\GBRBM</Filter>
     </ClInclude>
+    <ClInclude Include="GBRBMSampler.h">
+      <Filter>ヘッダー ファイル\GBRBM</Filter>
+    </ClInclude>
+    <ClInclude Include="GBRBMTrainer.h">
+      <Filter>ヘッダー ファイル\GBRBM</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="RBM.cpp">
@@ -144,6 +150,12 @@
       <Filter>ソース ファイル\GBRBM</Filter>
     </ClCompile>
     <ClCompile Include="GBRBMParamator.cpp">
+      <Filter>ソース ファイル\GBRBM</Filter>
+    </ClCompile>
+    <ClCompile Include="GBRBMSampler.cpp">
+      <Filter>ソース ファイル\GBRBM</Filter>
+    </ClCompile>
+    <ClCompile Include="GBRBMTrainer.cpp">
       <Filter>ソース ファイル\GBRBM</Filter>
     </ClCompile>
   </ItemGroup>
