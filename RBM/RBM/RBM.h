@@ -14,6 +14,7 @@ public:
 
 public:
     RBM();
+    RBM(size_t v_size, size_t h_size);
     ~RBM();
 
     // 可視変数の数を返す

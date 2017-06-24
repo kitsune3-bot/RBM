@@ -5,6 +5,8 @@ VisualStudioVersion = 15.0.26430.13
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "RBM", "RBM\RBM.vcxproj", "{C54A46F8-7924-49A3-97C2-C059F6FA92A1}"
 EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "RBMRun", "RBMRun\RBMRun.vcxproj", "{9BE8DD57-7F83-406B-AD8C-64F439187B4E}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|x64 = Debug|x64
@@ -21,6 +23,14 @@ Global
 		{C54A46F8-7924-49A3-97C2-C059F6FA92A1}.Release|x64.Build.0 = Release|x64
 		{C54A46F8-7924-49A3-97C2-C059F6FA92A1}.Release|x86.ActiveCfg = Release|Win32
 		{C54A46F8-7924-49A3-97C2-C059F6FA92A1}.Release|x86.Build.0 = Release|Win32
+		{9BE8DD57-7F83-406B-AD8C-64F439187B4E}.Debug|x64.ActiveCfg = Debug|x64
+		{9BE8DD57-7F83-406B-AD8C-64F439187B4E}.Debug|x64.Build.0 = Debug|x64
+		{9BE8DD57-7F83-406B-AD8C-64F439187B4E}.Debug|x86.ActiveCfg = Debug|Win32
+		{9BE8DD57-7F83-406B-AD8C-64F439187B4E}.Debug|x86.Build.0 = Debug|Win32
+		{9BE8DD57-7F83-406B-AD8C-64F439187B4E}.Release|x64.ActiveCfg = Release|x64
+		{9BE8DD57-7F83-406B-AD8C-64F439187B4E}.Release|x64.Build.0 = Release|x64
+		{9BE8DD57-7F83-406B-AD8C-64F439187B4E}.Release|x86.ActiveCfg = Release|Win32
+		{9BE8DD57-7F83-406B-AD8C-64F439187B4E}.Release|x86.Build.0 = Release|Win32
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

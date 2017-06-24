@@ -12,6 +12,22 @@ GeneralizedRBM::~GeneralizedRBM()
 {
 }
 
+GeneralizedRBM::GeneralizedRBM(size_t v_size, size_t h_size) {
+    vSize = v_size;
+    hSize = h_size;
+
+    // ノード確保
+    nodes = GeneralizedRBMNode(v_size, h_size);
+
+    // パラメータ初期化
+    params = GeneralizedRBMParamator(v_size, h_size);
+    params.initParamsRandom(0.01, 0.01);
+
+    // 区間分割
+    hiddenValueSet = splitHiddenSet();
+}
+
+
 // 可視変数の数を返す
 size_t GeneralizedRBM::getVisibleSize() {
     return vSize;
@@ -99,23 +115,25 @@ double GeneralizedRBM::sumExpMu(int hindex) {
 // 隠れ変数を条件で与えた可視変数の条件付き確率, P(v_i | h)
 double GeneralizedRBM::condProbVis(int vindex, double value) {
     double lam = lambda(vindex);
-    return exp(lam * value) / sumExpLambda(lam);
+    return exp(lam * value) / sumExpLambda(vindex);
 }
 
 // 可視変数を条件で与えた隠れ変数の条件付き確率, P(h_j | v)
 double GeneralizedRBM::condProbHid(int hindex, double value) {
     double m = mu(hindex);
-    return exp(m * value) / sumExpMu(m);
+    double prob = exp(m * value) / sumExpMu(hindex);
+    return prob;
 }
 
 std::vector<double> GeneralizedRBM::splitHiddenSet() {
     std::vector<double> set(divSize + 1);
 
-    auto x = [](double split_size, double i, double max, double min) {  // 分割関数[i=0,1,...,elems]
-        return ((max - min)* i + (split_size + 1) * min) / (split_size + 1);
+    // FIXME: 式間違ってる
+    auto x = [](double split_size, double i, double min, double max) {  // 分割関数[i=0,1,...,elems]
+        return 1.0/ (split_size) * i * (max - min) + min;
     };
 
-    for (int i = 0; i < set.size(); i++) set[i] = x(divSize, i, -1.0, 1.0);
+    for (int i = 0; i < set.size(); i++) set[i] = x(divSize, i, 0.0, 1.0);
 
     return set;
 }

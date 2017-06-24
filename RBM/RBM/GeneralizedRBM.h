@@ -1,6 +1,8 @@
 ﻿#pragma once
 #include "RBMBase.h"
-#include <vector>"
+#include "GeneralizedRBMNode.h"
+#include "GeneralizedRBMParamator.h"
+#include <vector>
 
 class GeneralizedRBM :
     public RBMBase
@@ -17,6 +19,7 @@ public:
 
 public:
     GeneralizedRBM();
+    GeneralizedRBM(size_t v_size, size_t h_size);
     ~GeneralizedRBM();
 
     // 可視変数の数を返す

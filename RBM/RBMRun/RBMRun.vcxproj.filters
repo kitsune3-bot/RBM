@@ -1,0 +1,114 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <Filter Include="ソース ファイル">
+      <UniqueIdentifier>{4FC737F1-C7A5-4376-A066-2A32D752A2FF}</UniqueIdentifier>
+      <Extensions>cpp;c;cc;cxx;def;odl;idl;hpj;bat;asm;asmx</Extensions>
+    </Filter>
+    <Filter Include="ヘッダー ファイル">
+      <UniqueIdentifier>{93995380-89BD-4b04-88EB-625FBE52EBFB}</UniqueIdentifier>
+      <Extensions>h;hh;hpp;hxx;hm;inl;inc;xsd</Extensions>
+    </Filter>
+    <Filter Include="リソース ファイル">
+      <UniqueIdentifier>{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}</UniqueIdentifier>
+      <Extensions>rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx;tiff;tif;png;wav;mfcribbon-ms</Extensions>
+    </Filter>
+    <Filter Include="ソース ファイル\libs">
+      <UniqueIdentifier>{927260e9-8621-4406-ae96-4317a88faca6}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="ヘッダー ファイル\libs">
+      <UniqueIdentifier>{c9125ca8-5914-48e4-9732-af68a23ad89d}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="Train.h">
+      <Filter>ヘッダー ファイル</Filter>
+    </ClInclude>
+    <ClInclude Include="..\RBM\GeneralizedRBM.h">
+      <Filter>ヘッダー ファイル\libs</Filter>
+    </ClInclude>
+    <ClInclude Include="..\RBM\GeneralizedRBMNode.h">
+      <Filter>ヘッダー ファイル\libs</Filter>
+    </ClInclude>
+    <ClInclude Include="..\RBM\GeneralizedRBMParamator.h">
+      <Filter>ヘッダー ファイル\libs</Filter>
+    </ClInclude>
+    <ClInclude Include="..\RBM\GeneralizedRBMSampler.h">
+      <Filter>ヘッダー ファイル\libs</Filter>
+    </ClInclude>
+    <ClInclude Include="..\RBM\GeneralizedRBMTrainer.h">
+      <Filter>ヘッダー ファイル\libs</Filter>
+    </ClInclude>
+    <ClInclude Include="..\RBM\RBM.h">
+      <Filter>ヘッダー ファイル\libs</Filter>
+    </ClInclude>
+    <ClInclude Include="..\RBM\RBMBase.h">
+      <Filter>ヘッダー ファイル\libs</Filter>
+    </ClInclude>
+    <ClInclude Include="..\RBM\RBMMath.h">
+      <Filter>ヘッダー ファイル\libs</Filter>
+    </ClInclude>
+    <ClInclude Include="..\RBM\RBMNode.h">
+      <Filter>ヘッダー ファイル\libs</Filter>
+    </ClInclude>
+    <ClInclude Include="..\RBM\RBMNodeBase.h">
+      <Filter>ヘッダー ファイル\libs</Filter>
+    </ClInclude>
+    <ClInclude Include="..\RBM\RBMParamator.h">
+      <Filter>ヘッダー ファイル\libs</Filter>
+    </ClInclude>
+    <ClInclude Include="..\RBM\RBMParamatorBase.h">
+      <Filter>ヘッダー ファイル\libs</Filter>
+    </ClInclude>
+    <ClInclude Include="..\RBM\RBMSampler.h">
+      <Filter>ヘッダー ファイル\libs</Filter>
+    </ClInclude>
+    <ClInclude Include="..\RBM\RBMSamplerBase.h">
+      <Filter>ヘッダー ファイル\libs</Filter>
+    </ClInclude>
+    <ClInclude Include="..\RBM\RBMTrainer.h">
+      <Filter>ヘッダー ファイル\libs</Filter>
+    </ClInclude>
+    <ClInclude Include="..\RBM\RBMTrainerBase.h">
+      <Filter>ヘッダー ファイル\libs</Filter>
+    </ClInclude>
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="..\RBM\GeneralizedRBM.cpp">
+      <Filter>ソース ファイル\libs</Filter>
+    </ClCompile>
+    <ClCompile Include="..\RBM\GeneralizedRBMNode.cpp">
+      <Filter>ソース ファイル\libs</Filter>
+    </ClCompile>
+    <ClCompile Include="..\RBM\GeneralizedRBMParamator.cpp">
+      <Filter>ソース ファイル\libs</Filter>
+    </ClCompile>
+    <ClCompile Include="..\RBM\GeneralizedRBMSampler.cpp">
+      <Filter>ソース ファイル\libs</Filter>
+    </ClCompile>
+    <ClCompile Include="..\RBM\GeneralizedRBMTrainer.cpp">
+      <Filter>ソース ファイル\libs</Filter>
+    </ClCompile>
+    <ClCompile Include="..\RBM\RBM.cpp">
+      <Filter>ソース ファイル\libs</Filter>
+    </ClCompile>
+    <ClCompile Include="..\RBM\RBMMath.cpp">
+      <Filter>ソース ファイル\libs</Filter>
+    </ClCompile>
+    <ClCompile Include="..\RBM\RBMNode.cpp">
+      <Filter>ソース ファイル\libs</Filter>
+    </ClCompile>
+    <ClCompile Include="..\RBM\RBMParamator.cpp">
+      <Filter>ソース ファイル\libs</Filter>
+    </ClCompile>
+    <ClCompile Include="..\RBM\RBMSampler.cpp">
+      <Filter>ソース ファイル\libs</Filter>
+    </ClCompile>
+    <ClCompile Include="..\RBM\RBMTrainer.cpp">
+      <Filter>ソース ファイル\libs</Filter>
+    </ClCompile>
+    <ClCompile Include="Source.cpp">
+      <Filter>ソース ファイル</Filter>
+    </ClCompile>
+  </ItemGroup>
+</Project>
