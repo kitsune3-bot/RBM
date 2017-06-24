@@ -10,6 +10,8 @@ class GeneralizedRBM :
 private:
     size_t vSize = 0;
     size_t hSize = 0;
+    double hMin = 0.0;
+    double hMax = 1.0;
     size_t divSize = 1;  // 隠れ変数の区間分割数
     std::vector <double> hiddenValueSet;  // 隠れ変数の取りうる値
 
@@ -58,10 +60,28 @@ public:
     // 可視変数を条件で与えた隠れ変数の条件付き確率, P(h_j | v)
     double condProbHid(int hindex, double value);
 
-    // 隠れ変数の取りうる値を返す [-1, +1]をdivSizeで分割
+    // 隠れ変数の取りうる値を返す
     std::vector<double> splitHiddenSet();
 
     // 隠れ変数の取りうるパターン数
     int getHiddenValueSetSize();
+
+    // 隠れ変数の取りうる最大値を取得
+    double getHiddenMax();
+
+    // 隠れ変数の取りうる最大値を設定
+    void setHiddenMax(double value);
+
+    // 隠れ変数の取りうる最小値を取得
+    double getHiddenMin();
+
+    // 隠れ変数の取りうる最小値を設定
+    void setHiddenMin(double value);
+
+    // 隠れ変数の区間分割数を返す
+    size_t getHiddenDivSize();
+
+    // 隠れ変数の区間分割数を設定
+    void setHiddenDiveSize(size_t div_size);
 };
 

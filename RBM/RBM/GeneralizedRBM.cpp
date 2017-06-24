@@ -133,11 +133,50 @@ std::vector<double> GeneralizedRBM::splitHiddenSet() {
         return 1.0/ (split_size) * i * (max - min) + min;
     };
 
-    for (int i = 0; i < set.size(); i++) set[i] = x(divSize, i, 0.0, 1.0);
+    for (int i = 0; i < set.size(); i++) set[i] = x(divSize, i, hMin, hMax);
 
     return set;
 }
 
 int GeneralizedRBM::getHiddenValueSetSize() {
     return divSize + 1;
+}
+
+// 隠れ変数の取りうる最大値を取得
+double GeneralizedRBM::getHiddenMax() {
+    return hMax;
+}
+
+// 隠れ変数の取りうる最大値を設定
+void GeneralizedRBM::setHiddenMax(double value) {
+    hMax = value;
+
+    // 区間分割
+    hiddenValueSet = splitHiddenSet();
+}
+
+// 隠れ変数の取りうる最小値を取得
+double GeneralizedRBM::getHiddenMin() {
+    return hMin;
+}
+
+// 隠れ変数の取りうる最小値を設定
+void GeneralizedRBM::setHiddenMin(double value) {
+    hMin = value;
+
+    // 区間分割
+    hiddenValueSet = splitHiddenSet();
+}
+
+// 隠れ変数の区間分割数を返す
+size_t GeneralizedRBM::getHiddenDivSize() {
+    return divSize;
+}
+
+// 隠れ変数の区間分割数を設定
+void GeneralizedRBM::setHiddenDiveSize(size_t div_size) {
+    divSize = div_size;
+
+    // 区間分割
+    hiddenValueSet = splitHiddenSet();
 }
