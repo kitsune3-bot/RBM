@@ -1,8 +1,9 @@
 ﻿#pragma once
+#include "RBMBase.h"
 #include "RBMParamator.h"
 #include "RBMNode.h"
 
-class RBM {
+class RBM : RBMBase {
 private:
     size_t vSize = 0;
     size_t hSize = 0;
@@ -13,6 +14,7 @@ public:
 
 public:
     RBM();
+    RBM(size_t v_size, size_t h_size);
     ~RBM();
 
     // 可視変数の数を返す

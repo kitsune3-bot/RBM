@@ -12,6 +12,19 @@ RBM::~RBM()
 {
 }
 
+RBM::RBM(size_t v_size, size_t h_size) {
+    vSize = v_size;
+    hSize = h_size;
+
+    // ノード確保
+    nodes = RBMNode(v_size, h_size);
+
+    // パラメータ初期化
+    params = RBMParamator(v_size, h_size);
+    params.initParamsRandom(0.01, 0.01);
+}
+
+
 // 可視変数の数を返す
 size_t RBM::getVisibleSize() {
     return vSize;
@@ -24,20 +37,18 @@ size_t RBM::getHiddenSize() {
 
 
 // 規格化を返します
-/*
 double RBM::getNormalConstant() {
     // 未実装なので保留
     throw;
 }
-*/
+
 
 // エネルギー関数を返します
-/*
 double RBM::getEnergy() {
     // まだ必要ないため実装保留
     throw;
 }
-*/
+
 
 // 自由エネルギーを返します
 double RBM::getFreeEnergy() {
@@ -88,12 +99,12 @@ double RBM::sumExpMu(int hindex) {
 // 隠れ変数を条件で与えた可視変数の条件付き確率, P(v_i | h)
 double RBM::condProbVis(int vindex, double value) {
     double lam = lambda(vindex);
-    return exp(lam * value) / sumExpLambda(lam);
+    return exp(lam * value) / sumExpLambda(vindex);
 }
 
 // 可視変数を条件で与えた隠れ変数の条件付き確率, P(h_j | v)
 double RBM::condProbHid(int hindex, double value) {
     double m = mu(hindex);
-    return exp(m * value) / sumExpMu(m);
+    return exp(m * value) / sumExpMu(hindex);
 }
 
