@@ -77,7 +77,7 @@ double GeneralizedRBM::lambda(int vindex) {
 
     // TODO: Eigen使ってるから内積計算で高速化できる
     for (int j = 0; j < hSize; j++) {
-        lam += params.w(vindex, j) * params.c(j);
+        lam += params.w(vindex, j) * nodes.h(j);
     }
 
     return lam;
@@ -95,7 +95,7 @@ double GeneralizedRBM::mu(int hindex) {
 
     // TODO: Eigen使ってるから内積計算で高速化できる
     for (int i = 0; i < vSize; i++) {
-        mu += params.w(i, hindex) * params.b(i);
+        mu += params.w(i, hindex) * nodes.v(i);
     }
 
     return mu;
