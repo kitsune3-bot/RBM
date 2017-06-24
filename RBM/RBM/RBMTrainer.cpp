@@ -145,7 +145,7 @@ void RBMTrainer::calcSampleMean(RBM & rbm, std::vector<std::vector<double>> & da
         rbm.nodes.v = vect;
 
         for (int j = 0; j < rbm.getHiddenSize(); j++) {
-            dataMean.hidden(j) += rbm.actHidJ(j);
+            rbm.nodes.h(j) = rbm.actHidJ(j);
         }
 
         // CD-K

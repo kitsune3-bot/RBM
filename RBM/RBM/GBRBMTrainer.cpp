@@ -153,7 +153,7 @@ void GBRBMTrainer::calcSampleMean(GBRBM & rbm, std::vector<std::vector<double>> 
         rbm.nodes.v = vect;
 
         for (int j = 0; j < rbm.getHiddenSize(); j++) {
-            rbm.nodes.h(j) += rbm.actHidJ(j);
+            rbm.nodes.h(j) = rbm.actHidJ(j);
         }
 
         // CD-K
