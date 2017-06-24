@@ -30,9 +30,13 @@ int main(int argc, char **argv) {
     std::cout << rbm.params.w << std::endl;
     rbm_t.train(rbm, dataset);
     std::cout << rbm.params.w << std::endl;
-
+    */
 
     GeneralizedRBM grbm(10, 10);
+    grbm.setHiddenDiveSize(5);
+    grbm.setHiddenMax(2);
+    grbm.setHiddenMin(-2);
+    auto set = grbm.splitHiddenSet();
     GeneralizedRBMTrainer grbm_t(grbm);
     grbm_t.epoch = 300;
     grbm_t.cdk = 3;
@@ -43,9 +47,9 @@ int main(int argc, char **argv) {
     std::cout << grbm.params.w << std::endl;
     grbm_t.train(grbm, dataset);
     std::cout << grbm.params.w << std::endl;
-    */
+    
 
-
+    /*
     GBRBM gbrbm(10, 10);
     GBRBMTrainer gbrbm_t(gbrbm);
     gbrbm_t.epoch = 300;
@@ -57,7 +61,7 @@ int main(int argc, char **argv) {
     std::cout << gbrbm.params.w << std::endl;
     gbrbm_t.train(gbrbm, dataset);
     std::cout << gbrbm.params.w << std::endl;
-
+    */
 
 
     return 0;
