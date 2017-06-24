@@ -3,6 +3,8 @@
 #include "RBMTrainer.h"
 #include "GeneralizedRBM.h"
 #include "GeneralizedRBMTrainer.h"
+#include "GBRBM.h"
+#include "GBRBMTrainer.h"
 
 int main(int argc, char **argv) {
     std::vector<std::vector<double>> dataset(10);
@@ -17,6 +19,7 @@ int main(int argc, char **argv) {
     dataset[8] = std::vector<double>({ 1,1,1,1,1,1,1,1,1,1 });
     dataset[9] = std::vector<double>({ 0,1,0,1,0,1,0,0,1,1 });
 
+    /*
     RBM rbm(10, 10);
     RBMTrainer rbm_t(rbm);
     
@@ -40,7 +43,20 @@ int main(int argc, char **argv) {
     std::cout << grbm.params.w << std::endl;
     grbm_t.train(grbm, dataset);
     std::cout << grbm.params.w << std::endl;
+    */
 
+
+    GBRBM gbrbm(10, 10);
+    GBRBMTrainer gbrbm_t(gbrbm);
+    gbrbm_t.epoch = 300;
+    gbrbm_t.cdk = 3;
+    gbrbm_t.batchSize = 5;
+    gbrbm_t.learningRate = 0.001;
+    std::cout << gbrbm.mu(1) << std::endl;
+
+    std::cout << gbrbm.params.w << std::endl;
+    gbrbm_t.train(gbrbm, dataset);
+    std::cout << gbrbm.params.w << std::endl;
 
 
 

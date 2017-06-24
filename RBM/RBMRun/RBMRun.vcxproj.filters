@@ -72,6 +72,21 @@
     <ClInclude Include="..\RBM\RBMTrainerBase.h">
       <Filter>ヘッダー ファイル\libs</Filter>
     </ClInclude>
+    <ClInclude Include="..\RBM\GBRBM.h">
+      <Filter>ヘッダー ファイル\libs</Filter>
+    </ClInclude>
+    <ClInclude Include="..\RBM\GBRBMNode.h">
+      <Filter>ヘッダー ファイル\libs</Filter>
+    </ClInclude>
+    <ClInclude Include="..\RBM\GBRBMParamator.h">
+      <Filter>ヘッダー ファイル\libs</Filter>
+    </ClInclude>
+    <ClInclude Include="..\RBM\GBRBMSampler.h">
+      <Filter>ヘッダー ファイル\libs</Filter>
+    </ClInclude>
+    <ClInclude Include="..\RBM\GBRBMTrainer.h">
+      <Filter>ヘッダー ファイル\libs</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\RBM\GeneralizedRBM.cpp">
@@ -109,6 +124,21 @@
     </ClCompile>
     <ClCompile Include="Source.cpp">
       <Filter>ソース ファイル</Filter>
+    </ClCompile>
+    <ClCompile Include="..\RBM\GBRBM.cpp">
+      <Filter>ソース ファイル\libs</Filter>
+    </ClCompile>
+    <ClCompile Include="..\RBM\GBRBMNode.cpp">
+      <Filter>ソース ファイル\libs</Filter>
+    </ClCompile>
+    <ClCompile Include="..\RBM\GBRBMParamator.cpp">
+      <Filter>ソース ファイル\libs</Filter>
+    </ClCompile>
+    <ClCompile Include="..\RBM\GBRBMSampler.cpp">
+      <Filter>ソース ファイル\libs</Filter>
+    </ClCompile>
+    <ClCompile Include="..\RBM\GBRBMTrainer.cpp">
+      <Filter>ソース ファイル\libs</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

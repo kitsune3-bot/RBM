@@ -52,21 +52,25 @@ void GBRBMTrainer::initGradient() {
 
 void GBRBMTrainer::initDataMean(GBRBM & rbm) {
     dataMean.visible.setConstant(rbm.getVisibleSize(), 0.0);
+    dataMean.visible2.setConstant(rbm.getVisibleSize(), 0.0);  // Gaussian Unit
     dataMean.hidden.setConstant(rbm.getHiddenSize(), 0.0);
 }
 
 void GBRBMTrainer::initDataMean() {
     dataMean.visible.setConstant(0.0);
+    dataMean.visible2.setConstant(0.0);  // Gaussian Unit
     dataMean.hidden.setConstant(0.0);
 }
 
 void GBRBMTrainer::initSampleMean(GBRBM & rbm) {
     sampleMean.visible.setConstant(rbm.getVisibleSize(), 0.0);
+    sampleMean.visible2.setConstant(rbm.getVisibleSize(), 0.0);  // Gaussian Unit
     sampleMean.hidden.setConstant(rbm.getHiddenSize(), 0.0);
 }
 
 void GBRBMTrainer::initSampleMean() {
     sampleMean.visible.setConstant(0.0);
+    sampleMean.visible2.setConstant(0.0);  // Gaussian Unit
     sampleMean.hidden.setConstant(0.0);
 }
 
