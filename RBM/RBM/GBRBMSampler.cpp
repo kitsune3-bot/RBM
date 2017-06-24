@@ -14,9 +14,9 @@ GBRBMSampler::~GBRBMSampler()
 double GBRBMSampler::gibbsSamplingVisible(GBRBM &rbm, int vindex) {
     std::random_device rd;
     std::mt19937 mt(rd());
-    std::normal_distribution<double> dist(0.0, 1.0);
+    std::normal_distribution<double> dist(rbm.meanVisible(vindex), sqrt(1/rbm.params.lambda(vindex)));
 
-    double value = rbm.condProbVis(vindex, 0.0) < dist(mt) ? 0.0 : 1.0;
+    double value = dist(mt);
     return value;
 }
 
@@ -52,9 +52,9 @@ Eigen::VectorXd & GBRBMSampler::blockedGibbsSamplingHidden(GBRBM &rbm) {
 double GBRBMSampler::updateByGibbsSamplingVisible(GBRBM &rbm, int vindex) {
     std::random_device rd;
     std::mt19937 mt(rd());
-    std::uniform_real_distribution<double> dist(0.0, 1.0);
+    std::normal_distribution<double> dist(rbm.meanVisible(vindex), sqrt(1 / rbm.params.lambda(vindex)));
 
-    double value = rbm.condProbVis(vindex, 0.0) < dist(mt) ? 0.0 : 1.0;
+    double value = dist(mt);
     rbm.nodes.v(vindex) = value;
     return value;
 }
