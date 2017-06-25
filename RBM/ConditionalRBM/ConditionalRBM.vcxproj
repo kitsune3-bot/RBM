@@ -122,11 +122,25 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClInclude Include="ConditionalRBM.h" />
     <ClInclude Include="ConditionalRBMBase.h" />
+    <ClInclude Include="ConditionalRBMMath.h" />
+    <ClInclude Include="ConditionalRBMNode.h" />
     <ClInclude Include="ConditionalRBMNodeBase.h" />
+    <ClInclude Include="ConditionalRBMParamator.h" />
     <ClInclude Include="ConditionalRBMParamatorBase.h" />
+    <ClInclude Include="ConditionalRBMSampler.h" />
     <ClInclude Include="ConditionalRBMSamplerBase.h" />
+    <ClInclude Include="ConditionalRBMTrainer.h" />
     <ClInclude Include="ConditionalRBMTrainerBase.h" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="ConditionalRBM.cpp" />
+    <ClCompile Include="ConditionalRBMMath.cpp" />
+    <ClCompile Include="ConditionalRBMNode.cpp" />
+    <ClCompile Include="ConditionalRBMParamator.cpp" />
+    <ClCompile Include="ConditionalRBMSampler.cpp" />
+    <ClCompile Include="ConditionalRBMTrainer.cpp" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

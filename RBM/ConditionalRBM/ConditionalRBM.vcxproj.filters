@@ -13,11 +13,14 @@
       <UniqueIdentifier>{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}</UniqueIdentifier>
       <Extensions>rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx;tiff;tif;png;wav;mfcribbon-ms</Extensions>
     </Filter>
-    <Filter Include="ソース ファイル\ConditionalRBMBase">
-      <UniqueIdentifier>{1bfb8a09-6ff9-4e6b-9952-844d6f1527e2}</UniqueIdentifier>
-    </Filter>
     <Filter Include="ヘッダー ファイル\ConditionalRBMBase">
       <UniqueIdentifier>{b36666f2-98c2-435f-b2ea-f30dc8e1117c}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="ソース ファイル\ConditionalRBM">
+      <UniqueIdentifier>{a70307b3-6c74-4ef6-9b48-579b6775047b}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="ヘッダー ファイル\ConditionalRBM">
+      <UniqueIdentifier>{4e99300a-0323-4b84-9e1d-7ef757ddc0e4}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -36,5 +39,43 @@
     <ClInclude Include="ConditionalRBMTrainerBase.h">
       <Filter>ヘッダー ファイル\ConditionalRBMBase</Filter>
     </ClInclude>
+    <ClInclude Include="ConditionalRBM.h">
+      <Filter>ヘッダー ファイル\ConditionalRBM</Filter>
+    </ClInclude>
+    <ClInclude Include="ConditionalRBMNode.h">
+      <Filter>ヘッダー ファイル\ConditionalRBM</Filter>
+    </ClInclude>
+    <ClInclude Include="ConditionalRBMParamator.h">
+      <Filter>ヘッダー ファイル\ConditionalRBM</Filter>
+    </ClInclude>
+    <ClInclude Include="ConditionalRBMSampler.h">
+      <Filter>ヘッダー ファイル\ConditionalRBM</Filter>
+    </ClInclude>
+    <ClInclude Include="ConditionalRBMTrainer.h">
+      <Filter>ヘッダー ファイル\ConditionalRBM</Filter>
+    </ClInclude>
+    <ClInclude Include="ConditionalRBMMath.h">
+      <Filter>ヘッダー ファイル</Filter>
+    </ClInclude>
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="ConditionalRBM.cpp">
+      <Filter>ソース ファイル\ConditionalRBM</Filter>
+    </ClCompile>
+    <ClCompile Include="ConditionalRBMNode.cpp">
+      <Filter>ソース ファイル\ConditionalRBM</Filter>
+    </ClCompile>
+    <ClCompile Include="ConditionalRBMParamator.cpp">
+      <Filter>ソース ファイル\ConditionalRBM</Filter>
+    </ClCompile>
+    <ClCompile Include="ConditionalRBMSampler.cpp">
+      <Filter>ソース ファイル\ConditionalRBM</Filter>
+    </ClCompile>
+    <ClCompile Include="ConditionalRBMTrainer.cpp">
+      <Filter>ソース ファイル\ConditionalRBM</Filter>
+    </ClCompile>
+    <ClCompile Include="ConditionalRBMMath.cpp">
+      <Filter>ソース ファイル</Filter>
+    </ClCompile>
   </ItemGroup>
 </Project>
