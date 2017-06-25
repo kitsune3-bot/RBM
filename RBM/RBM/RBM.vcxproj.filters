@@ -43,6 +43,12 @@
     <Filter Include="ヘッダー ファイル\GBRBM">
       <UniqueIdentifier>{c7a6c08a-c1ab-4a06-884c-ea16135a75c1}</UniqueIdentifier>
     </Filter>
+    <Filter Include="ソース ファイル\GeneralizedGRBM">
+      <UniqueIdentifier>{8097b9be-74fc-4145-93bb-6ade05b185d5}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="ヘッダー ファイル\GeneralizedGRBM">
+      <UniqueIdentifier>{9ee5976a-263f-48f7-a102-bb11590cf4d4}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="RBM.h">
@@ -108,6 +114,21 @@
     <ClInclude Include="GBRBMTrainer.h">
       <Filter>ヘッダー ファイル\GBRBM</Filter>
     </ClInclude>
+    <ClInclude Include="GeneralizedGRBM.h">
+      <Filter>ヘッダー ファイル\GeneralizedGRBM</Filter>
+    </ClInclude>
+    <ClInclude Include="GeneralizedGRBMNode.h">
+      <Filter>ヘッダー ファイル\GeneralizedGRBM</Filter>
+    </ClInclude>
+    <ClInclude Include="GeneralizedGRBMParamator.h">
+      <Filter>ヘッダー ファイル\GeneralizedGRBM</Filter>
+    </ClInclude>
+    <ClInclude Include="GeneralizedGRBMSampler.h">
+      <Filter>ヘッダー ファイル\GeneralizedGRBM</Filter>
+    </ClInclude>
+    <ClInclude Include="GeneralizedGRBMTrainer.h">
+      <Filter>ヘッダー ファイル\GeneralizedGRBM</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="RBM.cpp">
@@ -157,6 +178,21 @@
     </ClCompile>
     <ClCompile Include="GBRBMTrainer.cpp">
       <Filter>ソース ファイル\GBRBM</Filter>
+    </ClCompile>
+    <ClCompile Include="GeneralizedGRBM.cpp">
+      <Filter>ソース ファイル</Filter>
+    </ClCompile>
+    <ClCompile Include="GeneralizedGRBMNode.cpp">
+      <Filter>ソース ファイル</Filter>
+    </ClCompile>
+    <ClCompile Include="GeneralizedGRBMParamator.cpp">
+      <Filter>ソース ファイル</Filter>
+    </ClCompile>
+    <ClCompile Include="GeneralizedGRBMSampler.cpp">
+      <Filter>ソース ファイル</Filter>
+    </ClCompile>
+    <ClCompile Include="GeneralizedGRBMTrainer.cpp">
+      <Filter>ソース ファイル</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>
