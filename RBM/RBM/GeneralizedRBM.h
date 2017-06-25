@@ -60,6 +60,10 @@ public:
     // 可視変数を条件で与えた隠れ変数の条件付き確率, P(h_j | v)
     double condProbHid(int hindex, double value);
 
+    //
+    //appendix methods
+    //
+
     // 隠れ変数の取りうる値を返す
     std::vector<double> splitHiddenSet();
 
