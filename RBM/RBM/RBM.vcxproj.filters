@@ -180,19 +180,19 @@
       <Filter>ソース ファイル\GBRBM</Filter>
     </ClCompile>
     <ClCompile Include="GeneralizedGRBM.cpp">
-      <Filter>ソース ファイル</Filter>
+      <Filter>ソース ファイル\GeneralizedGRBM</Filter>
     </ClCompile>
     <ClCompile Include="GeneralizedGRBMNode.cpp">
-      <Filter>ソース ファイル</Filter>
+      <Filter>ソース ファイル\GeneralizedGRBM</Filter>
     </ClCompile>
     <ClCompile Include="GeneralizedGRBMParamator.cpp">
-      <Filter>ソース ファイル</Filter>
+      <Filter>ソース ファイル\GeneralizedGRBM</Filter>
     </ClCompile>
     <ClCompile Include="GeneralizedGRBMSampler.cpp">
-      <Filter>ソース ファイル</Filter>
+      <Filter>ソース ファイル\GeneralizedGRBM</Filter>
     </ClCompile>
     <ClCompile Include="GeneralizedGRBMTrainer.cpp">
-      <Filter>ソース ファイル</Filter>
+      <Filter>ソース ファイル\GeneralizedGRBM</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>
