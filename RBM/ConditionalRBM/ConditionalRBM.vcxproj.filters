@@ -1,0 +1,40 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <Filter Include="ソース ファイル">
+      <UniqueIdentifier>{4FC737F1-C7A5-4376-A066-2A32D752A2FF}</UniqueIdentifier>
+      <Extensions>cpp;c;cc;cxx;def;odl;idl;hpj;bat;asm;asmx</Extensions>
+    </Filter>
+    <Filter Include="ヘッダー ファイル">
+      <UniqueIdentifier>{93995380-89BD-4b04-88EB-625FBE52EBFB}</UniqueIdentifier>
+      <Extensions>h;hh;hpp;hxx;hm;inl;inc;xsd</Extensions>
+    </Filter>
+    <Filter Include="リソース ファイル">
+      <UniqueIdentifier>{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}</UniqueIdentifier>
+      <Extensions>rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx;tiff;tif;png;wav;mfcribbon-ms</Extensions>
+    </Filter>
+    <Filter Include="ソース ファイル\ConditionalRBMBase">
+      <UniqueIdentifier>{1bfb8a09-6ff9-4e6b-9952-844d6f1527e2}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="ヘッダー ファイル\ConditionalRBMBase">
+      <UniqueIdentifier>{b36666f2-98c2-435f-b2ea-f30dc8e1117c}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="ConditionalRBMBase.h">
+      <Filter>ヘッダー ファイル\ConditionalRBMBase</Filter>
+    </ClInclude>
+    <ClInclude Include="ConditionalRBMNodeBase.h">
+      <Filter>ヘッダー ファイル\ConditionalRBMBase</Filter>
+    </ClInclude>
+    <ClInclude Include="ConditionalRBMParamatorBase.h">
+      <Filter>ヘッダー ファイル\ConditionalRBMBase</Filter>
+    </ClInclude>
+    <ClInclude Include="ConditionalRBMSamplerBase.h">
+      <Filter>ヘッダー ファイル\ConditionalRBMBase</Filter>
+    </ClInclude>
+    <ClInclude Include="ConditionalRBMTrainerBase.h">
+      <Filter>ヘッダー ファイル\ConditionalRBMBase</Filter>
+    </ClInclude>
+  </ItemGroup>
+</Project>

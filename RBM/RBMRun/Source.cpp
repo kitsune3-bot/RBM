@@ -67,7 +67,7 @@ int main(int argc, char **argv) {
     */
 
     GeneralizedGRBM gen_grbm(10, 10);
-    gen_grbm.setHiddenDiveSize(1300);
+    gen_grbm.setHiddenDiveSize(1);
     gen_grbm.setHiddenMax(2);
     gen_grbm.setHiddenMin(-2);
     auto set = gen_grbm.splitHiddenSet();
