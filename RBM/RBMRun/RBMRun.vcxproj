@@ -164,6 +164,11 @@
     <ClInclude Include="..\RBM\GBRBMParamator.h" />
     <ClInclude Include="..\RBM\GBRBMSampler.h" />
     <ClInclude Include="..\RBM\GBRBMTrainer.h" />
+    <ClInclude Include="..\RBM\GeneralizedGRBM.h" />
+    <ClInclude Include="..\RBM\GeneralizedGRBMNode.h" />
+    <ClInclude Include="..\RBM\GeneralizedGRBMParamator.h" />
+    <ClInclude Include="..\RBM\GeneralizedGRBMSampler.h" />
+    <ClInclude Include="..\RBM\GeneralizedGRBMTrainer.h" />
     <ClInclude Include="..\RBM\GeneralizedRBM.h" />
     <ClInclude Include="..\RBM\GeneralizedRBMNode.h" />
     <ClInclude Include="..\RBM\GeneralizedRBMParamator.h" />
@@ -188,6 +193,11 @@
     <ClCompile Include="..\RBM\GBRBMParamator.cpp" />
     <ClCompile Include="..\RBM\GBRBMSampler.cpp" />
     <ClCompile Include="..\RBM\GBRBMTrainer.cpp" />
+    <ClCompile Include="..\RBM\GeneralizedGRBM.cpp" />
+    <ClCompile Include="..\RBM\GeneralizedGRBMNode.cpp" />
+    <ClCompile Include="..\RBM\GeneralizedGRBMParamator.cpp" />
+    <ClCompile Include="..\RBM\GeneralizedGRBMSampler.cpp" />
+    <ClCompile Include="..\RBM\GeneralizedGRBMTrainer.cpp" />
     <ClCompile Include="..\RBM\GeneralizedRBM.cpp" />
     <ClCompile Include="..\RBM\GeneralizedRBMNode.cpp" />
     <ClCompile Include="..\RBM\GeneralizedRBMParamator.cpp" />

@@ -5,6 +5,8 @@
 #include "GeneralizedRBMTrainer.h"
 #include "GBRBM.h"
 #include "GBRBMTrainer.h"
+#include "GeneralizedGRBM.h"
+#include "GeneralizedGRBMTrainer.h"
 
 int main(int argc, char **argv) {
     std::vector<std::vector<double>> dataset(10);
@@ -31,7 +33,8 @@ int main(int argc, char **argv) {
     rbm_t.train(rbm, dataset);
     std::cout << rbm.params.w << std::endl;
     */
-
+    
+    /*
     GeneralizedRBM grbm(10, 10);
     grbm.setHiddenDiveSize(5);
     grbm.setHiddenMax(2);
@@ -47,7 +50,7 @@ int main(int argc, char **argv) {
     std::cout << grbm.params.w << std::endl;
     grbm_t.train(grbm, dataset);
     std::cout << grbm.params.w << std::endl;
-    
+    */
 
     /*
     GBRBM gbrbm(10, 10);
@@ -62,6 +65,22 @@ int main(int argc, char **argv) {
     gbrbm_t.train(gbrbm, dataset);
     std::cout << gbrbm.params.w << std::endl;
     */
+
+    GeneralizedGRBM gen_grbm(10, 10);
+    gen_grbm.setHiddenDiveSize(1300);
+    gen_grbm.setHiddenMax(2);
+    gen_grbm.setHiddenMin(-2);
+    auto set = gen_grbm.splitHiddenSet();
+    GeneralizedGRBMTrainer gen_grbm_t(gen_grbm);
+    gen_grbm_t.epoch = 10;
+    gen_grbm_t.cdk = 3;
+    gen_grbm_t.batchSize = 5;
+    gen_grbm_t.learningRate = 0.1;
+    std::cout << gen_grbm.mu(1) << std::endl;
+
+    std::cout << gen_grbm.params.w << std::endl;
+    gen_grbm_t.train(gen_grbm, dataset);
+    std::cout << gen_grbm.params.w << std::endl;
 
 
     return 0;

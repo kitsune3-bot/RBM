@@ -87,6 +87,21 @@
     <ClInclude Include="..\RBM\GBRBMTrainer.h">
       <Filter>ヘッダー ファイル\libs</Filter>
     </ClInclude>
+    <ClInclude Include="..\RBM\GeneralizedGRBM.h">
+      <Filter>ヘッダー ファイル\libs</Filter>
+    </ClInclude>
+    <ClInclude Include="..\RBM\GeneralizedGRBMNode.h">
+      <Filter>ヘッダー ファイル\libs</Filter>
+    </ClInclude>
+    <ClInclude Include="..\RBM\GeneralizedGRBMParamator.h">
+      <Filter>ヘッダー ファイル\libs</Filter>
+    </ClInclude>
+    <ClInclude Include="..\RBM\GeneralizedGRBMSampler.h">
+      <Filter>ヘッダー ファイル\libs</Filter>
+    </ClInclude>
+    <ClInclude Include="..\RBM\GeneralizedGRBMTrainer.h">
+      <Filter>ヘッダー ファイル\libs</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\RBM\GeneralizedRBM.cpp">
@@ -138,6 +153,21 @@
       <Filter>ソース ファイル\libs</Filter>
     </ClCompile>
     <ClCompile Include="..\RBM\GBRBMTrainer.cpp">
+      <Filter>ソース ファイル\libs</Filter>
+    </ClCompile>
+    <ClCompile Include="..\RBM\GeneralizedGRBM.cpp">
+      <Filter>ソース ファイル\libs</Filter>
+    </ClCompile>
+    <ClCompile Include="..\RBM\GeneralizedGRBMNode.cpp">
+      <Filter>ソース ファイル\libs</Filter>
+    </ClCompile>
+    <ClCompile Include="..\RBM\GeneralizedGRBMParamator.cpp">
+      <Filter>ソース ファイル\libs</Filter>
+    </ClCompile>
+    <ClCompile Include="..\RBM\GeneralizedGRBMSampler.cpp">
+      <Filter>ソース ファイル\libs</Filter>
+    </ClCompile>
+    <ClCompile Include="..\RBM\GeneralizedGRBMTrainer.cpp">
       <Filter>ソース ファイル\libs</Filter>
     </ClCompile>
   </ItemGroup>
