@@ -28,19 +28,19 @@ class ConditionalRBMTrainerBase {
     virtual void initSampleMean() = 0;
 
     // 学習
-    virtual void train(ConditionalRBMBase & rbm, std::vector<std::vector<double>> & dataset) = 0;
+    virtual void train(ConditionalRBMBase & rbm, std::vector<std::vector<double>> & dataset, std::vector<std::vector<double>> & cond_dataset) = 0;
 
     // 1回だけ学習
-    virtual void trainOnce(ConditionalRBMBase & rbm, std::vector<std::vector<double>> & dataset) = 0;
+    virtual void trainOnce(ConditionalRBMBase & rbm, std::vector<std::vector<double>> & dataset, std::vector<std::vector<double>> & cond_dataset) = 0;
 
     // CD計算
-    virtual void calcContrastiveDivergence(ConditionalRBMBase & rbm, std::vector<std::vector<double>> & dataset, std::vector<int> & data_indexes) = 0;
+    virtual void calcContrastiveDivergence(ConditionalRBMBase & rbm, std::vector<std::vector<double>> & dataset, std::vector<std::vector<double>> & cond_dataset, std::vector<int> & data_indexes) = 0;
 
     // データ平均の計算
-    virtual void calcDataMean(ConditionalRBMBase & rbm, std::vector<std::vector<double>> & dataset, std::vector<int> & data_indexes) = 0;
+    virtual void calcDataMean(ConditionalRBMBase & rbm, std::vector<std::vector<double>> & dataset, std::vector<std::vector<double>> & cond_dataset, std::vector<int> & data_indexes) = 0;
 
     // サンプル平均の計算
-    virtual void calcSampleMean(ConditionalRBMBase & rbm, std::vector<std::vector<double>> & dataset, std::vector<int> & data_indexes) = 0;
+    virtual void calcSampleMean(ConditionalRBMBase & rbm, std::vector<std::vector<double>> & dataset, std::vector<std::vector<double>> & cond_dataset, std::vector<int> & data_indexes) = 0;
 
     // 勾配の計算
     virtual void calcGradient(ConditionalRBMBase & rbm, std::vector<int> & data_indexes) = 0;
