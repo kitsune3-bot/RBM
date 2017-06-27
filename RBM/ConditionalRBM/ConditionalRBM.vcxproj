@@ -122,6 +122,11 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClInclude Include="ConditionalGRBM.h" />
+    <ClInclude Include="ConditionalGRBMNode.h" />
+    <ClInclude Include="ConditionalGRBMParamator.h" />
+    <ClInclude Include="ConditionalGRBMSampler.h" />
+    <ClInclude Include="ConditionalGRBMTrainer.h" />
     <ClInclude Include="ConditionalRBM.h" />
     <ClInclude Include="ConditionalRBMBase.h" />
     <ClInclude Include="ConditionalRBMMath.h" />
@@ -135,6 +140,11 @@
     <ClInclude Include="ConditionalRBMTrainerBase.h" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="ConditionalGRBM.cpp" />
+    <ClCompile Include="ConditionalGRBMNode.cpp" />
+    <ClCompile Include="ConditionalGRBMParamator.cpp" />
+    <ClCompile Include="ConditionalGRBMSampler.cpp" />
+    <ClCompile Include="ConditionalGRBMTrainer.cpp" />
     <ClCompile Include="ConditionalRBM.cpp" />
     <ClCompile Include="ConditionalRBMMath.cpp" />
     <ClCompile Include="ConditionalRBMNode.cpp" />

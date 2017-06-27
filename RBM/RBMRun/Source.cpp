@@ -7,6 +7,7 @@
 #include "GBRBMTrainer.h"
 #include "GeneralizedGRBM.h"
 #include "GeneralizedGRBMTrainer.h"
+#include "ConditionalGRBM.h"
 
 int main(int argc, char **argv) {
     std::vector<std::vector<double>> dataset(10);
@@ -66,6 +67,7 @@ int main(int argc, char **argv) {
     std::cout << gbrbm.params.w << std::endl;
     */
 
+    /*
     GeneralizedGRBM gen_grbm(10, 10);
     gen_grbm.setHiddenDiveSize(1);
     gen_grbm.setHiddenMax(2);
@@ -81,7 +83,9 @@ int main(int argc, char **argv) {
     std::cout << gen_grbm.params.w << std::endl;
     gen_grbm_t.train(gen_grbm, dataset);
     std::cout << gen_grbm.params.w << std::endl;
+    */
 
+    ConditionalGRBM cond_grbm(10, 3, 10);
 
     return 0;
 }

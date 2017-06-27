@@ -19,6 +19,12 @@
     <Filter Include="ヘッダー ファイル\libs">
       <UniqueIdentifier>{c9125ca8-5914-48e4-9732-af68a23ad89d}</UniqueIdentifier>
     </Filter>
+    <Filter Include="ソース ファイル\crbmlibs">
+      <UniqueIdentifier>{5f51bd6f-57e5-4321-a500-babf3a9e4534}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="ヘッダー ファイル\crbmlibs">
+      <UniqueIdentifier>{349bde3d-4471-4e2c-af27-7eb428c57b8e}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Train.h">
@@ -102,6 +108,54 @@
     <ClInclude Include="..\RBM\GeneralizedGRBMTrainer.h">
       <Filter>ヘッダー ファイル\libs</Filter>
     </ClInclude>
+    <ClInclude Include="..\ConditionalRBM\ConditionalGRBM.h">
+      <Filter>ヘッダー ファイル\crbmlibs</Filter>
+    </ClInclude>
+    <ClInclude Include="..\ConditionalRBM\ConditionalGRBMNode.h">
+      <Filter>ヘッダー ファイル\crbmlibs</Filter>
+    </ClInclude>
+    <ClInclude Include="..\ConditionalRBM\ConditionalGRBMParamator.h">
+      <Filter>ヘッダー ファイル\crbmlibs</Filter>
+    </ClInclude>
+    <ClInclude Include="..\ConditionalRBM\ConditionalGRBMSampler.h">
+      <Filter>ヘッダー ファイル\crbmlibs</Filter>
+    </ClInclude>
+    <ClInclude Include="..\ConditionalRBM\ConditionalGRBMTrainer.h">
+      <Filter>ヘッダー ファイル\crbmlibs</Filter>
+    </ClInclude>
+    <ClInclude Include="..\ConditionalRBM\ConditionalRBM.h">
+      <Filter>ヘッダー ファイル\crbmlibs</Filter>
+    </ClInclude>
+    <ClInclude Include="..\ConditionalRBM\ConditionalRBMBase.h">
+      <Filter>ヘッダー ファイル\crbmlibs</Filter>
+    </ClInclude>
+    <ClInclude Include="..\ConditionalRBM\ConditionalRBMMath.h">
+      <Filter>ヘッダー ファイル\crbmlibs</Filter>
+    </ClInclude>
+    <ClInclude Include="..\ConditionalRBM\ConditionalRBMNode.h">
+      <Filter>ヘッダー ファイル\crbmlibs</Filter>
+    </ClInclude>
+    <ClInclude Include="..\ConditionalRBM\ConditionalRBMNodeBase.h">
+      <Filter>ヘッダー ファイル\crbmlibs</Filter>
+    </ClInclude>
+    <ClInclude Include="..\ConditionalRBM\ConditionalRBMParamator.h">
+      <Filter>ヘッダー ファイル\crbmlibs</Filter>
+    </ClInclude>
+    <ClInclude Include="..\ConditionalRBM\ConditionalRBMParamatorBase.h">
+      <Filter>ヘッダー ファイル\crbmlibs</Filter>
+    </ClInclude>
+    <ClInclude Include="..\ConditionalRBM\ConditionalRBMSampler.h">
+      <Filter>ヘッダー ファイル\crbmlibs</Filter>
+    </ClInclude>
+    <ClInclude Include="..\ConditionalRBM\ConditionalRBMSamplerBase.h">
+      <Filter>ヘッダー ファイル\crbmlibs</Filter>
+    </ClInclude>
+    <ClInclude Include="..\ConditionalRBM\ConditionalRBMTrainer.h">
+      <Filter>ヘッダー ファイル\crbmlibs</Filter>
+    </ClInclude>
+    <ClInclude Include="..\ConditionalRBM\ConditionalRBMTrainerBase.h">
+      <Filter>ヘッダー ファイル\crbmlibs</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\RBM\GeneralizedRBM.cpp">
@@ -169,6 +223,39 @@
     </ClCompile>
     <ClCompile Include="..\RBM\GeneralizedGRBMTrainer.cpp">
       <Filter>ソース ファイル\libs</Filter>
+    </ClCompile>
+    <ClCompile Include="..\ConditionalRBM\ConditionalGRBM.cpp">
+      <Filter>ソース ファイル\crbmlibs</Filter>
+    </ClCompile>
+    <ClCompile Include="..\ConditionalRBM\ConditionalGRBMNode.cpp">
+      <Filter>ソース ファイル\crbmlibs</Filter>
+    </ClCompile>
+    <ClCompile Include="..\ConditionalRBM\ConditionalGRBMParamator.cpp">
+      <Filter>ソース ファイル\crbmlibs</Filter>
+    </ClCompile>
+    <ClCompile Include="..\ConditionalRBM\ConditionalGRBMSampler.cpp">
+      <Filter>ソース ファイル\crbmlibs</Filter>
+    </ClCompile>
+    <ClCompile Include="..\ConditionalRBM\ConditionalGRBMTrainer.cpp">
+      <Filter>ソース ファイル\crbmlibs</Filter>
+    </ClCompile>
+    <ClCompile Include="..\ConditionalRBM\ConditionalRBM.cpp">
+      <Filter>ソース ファイル\crbmlibs</Filter>
+    </ClCompile>
+    <ClCompile Include="..\ConditionalRBM\ConditionalRBMMath.cpp">
+      <Filter>ソース ファイル\crbmlibs</Filter>
+    </ClCompile>
+    <ClCompile Include="..\ConditionalRBM\ConditionalRBMNode.cpp">
+      <Filter>ソース ファイル\crbmlibs</Filter>
+    </ClCompile>
+    <ClCompile Include="..\ConditionalRBM\ConditionalRBMParamator.cpp">
+      <Filter>ソース ファイル\crbmlibs</Filter>
+    </ClCompile>
+    <ClCompile Include="..\ConditionalRBM\ConditionalRBMSampler.cpp">
+      <Filter>ソース ファイル\crbmlibs</Filter>
+    </ClCompile>
+    <ClCompile Include="..\ConditionalRBM\ConditionalRBMTrainer.cpp">
+      <Filter>ソース ファイル\crbmlibs</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

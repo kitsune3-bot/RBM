@@ -89,7 +89,7 @@
       <WarningLevel>Level4</WarningLevel>
       <Optimization>Disabled</Optimization>
       <PreprocessorDefinitions>WIN32;_DEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
-      <AdditionalIncludeDirectories>$(SolutionDir)RBM;C:\src\eigen-eigen-dbab66d00651;</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(SolutionDir)RBM;$(SolutionDir)ConditionalRBM;C:\src\eigen-eigen-dbab66d00651;</AdditionalIncludeDirectories>
       <BufferSecurityCheck>true</BufferSecurityCheck>
       <SDLCheck>true</SDLCheck>
       <DisableLanguageExtensions>true</DisableLanguageExtensions>
@@ -106,7 +106,7 @@
       <WarningLevel>Level4</WarningLevel>
       <Optimization>Disabled</Optimization>
       <PreprocessorDefinitions>_DEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
-      <AdditionalIncludeDirectories>$(SolutionDir)RBM;C:\src\eigen-eigen-dbab66d00651;</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(SolutionDir)RBM;$(SolutionDir)ConditionalRBM;C:\src\eigen-eigen-dbab66d00651;</AdditionalIncludeDirectories>
       <BufferSecurityCheck>true</BufferSecurityCheck>
       <SDLCheck>true</SDLCheck>
       <DisableLanguageExtensions>true</DisableLanguageExtensions>
@@ -125,7 +125,7 @@
       <FunctionLevelLinking>true</FunctionLevelLinking>
       <IntrinsicFunctions>true</IntrinsicFunctions>
       <PreprocessorDefinitions>WIN32;NDEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
-      <AdditionalIncludeDirectories>$(SolutionDir)RBM;C:\src\eigen-eigen-dbab66d00651;</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(SolutionDir)RBM;$(SolutionDir)ConditionalRBM;C:\src\eigen-eigen-dbab66d00651;</AdditionalIncludeDirectories>
       <BufferSecurityCheck>true</BufferSecurityCheck>
       <SDLCheck>true</SDLCheck>
       <DisableLanguageExtensions>true</DisableLanguageExtensions>
@@ -146,7 +146,7 @@
       <FunctionLevelLinking>true</FunctionLevelLinking>
       <IntrinsicFunctions>true</IntrinsicFunctions>
       <PreprocessorDefinitions>NDEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
-      <AdditionalIncludeDirectories>$(SolutionDir)RBM;C:\src\eigen-eigen-dbab66d00651;</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(SolutionDir)RBM;$(SolutionDir)ConditionalRBM;C:\src\eigen-eigen-dbab66d00651;</AdditionalIncludeDirectories>
       <BufferSecurityCheck>true</BufferSecurityCheck>
       <SDLCheck>true</SDLCheck>
       <DisableLanguageExtensions>true</DisableLanguageExtensions>
@@ -159,6 +159,22 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClInclude Include="..\ConditionalRBM\ConditionalGRBM.h" />
+    <ClInclude Include="..\ConditionalRBM\ConditionalGRBMNode.h" />
+    <ClInclude Include="..\ConditionalRBM\ConditionalGRBMParamator.h" />
+    <ClInclude Include="..\ConditionalRBM\ConditionalGRBMSampler.h" />
+    <ClInclude Include="..\ConditionalRBM\ConditionalGRBMTrainer.h" />
+    <ClInclude Include="..\ConditionalRBM\ConditionalRBM.h" />
+    <ClInclude Include="..\ConditionalRBM\ConditionalRBMBase.h" />
+    <ClInclude Include="..\ConditionalRBM\ConditionalRBMMath.h" />
+    <ClInclude Include="..\ConditionalRBM\ConditionalRBMNode.h" />
+    <ClInclude Include="..\ConditionalRBM\ConditionalRBMNodeBase.h" />
+    <ClInclude Include="..\ConditionalRBM\ConditionalRBMParamator.h" />
+    <ClInclude Include="..\ConditionalRBM\ConditionalRBMParamatorBase.h" />
+    <ClInclude Include="..\ConditionalRBM\ConditionalRBMSampler.h" />
+    <ClInclude Include="..\ConditionalRBM\ConditionalRBMSamplerBase.h" />
+    <ClInclude Include="..\ConditionalRBM\ConditionalRBMTrainer.h" />
+    <ClInclude Include="..\ConditionalRBM\ConditionalRBMTrainerBase.h" />
     <ClInclude Include="..\RBM\GBRBM.h" />
     <ClInclude Include="..\RBM\GBRBMNode.h" />
     <ClInclude Include="..\RBM\GBRBMParamator.h" />
@@ -188,6 +204,17 @@
     <ClInclude Include="Train.h" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="..\ConditionalRBM\ConditionalGRBM.cpp" />
+    <ClCompile Include="..\ConditionalRBM\ConditionalGRBMNode.cpp" />
+    <ClCompile Include="..\ConditionalRBM\ConditionalGRBMParamator.cpp" />
+    <ClCompile Include="..\ConditionalRBM\ConditionalGRBMSampler.cpp" />
+    <ClCompile Include="..\ConditionalRBM\ConditionalGRBMTrainer.cpp" />
+    <ClCompile Include="..\ConditionalRBM\ConditionalRBM.cpp" />
+    <ClCompile Include="..\ConditionalRBM\ConditionalRBMMath.cpp" />
+    <ClCompile Include="..\ConditionalRBM\ConditionalRBMNode.cpp" />
+    <ClCompile Include="..\ConditionalRBM\ConditionalRBMParamator.cpp" />
+    <ClCompile Include="..\ConditionalRBM\ConditionalRBMSampler.cpp" />
+    <ClCompile Include="..\ConditionalRBM\ConditionalRBMTrainer.cpp" />
     <ClCompile Include="..\RBM\GBRBM.cpp" />
     <ClCompile Include="..\RBM\GBRBMNode.cpp" />
     <ClCompile Include="..\RBM\GBRBMParamator.cpp" />
