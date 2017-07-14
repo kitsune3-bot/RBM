@@ -11,6 +11,7 @@ class ConditionalGRBMTrainer : ConditionalRBMTrainerBase {
         Eigen::VectorXd vLambda;
         Eigen::VectorXd hBias;
         Eigen::MatrixXd weight;
+        Eigen::MatrixXd vxWeight;
         Eigen::MatrixXd hxWeight;
     };
 
@@ -19,6 +20,7 @@ class ConditionalGRBMTrainer : ConditionalRBMTrainerBase {
         Eigen::VectorXd vLambda;
         Eigen::VectorXd hBias;
         Eigen::MatrixXd weight;
+        Eigen::MatrixXd vxWeight;
         Eigen::MatrixXd hxWeight;
     };
 

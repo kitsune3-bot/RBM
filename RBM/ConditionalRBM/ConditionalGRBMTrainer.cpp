@@ -4,6 +4,7 @@
 #include <vector>
 #include <numeric>
 #include <random>
+#include <iostream>
 
 ConditionalGRBMTrainer::ConditionalGRBMTrainer()
 {
@@ -27,6 +28,7 @@ void ConditionalGRBMTrainer::initMomentum(ConditionalGRBM & rbm) {
     momentum.vLambda.setConstant(rbm.getVisibleSize(), 0.0);
     momentum.hBias.setConstant(rbm.getHiddenSize(), 0.0);
     momentum.weight.setConstant(rbm.getVisibleSize(), rbm.getHiddenSize(), 0.0);
+    //momentum.vxWeight.setConstant(rbm.getVisibleSize(), rbm.getCondSize(), 0.0);
     momentum.hxWeight.setConstant(rbm.getHiddenSize(), rbm.getCondSize(), 0.0);
 }
 
@@ -35,6 +37,7 @@ void ConditionalGRBMTrainer::initMomentum() {
     momentum.vLambda.setConstant(0.0);
     momentum.hBias.setConstant(0.0);
     momentum.weight.setConstant(0.0);
+    //momentum.vxWeight.setConstant(0.0);
     momentum.hxWeight.setConstant(0.0);
 }
 
@@ -43,6 +46,7 @@ void ConditionalGRBMTrainer::initGradient(ConditionalGRBM & rbm) {
     gradient.vLambda.setConstant(rbm.getVisibleSize(), 0.0);
     gradient.hBias.setConstant(rbm.getHiddenSize(), 0.0);
     gradient.weight.setConstant(rbm.getVisibleSize(), rbm.getHiddenSize(), 0.0);
+   // gradient.vxWeight.setConstant(rbm.getVisibleSize(), rbm.getCondSize(), 0.0);
     gradient.hxWeight.setConstant(rbm.getHiddenSize(), rbm.getCondSize(), 0.0);
 }
 
@@ -51,6 +55,7 @@ void ConditionalGRBMTrainer::initGradient() {
     gradient.vLambda.setConstant(0.0);
     gradient.hBias.setConstant(0.0);
     gradient.weight.setConstant(0.0);
+    //gradient.vxWeight.setConstant(0.0);
     gradient.hxWeight.setConstant(0.0);
 }
 
@@ -58,7 +63,7 @@ void ConditionalGRBMTrainer::initDataMean(ConditionalGRBM & rbm) {
     dataMean.visible.setConstant(rbm.getVisibleSize(), 0.0);
     dataMean.visible2.setConstant(rbm.getVisibleSize(), 0.0);  // Gaussian Unit
     dataMean.hidden.setConstant(rbm.getHiddenSize(), 0.0);
-    dataMean.conditional.setConstant(rbm.getHiddenSize(), 0.0);
+    dataMean.conditional.setConstant(rbm.getCondSize(), 0.0);
 }
 
 void ConditionalGRBMTrainer::initDataMean() {
@@ -72,7 +77,7 @@ void ConditionalGRBMTrainer::initSampleMean(ConditionalGRBM & rbm) {
     sampleMean.visible.setConstant(rbm.getVisibleSize(), 0.0);
     sampleMean.visible2.setConstant(rbm.getVisibleSize(), 0.0);  // Gaussian Unit
     sampleMean.hidden.setConstant(rbm.getHiddenSize(), 0.0);
-    sampleMean.conditional.setConstant(rbm.getHiddenSize(), 0.0);
+    sampleMean.conditional.setConstant(rbm.getCondSize(), 0.0);
 }
 
 void ConditionalGRBMTrainer::initSampleMean() {
@@ -97,11 +102,13 @@ void ConditionalGRBMTrainer::trainOnce(ConditionalGRBM & rbm, std::vector<std::v
 
     // ミニバッチ学習のためにデータインデックスをシャッフルする
     std::iota(data_indexes.begin(), data_indexes.end(), 0);
-    std::shuffle(data_indexes.begin(), data_indexes.end(), std::mt19937());
+    std::random_device rnd;
+    std::mt19937 mt(rnd());
+    std::shuffle(data_indexes.begin(), data_indexes.end(), mt);
 
     // ミニバッチ
     // バッチサイズの確認
-    int batch_size = this->batchSize < dataset.size() ? dataset.size() : this->batchSize;
+    int batch_size = this->batchSize < dataset.size() ? this->batchSize : dataset.size();
 
     // ミニバッチ学習に使うデータのインデックス集合
     std::vector<int> minibatch_indexes(batch_size);
@@ -134,14 +141,18 @@ void ConditionalGRBMTrainer::calcDataMean(ConditionalGRBM & rbm, std::vector<std
     initDataMean();
 
     for (auto & n : data_indexes) {
+        std::cout << "index:" << n << std::endl;
+
         auto & data = dataset[n];
-        auto & cond_data = dataset[n];
+        auto & cond_data = cond_dataset[n];
         Eigen::VectorXd vect = Eigen::Map<Eigen::VectorXd>(data.data(), data.size());
         rbm.nodes.v = vect;
         Eigen::VectorXd cond_vect = Eigen::Map<Eigen::VectorXd>(cond_data.data(), cond_data.size());
         rbm.nodes.x = cond_vect;
 
         dataMean.visible += vect;
+        dataMean.conditional += cond_vect;
+
         // Gausiann Unit限定 
         for (int i = 0; i < rbm.getVisibleSize(); i++) {
             dataMean.visible2(i) += vect(i) * vect(i) / 2.0;  // Gausiann Unit限定 
@@ -150,9 +161,11 @@ void ConditionalGRBMTrainer::calcDataMean(ConditionalGRBM & rbm, std::vector<std
         for (int j = 0; j < rbm.getHiddenSize(); j++) {
             dataMean.hidden(j) += rbm.actHidJ(j);
         }
+
     }
 
     dataMean.visible /= static_cast<double>(data_indexes.size());
+    dataMean.visible2 /= static_cast<double>(data_indexes.size());
     dataMean.hidden /= static_cast<double>(data_indexes.size());
     dataMean.conditional /= static_cast<double>(data_indexes.size());
 }
@@ -185,7 +198,7 @@ void ConditionalGRBMTrainer::calcSampleMean(ConditionalGRBM & rbm, std::vector<s
         // 結果を格納
         sampleMean.visible += rbm.nodes.v;
         sampleMean.hidden += rbm.nodes.h;
-        sampleMean.hidden += cond_vect;
+        sampleMean.conditional += cond_vect;
 
         // Gausiann Unit限定 
         for (int i = 0; i < rbm.getVisibleSize(); i++) {
@@ -194,6 +207,7 @@ void ConditionalGRBMTrainer::calcSampleMean(ConditionalGRBM & rbm, std::vector<s
     }
 
     sampleMean.visible /= static_cast<double>(data_indexes.size());
+    sampleMean.visible2 /= static_cast<double>(data_indexes.size());
     sampleMean.hidden /= static_cast<double>(data_indexes.size());
     sampleMean.conditional /= static_cast<double>(data_indexes.size());
 }
@@ -205,11 +219,16 @@ void ConditionalGRBMTrainer::calcGradient(ConditionalGRBM & rbm, std::vector<int
 
     for (int i = 0; i < rbm.getVisibleSize(); i++) {
         gradient.vBias(i) = dataMean.visible(i) - sampleMean.visible(i);
-        //gradient.vLambda(i) = dataMean.visible2(i) - sampleMean.visible2(i);
+        gradient.vLambda(i) = dataMean.visible2(i) - sampleMean.visible2(i);
 
         for (int j = 0; j < rbm.getHiddenSize(); j++) {
             gradient.weight(i, j) = dataMean.visible(i) * dataMean.hidden(j) - sampleMean.visible(i) * sampleMean.hidden(j);
         }
+
+//        for (int k = 0; k < rbm.getCondSize(); k++) {
+//            gradient.vxWeight(i, k) = dataMean.visible(i) * dataMean.conditional(k) - sampleMean.visible(i) * sampleMean.conditional(k);
+//        }
+
     }
 
     for (int j = 0; j < rbm.getHiddenSize(); j++) {
@@ -219,15 +238,20 @@ void ConditionalGRBMTrainer::calcGradient(ConditionalGRBM & rbm, std::vector<int
             gradient.hxWeight(j, k) = dataMean.hidden(j) * dataMean.conditional(k) - sampleMean.hidden(j) * sampleMean.conditional(k);
         }
     }
+
 }
 
 void ConditionalGRBMTrainer::updateMomentum(ConditionalGRBM & rbm) {
     for (int i = 0; i < rbm.getVisibleSize(); i++) {
-        momentum.vBias(i) = momentumRate * momentum.vBias(i) + learningRate * gradient.vBias(i);
-        //momentum.vLambda(i) = momentumRate * momentum.vLambda(i) + learningRate * gradient.vLambda(i);  // 非負制約満たすこと
+        momentum.vBias(i) = momentumRate * momentum.vBias(i) + learningRate * 0.1 *  gradient.vBias(i);
+        momentum.vLambda(i) = momentumRate * momentum.vLambda(i) + learningRate * 0.01 * gradient.vLambda(i);  // 非負制約満たすこと
 
         for (int j = 0; j < rbm.getHiddenSize(); j++) {
             momentum.weight(i, j) = momentumRate * momentum.weight(i, j) + learningRate * gradient.weight(i, j);
+        }
+
+        for (int k = 0; k < rbm.getCondSize(); k++) {
+            //momentum.vxWeight(i, k) = momentumRate * momentum.vxWeight(i, k) + learningRate * gradient.vxWeight(i, k);
         }
     }
 
@@ -235,7 +259,7 @@ void ConditionalGRBMTrainer::updateMomentum(ConditionalGRBM & rbm) {
         momentum.hBias(j) = momentumRate * momentum.hBias(j) + learningRate * gradient.hBias(j);
 
         for (int k = 0; k < rbm.getCondSize(); k++) {
-            momentum.hxWeight(j, k) = momentumRate * momentum.hxWeight(j, k) + learningRate * gradient.hxWeight(j, k);
+            momentum.hxWeight(j, k) = momentumRate * momentum.hxWeight(j, k) + learningRate *1* gradient.hxWeight(j, k);
         }
     }
 }
@@ -244,11 +268,15 @@ void ConditionalGRBMTrainer::updateMomentum(ConditionalGRBM & rbm) {
 void ConditionalGRBMTrainer::updateParams(ConditionalGRBM & rbm) {
     for (int i = 0; i < rbm.getVisibleSize(); i++) {
         rbm.params.b(i) += momentum.vBias(i);
-        //rbm.params.lambda(i) += momentum.vLambda(i);  // 非負制約を満たすこと
+        //rbm.params.lambda(i) += (rbm.params.lambda(i) + momentum.vLambda(i)) < 0 ? 0 : momentum.vLambda(i);  // 非負制約を満たすこと
 
         for (int j = 0; j < rbm.getHiddenSize(); j++) {
             rbm.params.w(i, j) += momentum.weight(i, j);
         }
+
+//        for (int k = 0; k < rbm.getCondSize(); k++) {
+//            rbm.params.vxW(i, k) += momentum.vxWeight(i, k);
+//        }
     }
 
     for (int j = 0; j < rbm.getHiddenSize(); j++) {
@@ -258,4 +286,5 @@ void ConditionalGRBMTrainer::updateParams(ConditionalGRBM & rbm) {
             rbm.params.hxW(j, k) += momentum.hxWeight(j, k);
         }
     }
+
 }

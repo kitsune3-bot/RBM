@@ -11,6 +11,7 @@ public:
     Eigen::VectorXd b;  // 可視変数のバイアス
     Eigen::VectorXd c;  // 隠れ変数のバイアス
     Eigen::MatrixXd w;  // 可視変数-隠れ変数間のカップリング
+    Eigen::MatrixXd vxW;  // 可視変数-条件変数間のカップリング
     Eigen::MatrixXd hxW;  // 隠れ変数-条件変数間のカップリング
     Eigen::VectorXd lambda;  // 可視変数の逆分散
 

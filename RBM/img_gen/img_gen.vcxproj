@@ -20,9 +20,9 @@
   </ItemGroup>
   <PropertyGroup Label="Globals">
     <VCProjectVersion>15.0</VCProjectVersion>
-    <ProjectGuid>{9BE8DD57-7F83-406B-AD8C-64F439187B4E}</ProjectGuid>
+    <ProjectGuid>{FD32413F-EDA9-439C-9FB1-A9F860561D3B}</ProjectGuid>
     <Keyword>Win32Proj</Keyword>
-    <RootNamespace>RBMRun</RootNamespace>
+    <RootNamespace>img_gen</RootNamespace>
     <WindowsTargetPlatformVersion>10.0.14393.0</WindowsTargetPlatformVersion>
   </PropertyGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
@@ -70,6 +70,9 @@
     <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
   </ImportGroup>
   <PropertyGroup Label="UserMacros" />
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
+    <LinkIncremental>false</LinkIncremental>
+  </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <LinkIncremental>true</LinkIncremental>
   </PropertyGroup>
@@ -79,21 +82,32 @@
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
     <LinkIncremental>false</LinkIncremental>
   </PropertyGroup>
-  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
-    <LinkIncremental>false</LinkIncremental>
-  </PropertyGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
+    <ClCompile>
+      <WarningLevel>Level3</WarningLevel>
+      <PrecompiledHeader>
+      </PrecompiledHeader>
+      <Optimization>MaxSpeed</Optimization>
+      <FunctionLevelLinking>true</FunctionLevelLinking>
+      <IntrinsicFunctions>true</IntrinsicFunctions>
+      <PreprocessorDefinitions>NDEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <AdditionalIncludeDirectories>C:\src\opencv-3.2.0\include;$(SolutionDir)RBM;$(SolutionDir)ConditionalRBM;C:\src\eigen-eigen-dbab66d00651</AdditionalIncludeDirectories>
+    </ClCompile>
+    <Link>
+      <SubSystem>Console</SubSystem>
+      <EnableCOMDATFolding>true</EnableCOMDATFolding>
+      <OptimizeReferences>true</OptimizeReferences>
+      <AdditionalLibraryDirectories>C:\src\opencv-3.2.0\x64\vc15\lib;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+    </Link>
+  </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <ClCompile>
       <PrecompiledHeader>
       </PrecompiledHeader>
-      <WarningLevel>Level4</WarningLevel>
+      <WarningLevel>Level3</WarningLevel>
       <Optimization>Disabled</Optimization>
       <PreprocessorDefinitions>WIN32;_DEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <AdditionalIncludeDirectories>C:\src\opencv-3.2.0\include;$(SolutionDir)RBM;$(SolutionDir)ConditionalRBM;C:\src\eigen-eigen-dbab66d00651</AdditionalIncludeDirectories>
-      <BufferSecurityCheck>true</BufferSecurityCheck>
-      <SDLCheck>true</SDLCheck>
-      <DisableLanguageExtensions>true</DisableLanguageExtensions>
-      <LanguageStandard>stdcpp14</LanguageStandard>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
@@ -104,14 +118,10 @@
     <ClCompile>
       <PrecompiledHeader>
       </PrecompiledHeader>
-      <WarningLevel>Level4</WarningLevel>
+      <WarningLevel>Level3</WarningLevel>
       <Optimization>Disabled</Optimization>
       <PreprocessorDefinitions>_DEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <AdditionalIncludeDirectories>C:\src\opencv-3.2.0\include;$(SolutionDir)RBM;$(SolutionDir)ConditionalRBM;C:\src\eigen-eigen-dbab66d00651</AdditionalIncludeDirectories>
-      <BufferSecurityCheck>true</BufferSecurityCheck>
-      <SDLCheck>true</SDLCheck>
-      <DisableLanguageExtensions>true</DisableLanguageExtensions>
-      <LanguageStandard>stdcpp14</LanguageStandard>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
@@ -120,7 +130,7 @@
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
     <ClCompile>
-      <WarningLevel>Level4</WarningLevel>
+      <WarningLevel>Level3</WarningLevel>
       <PrecompiledHeader>
       </PrecompiledHeader>
       <Optimization>MaxSpeed</Optimization>
@@ -128,10 +138,6 @@
       <IntrinsicFunctions>true</IntrinsicFunctions>
       <PreprocessorDefinitions>WIN32;NDEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <AdditionalIncludeDirectories>C:\src\opencv-3.2.0\include;$(SolutionDir)RBM;$(SolutionDir)ConditionalRBM;C:\src\eigen-eigen-dbab66d00651</AdditionalIncludeDirectories>
-      <BufferSecurityCheck>true</BufferSecurityCheck>
-      <SDLCheck>true</SDLCheck>
-      <DisableLanguageExtensions>true</DisableLanguageExtensions>
-      <LanguageStandard>stdcpp14</LanguageStandard>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
@@ -140,28 +146,20 @@
       <AdditionalLibraryDirectories>C:\src\opencv-3.2.0\x64\vc15\lib;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
     </Link>
   </ItemDefinitionGroup>
-  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
-    <ClCompile>
-      <WarningLevel>Level4</WarningLevel>
-      <PrecompiledHeader>
-      </PrecompiledHeader>
-      <Optimization>MaxSpeed</Optimization>
-      <FunctionLevelLinking>true</FunctionLevelLinking>
-      <IntrinsicFunctions>true</IntrinsicFunctions>
-      <PreprocessorDefinitions>NDEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
-      <AdditionalIncludeDirectories>C:\src\opencv-3.2.0\include;$(SolutionDir)RBM;$(SolutionDir)ConditionalRBM;C:\src\eigen-eigen-dbab66d00651</AdditionalIncludeDirectories>
-      <BufferSecurityCheck>true</BufferSecurityCheck>
-      <SDLCheck>true</SDLCheck>
-      <DisableLanguageExtensions>true</DisableLanguageExtensions>
-      <LanguageStandard>stdcpp14</LanguageStandard>
-    </ClCompile>
-    <Link>
-      <SubSystem>Console</SubSystem>
-      <EnableCOMDATFolding>true</EnableCOMDATFolding>
-      <OptimizeReferences>true</OptimizeReferences>
-      <AdditionalLibraryDirectories>C:\src\opencv-3.2.0\x64\vc15\lib;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
-    </Link>
-  </ItemDefinitionGroup>
+  <ItemGroup>
+    <ClCompile Include="..\ConditionalRBM\ConditionalGRBM.cpp" />
+    <ClCompile Include="..\ConditionalRBM\ConditionalGRBMNode.cpp" />
+    <ClCompile Include="..\ConditionalRBM\ConditionalGRBMParamator.cpp" />
+    <ClCompile Include="..\ConditionalRBM\ConditionalGRBMSampler.cpp" />
+    <ClCompile Include="..\ConditionalRBM\ConditionalGRBMTrainer.cpp" />
+    <ClCompile Include="..\ConditionalRBM\ConditionalRBM.cpp" />
+    <ClCompile Include="..\ConditionalRBM\ConditionalRBMMath.cpp" />
+    <ClCompile Include="..\ConditionalRBM\ConditionalRBMNode.cpp" />
+    <ClCompile Include="..\ConditionalRBM\ConditionalRBMParamator.cpp" />
+    <ClCompile Include="..\ConditionalRBM\ConditionalRBMSampler.cpp" />
+    <ClCompile Include="..\ConditionalRBM\ConditionalRBMTrainer.cpp" />
+    <ClCompile Include="Source.cpp" />
+  </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\ConditionalRBM\ConditionalGRBM.h" />
     <ClInclude Include="..\ConditionalRBM\ConditionalGRBMNode.h" />
@@ -179,68 +177,6 @@
     <ClInclude Include="..\ConditionalRBM\ConditionalRBMSamplerBase.h" />
     <ClInclude Include="..\ConditionalRBM\ConditionalRBMTrainer.h" />
     <ClInclude Include="..\ConditionalRBM\ConditionalRBMTrainerBase.h" />
-    <ClInclude Include="..\RBM\GBRBM.h" />
-    <ClInclude Include="..\RBM\GBRBMNode.h" />
-    <ClInclude Include="..\RBM\GBRBMParamator.h" />
-    <ClInclude Include="..\RBM\GBRBMSampler.h" />
-    <ClInclude Include="..\RBM\GBRBMTrainer.h" />
-    <ClInclude Include="..\RBM\GeneralizedGRBM.h" />
-    <ClInclude Include="..\RBM\GeneralizedGRBMNode.h" />
-    <ClInclude Include="..\RBM\GeneralizedGRBMParamator.h" />
-    <ClInclude Include="..\RBM\GeneralizedGRBMSampler.h" />
-    <ClInclude Include="..\RBM\GeneralizedGRBMTrainer.h" />
-    <ClInclude Include="..\RBM\GeneralizedRBM.h" />
-    <ClInclude Include="..\RBM\GeneralizedRBMNode.h" />
-    <ClInclude Include="..\RBM\GeneralizedRBMParamator.h" />
-    <ClInclude Include="..\RBM\GeneralizedRBMSampler.h" />
-    <ClInclude Include="..\RBM\GeneralizedRBMTrainer.h" />
-    <ClInclude Include="..\RBM\RBM.h" />
-    <ClInclude Include="..\RBM\RBMBase.h" />
-    <ClInclude Include="..\RBM\RBMMath.h" />
-    <ClInclude Include="..\RBM\RBMNode.h" />
-    <ClInclude Include="..\RBM\RBMNodeBase.h" />
-    <ClInclude Include="..\RBM\RBMParamator.h" />
-    <ClInclude Include="..\RBM\RBMParamatorBase.h" />
-    <ClInclude Include="..\RBM\RBMSampler.h" />
-    <ClInclude Include="..\RBM\RBMSamplerBase.h" />
-    <ClInclude Include="..\RBM\RBMTrainer.h" />
-    <ClInclude Include="..\RBM\RBMTrainerBase.h" />
-    <ClInclude Include="Train.h" />
-  </ItemGroup>
-  <ItemGroup>
-    <ClCompile Include="..\ConditionalRBM\ConditionalGRBM.cpp" />
-    <ClCompile Include="..\ConditionalRBM\ConditionalGRBMNode.cpp" />
-    <ClCompile Include="..\ConditionalRBM\ConditionalGRBMParamator.cpp" />
-    <ClCompile Include="..\ConditionalRBM\ConditionalGRBMSampler.cpp" />
-    <ClCompile Include="..\ConditionalRBM\ConditionalGRBMTrainer.cpp" />
-    <ClCompile Include="..\ConditionalRBM\ConditionalRBM.cpp" />
-    <ClCompile Include="..\ConditionalRBM\ConditionalRBMMath.cpp" />
-    <ClCompile Include="..\ConditionalRBM\ConditionalRBMNode.cpp" />
-    <ClCompile Include="..\ConditionalRBM\ConditionalRBMParamator.cpp" />
-    <ClCompile Include="..\ConditionalRBM\ConditionalRBMSampler.cpp" />
-    <ClCompile Include="..\ConditionalRBM\ConditionalRBMTrainer.cpp" />
-    <ClCompile Include="..\RBM\GBRBM.cpp" />
-    <ClCompile Include="..\RBM\GBRBMNode.cpp" />
-    <ClCompile Include="..\RBM\GBRBMParamator.cpp" />
-    <ClCompile Include="..\RBM\GBRBMSampler.cpp" />
-    <ClCompile Include="..\RBM\GBRBMTrainer.cpp" />
-    <ClCompile Include="..\RBM\GeneralizedGRBM.cpp" />
-    <ClCompile Include="..\RBM\GeneralizedGRBMNode.cpp" />
-    <ClCompile Include="..\RBM\GeneralizedGRBMParamator.cpp" />
-    <ClCompile Include="..\RBM\GeneralizedGRBMSampler.cpp" />
-    <ClCompile Include="..\RBM\GeneralizedGRBMTrainer.cpp" />
-    <ClCompile Include="..\RBM\GeneralizedRBM.cpp" />
-    <ClCompile Include="..\RBM\GeneralizedRBMNode.cpp" />
-    <ClCompile Include="..\RBM\GeneralizedRBMParamator.cpp" />
-    <ClCompile Include="..\RBM\GeneralizedRBMSampler.cpp" />
-    <ClCompile Include="..\RBM\GeneralizedRBMTrainer.cpp" />
-    <ClCompile Include="..\RBM\RBM.cpp" />
-    <ClCompile Include="..\RBM\RBMMath.cpp" />
-    <ClCompile Include="..\RBM\RBMNode.cpp" />
-    <ClCompile Include="..\RBM\RBMParamator.cpp" />
-    <ClCompile Include="..\RBM\RBMSampler.cpp" />
-    <ClCompile Include="..\RBM\RBMTrainer.cpp" />
-    <ClCompile Include="Source.cpp" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

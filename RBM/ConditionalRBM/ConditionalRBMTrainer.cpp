@@ -26,6 +26,7 @@ void ConditionalRBMTrainer::initMomentum(ConditionalRBM & rbm) {
     momentum.vBias.setConstant(rbm.getVisibleSize(), 0.0);
     momentum.hBias.setConstant(rbm.getHiddenSize(), 0.0);
     momentum.weight.setConstant(rbm.getVisibleSize(), rbm.getHiddenSize(), 0.0);
+    //momentum.vxWeight.setConstant(rbm.getVisibleSize(), rbm.getCondSize(), 0.0);
     momentum.hxWeight.setConstant(rbm.getHiddenSize(), rbm.getCondSize(), 0.0);
 }
 
@@ -33,6 +34,7 @@ void ConditionalRBMTrainer::initMomentum() {
     momentum.vBias.setConstant(0.0);
     momentum.hBias.setConstant(0.0);
     momentum.weight.setConstant(0.0);
+    //momentum.vxWeight.setConstant(0.0);
     momentum.hxWeight.setConstant(0.0);
 }
 
@@ -40,13 +42,15 @@ void ConditionalRBMTrainer::initGradient(ConditionalRBM & rbm) {
     gradient.vBias.setConstant(rbm.getVisibleSize(), 0.0);
     gradient.hBias.setConstant(rbm.getHiddenSize(), 0.0);
     gradient.weight.setConstant(rbm.getVisibleSize(), rbm.getHiddenSize(), 0.0);
-    gradient.weight.setConstant(rbm.getHiddenSize(), rbm.getCondSize(), 0.0);
+    //gradient.vxWeight.setConstant(rbm.getVisibleSize(), rbm.getCondSize(), 0.0);
+    gradient.hxWeight.setConstant(rbm.getHiddenSize(), rbm.getCondSize(), 0.0);
 }
 
 void ConditionalRBMTrainer::initGradient() {
     gradient.vBias.setConstant(0.0);
     gradient.hBias.setConstant(0.0);
     gradient.weight.setConstant(0.0);
+    //gradient.vxWeight.setConstant(0.0);
     gradient.hxWeight.setConstant(0.0);
 }
 
@@ -93,8 +97,7 @@ void ConditionalRBMTrainer::trainOnce(ConditionalRBM & rbm, std::vector<std::vec
 
     // ミニバッチ
     // バッチサイズの確認
-    int batch_size = this->batchSize < dataset.size() ? dataset.size() : this->batchSize;
-
+    int batch_size = this->batchSize < dataset.size() ? this->batchSize : dataset.size();
     // ミニバッチ学習に使うデータのインデックス集合
     std::vector<int> minibatch_indexes(batch_size);
     std::copy(data_indexes.begin(), data_indexes.begin() + batch_size, minibatch_indexes.begin());
@@ -134,12 +137,12 @@ void ConditionalRBMTrainer::calcDataMean(ConditionalRBM & rbm, std::vector<std::
         rbm.nodes.x = cond_vect;
 
         dataMean.visible += vect;
+        dataMean.conditional += cond_vect;
 
         for (int j = 0; j < rbm.getHiddenSize(); j++) {
             dataMean.hidden(j) += rbm.actHidJ(j);
         }
 
-        dataMean.conditional += cond_vect;
     }
 
     dataMean.visible /= static_cast<double>(data_indexes.size());

@@ -259,3 +259,7 @@ paket-files/
 # Python Tools for Visual Studio (PTVS)
 __pycache__/
 *.pyc
+/RBM/img_gen/image
+/RBM/img_gen/out5.png
+/RBM/img_gen/out2.png
+/RBM/img_gen/out1.png

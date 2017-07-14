@@ -22,7 +22,7 @@ ConditionalGRBM::ConditionalGRBM(size_t v_size, size_t h_size, size_t x_size) {
 
     // パラメータ初期化
     params = ConditionalGRBMParamator(v_size, h_size, x_size);
-    params.initParamsRandom(-0.01, 0.01);
+    params.initParamsRandom(-0.001, 0.001);
 }
 
 
@@ -71,6 +71,11 @@ double ConditionalGRBM::lambda(int vindex) {
     double lam = params.b(vindex);
 
     // TODO: 条件変数からの影響受けるようにしたい
+    // FIXME: 因子化しないと計算量やばい
+//    for (int k = 0; k < xSize; k++) {
+//        lam += params.vxW(vindex, k) * nodes.x(k);
+//    }
+
 
     // TODO: Eigen使ってるから内積計算で高速化できる
     for (int j = 0; j < hSize; j++) {
