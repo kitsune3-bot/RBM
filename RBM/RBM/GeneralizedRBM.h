@@ -61,6 +61,12 @@ public:
     // 可視変数を条件で与えた隠れ変数の条件付き確率, P(h_j | v)
     double condProbHid(int hindex, double value);
 
+	// 可視変数の期待値, E[v_i]
+	double expectedValueVis(int vindex);
+
+	// 隠れ変数の期待値, E[h_j]
+	double expectedValueHid(int hindex);
+
     //
     //appendix methods
     //

@@ -3,6 +3,9 @@
 #include "RBMParamator.h"
 #include "RBMNode.h"
 
+//
+// Restricted Boltzmann Machine(variables \in {0, 1})
+//
 class RBM : RBMBase {
 private:
     size_t vSize = 0;
@@ -23,7 +26,7 @@ public:
     // 隠れ変数の数を返す
     size_t getHiddenSize();
 
-    // 規格化を返します
+    // 規格化定数を返します
     double getNormalConstant();
 
     // エネルギー関数を返します
@@ -52,5 +55,11 @@ public:
 
     // 可視変数を条件で与えた隠れ変数の条件付き確率, P(h_j | v)
     double condProbHid(int hindex, double value);
+
+	// 可視変数の期待値, E[v_i]
+	double expectedValueVis(int vindex);
+
+	// 隠れ変数の期待値, E[h_j]
+	double expectedValueHid(int hindex);
 };
 
