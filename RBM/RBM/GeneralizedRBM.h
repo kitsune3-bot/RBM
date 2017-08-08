@@ -4,6 +4,7 @@
 #include "GeneralizedRBMParamator.h"
 #include <vector>
 
+
 class GeneralizedRBM :
     public RBMBase
 {

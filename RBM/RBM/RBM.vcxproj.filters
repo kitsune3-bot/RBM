@@ -84,9 +84,6 @@
     <ClInclude Include="RBMTrainerBase.h">
       <Filter>ヘッダー ファイル\RBMBase</Filter>
     </ClInclude>
-    <ClInclude Include="GeneralizedRBM.h">
-      <Filter>ヘッダー ファイル\GeneralizedRBM</Filter>
-    </ClInclude>
     <ClInclude Include="GeneralizedRBMNode.h">
       <Filter>ヘッダー ファイル\GeneralizedRBM</Filter>
     </ClInclude>
@@ -128,6 +125,12 @@
     </ClInclude>
     <ClInclude Include="GeneralizedGRBMTrainer.h">
       <Filter>ヘッダー ファイル\GeneralizedGRBM</Filter>
+    </ClInclude>
+    <ClInclude Include="GeneralizedRBM.h">
+      <Filter>ヘッダー ファイル\GeneralizedRBM</Filter>
+    </ClInclude>
+    <ClInclude Include="StateCounter.h">
+      <Filter>ヘッダー ファイル\Common</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

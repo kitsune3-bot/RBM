@@ -51,6 +51,9 @@
     <ClCompile Include="..\ConditionalRBM\ConditionalRBMTrainer.cpp">
       <Filter>ソース ファイル</Filter>
     </ClCompile>
+    <ClCompile Include="BatchNormalization.cpp">
+      <Filter>ソース ファイル</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\ConditionalRBM\ConditionalGRBM.h">
@@ -99,6 +102,9 @@
       <Filter>ヘッダー ファイル</Filter>
     </ClInclude>
     <ClInclude Include="..\ConditionalRBM\ConditionalRBMTrainerBase.h">
+      <Filter>ヘッダー ファイル</Filter>
+    </ClInclude>
+    <ClInclude Include="BatchNormalization.h">
       <Filter>ヘッダー ファイル</Filter>
     </ClInclude>
   </ItemGroup>
