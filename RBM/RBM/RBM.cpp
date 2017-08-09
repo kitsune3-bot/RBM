@@ -2,6 +2,8 @@
 #include "RBMMath.h"
 #include "StateCounter.h"
 #include <cmath>
+#include <vector>
+#include <numeric>
 
 
 RBM::RBM()
@@ -41,6 +43,11 @@ size_t RBM::getHiddenSize() {
 double RBM::getNormalConstant() {
     // 未実装なので保留
     throw;
+
+
+	std::vector<int> v_states(vSize, 2);
+	StateCounter<std::vector<int>> sc(v_states);
+
 }
 
 
