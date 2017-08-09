@@ -1,5 +1,5 @@
 ﻿#pragma once
-#include <vector>
+#include <Eigen/Core>
 #include <iostream>
 #include <numeric>
 
@@ -9,6 +9,7 @@ class StateCounter
 protected:
 	size_t _innerCounter = 0;  // 内部状態数カウンター
 	size_t _maxCount = 0;  // 状態数カウンターの最大値
+	size_t _elemNum = 0;  // 桁数
 	T _stateSet;  // 各状態数
 	T _stateCounterSet;
 
@@ -34,6 +35,7 @@ public:
 		_stateCounterSet = state_set;
 		std::fill(_stateCounterSet.begin(), _stateCounterSet.end(), 0);
 		_maxCount = std::accumulate(state_set.begin(), state_set.end(), 1, [](int init, int i) { return init * i; });
+		_elemNum = state_set.size();
 	}
 
 	~StateCounter() = default;
@@ -56,3 +58,4 @@ public:
 	}
 
 };
+

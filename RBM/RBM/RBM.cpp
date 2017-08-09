@@ -45,9 +45,34 @@ double RBM::getNormalConstant() {
     throw;
 
 
-	std::vector<int> v_states(vSize, 2);
-	StateCounter<std::vector<int>> sc(v_states);
+	StateCounter<std::vector<int>> sc(std::vector<int>(vSize, 2));  // 可視変数Vの状態カウンター
 
+	double z = 0.0;
+	auto max_count = sc.getMaxCount();
+	for (int i = 0; i < max_count; i++) {
+		// TODO: ここに状態数の計算を記述せよ
+		int state_map[] = { 0, 1 };  // 状態->値変換写像
+
+		// FIXME: stlのコピーは遅いぞ
+		auto v_state = sc.getState();
+		for (int i = 0; i < vSize; i++) {
+			this->nodes.v(i) = state_map[v_state[i]];
+		}
+
+		// 項計算
+		double term = exp(nodes.getVisibleLayer().dot(params.b));
+		for (int j = 0; j < hSize; j++) {
+			term *= 1 + exp(mu(j));
+		}
+
+		z += term;
+
+
+
+		sc++;
+	}
+
+	return z;
 }
 
 
