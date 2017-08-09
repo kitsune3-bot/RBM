@@ -51,4 +51,8 @@ public:
 		return _stateCounterSet;
 	}
 
+	size_t getMaxCount() {
+		return _maxCount;
+	}
+
 };
