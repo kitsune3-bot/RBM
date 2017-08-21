@@ -2,6 +2,7 @@
 #include "RBMBase.h"
 #include "RBMParamator.h"
 #include "RBMNode.h"
+#include "RBMSampler.h"
 
 //
 // Restricted Boltzmann Machine(variables \in {0, 1})
@@ -14,6 +15,7 @@ private:
 public:
     RBMParamator params;
     RBMNode nodes;
+	const RBMSampler sampler;
 
 public:
     RBM();

@@ -124,7 +124,7 @@ void GeneralizedRBMTrainer::calcExact(GeneralizedRBM & rbm, std::vector<std::vec
 	calcDataMean(rbm, dataset, data_indexes);
 
 	// サンプル平均の計算(CD)
-	calcRBMExpectedCD(rbm, dataset, data_indexes);
+	calcRBMExpectedExact(rbm, dataset, data_indexes);
 
 	// 勾配計算
 	calcGradient(rbm, data_indexes);

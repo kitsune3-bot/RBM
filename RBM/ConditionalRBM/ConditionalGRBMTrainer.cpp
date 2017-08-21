@@ -20,7 +20,7 @@ ConditionalGRBMTrainer::ConditionalGRBMTrainer(ConditionalGRBM & rbm) {
     initMomentum(rbm);
     initGradient(rbm);
     initDataMean(rbm);
-    initSampleMean(rbm);
+    initRBMExpected(rbm);
 }
 
 void ConditionalGRBMTrainer::initMomentum(ConditionalGRBM & rbm) {
@@ -73,14 +73,14 @@ void ConditionalGRBMTrainer::initDataMean() {
     dataMean.conditional.setConstant(0.0);
 }
 
-void ConditionalGRBMTrainer::initSampleMean(ConditionalGRBM & rbm) {
+void ConditionalGRBMTrainer::initRBMExpected(ConditionalGRBM & rbm) {
     sampleMean.visible.setConstant(rbm.getVisibleSize(), 0.0);
     sampleMean.visible2.setConstant(rbm.getVisibleSize(), 0.0);  // Gaussian Unit
     sampleMean.hidden.setConstant(rbm.getHiddenSize(), 0.0);
     sampleMean.conditional.setConstant(rbm.getCondSize(), 0.0);
 }
 
-void ConditionalGRBMTrainer::initSampleMean() {
+void ConditionalGRBMTrainer::initRBMExpected() {
     sampleMean.visible.setConstant(0.0);
     sampleMean.visible2.setConstant(0.0);  // Gaussian Unit
     sampleMean.hidden.setConstant(0.0);
@@ -130,7 +130,7 @@ void ConditionalGRBMTrainer::calcContrastiveDivergence(ConditionalGRBM & rbm, st
     calcDataMean(rbm, dataset, cond_dataset, data_indexes);
 
     // サンプル平均の計算(CD)
-    calcSampleMean(rbm, dataset, cond_dataset, data_indexes);
+    calcRBMExpected(rbm, dataset, cond_dataset, data_indexes);
 
     // 勾配計算
     calcGradient(rbm, data_indexes);
@@ -170,9 +170,9 @@ void ConditionalGRBMTrainer::calcDataMean(ConditionalGRBM & rbm, std::vector<std
     dataMean.conditional /= static_cast<double>(data_indexes.size());
 }
 
-void ConditionalGRBMTrainer::calcSampleMean(ConditionalGRBM & rbm, std::vector<std::vector<double>> & dataset, std::vector<std::vector<double>> & cond_dataset, std::vector<int> & data_indexes) {
+void ConditionalGRBMTrainer::calcRBMExpected(ConditionalGRBM & rbm, std::vector<std::vector<double>> & dataset, std::vector<std::vector<double>> & cond_dataset, std::vector<int> & data_indexes) {
     // 0埋め初期化
-    initSampleMean();
+    initRBMExpected();
 
     for (auto & n : data_indexes) {
         auto & data = dataset[n];

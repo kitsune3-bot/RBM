@@ -9,6 +9,6 @@
 
 #include "GeneralizedRBM.h"
 #include <iostream>
-
+#include <numeric>
 
 // TODO: プログラムに必要な追加ヘッダーをここで参照してください

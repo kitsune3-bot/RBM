@@ -2,6 +2,7 @@
 #include "RBMBase.h"
 #include "GeneralizedRBMNode.h"
 #include "GeneralizedRBMParamator.h"
+#include "GeneralizedRBMSampler.h"
 #include <vector>
 
 
@@ -21,6 +22,7 @@ private:
 public:
 	GeneralizedRBMParamator params;
 	GeneralizedRBMNode nodes;
+	GeneralizedRBMSampler sampler;
 
 public:
 	GeneralizedRBM();

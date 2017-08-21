@@ -148,6 +148,7 @@
     <ClInclude Include="RBMSamplerBase.h" />
     <ClInclude Include="RBMTrainer.h" />
     <ClInclude Include="RBMTrainerBase.h" />
+    <ClInclude Include="rbmutil.h" />
     <ClInclude Include="StateCounter.h" />
   </ItemGroup>
   <ItemGroup>

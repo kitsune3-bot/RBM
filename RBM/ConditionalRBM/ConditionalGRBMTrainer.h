@@ -25,24 +25,28 @@ class ConditionalGRBMTrainer : ConditionalRBMTrainerBase {
     };
 
     struct DataMean {
-        Eigen::VectorXd visible;
-        Eigen::VectorXd visible2;  // Gausiann Unit限定 
-        Eigen::VectorXd hidden;
-        Eigen::VectorXd conditional;
-    };
+		Eigen::VectorXd vBias;
+		Eigen::VectorXd vLambda;
+		Eigen::VectorXd hBias;
+		Eigen::MatrixXd weight;
+		Eigen::MatrixXd vxWeight;
+		Eigen::MatrixXd hxWeight;
+	};
 
-    struct SampleMean {
-        Eigen::VectorXd visible;
-        Eigen::VectorXd visible2;  // Gausiann Unit限定 
-        Eigen::VectorXd hidden;
-        Eigen::VectorXd conditional;
-    };
+    struct RBMExpected {
+		Eigen::VectorXd vBias;
+		Eigen::VectorXd vLambda;
+		Eigen::VectorXd hBias;
+		Eigen::MatrixXd weight;
+		Eigen::MatrixXd vxWeight;
+		Eigen::MatrixXd hxWeight;
+	};
 
 private:
     Momentum momentum;
     Gradient gradient;
     DataMean dataMean;
-    SampleMean sampleMean;
+    RBMExpected sampleMean;
 
 
 public:
@@ -81,11 +85,11 @@ public:
     void initDataMean();
 
     // サンプル平均ベクトルを初期化
-    void initSampleMean(ConditionalRBMBase & rbm) { initSampleMean(reinterpret_cast<ConditionalGRBM &>(rbm)); }
-    void initSampleMean(ConditionalGRBM & rbm);
+    void initRBMExpected(ConditionalRBMBase & rbm) { initRBMExpected(reinterpret_cast<ConditionalGRBM &>(rbm)); }
+    void initRBMExpected(ConditionalGRBM & rbm);
 
     // 確保済みサンプル平均ベクトルを初期化
-    void initSampleMean();
+    void initRBMExpected();
 
     // 学習
     void train(ConditionalRBMBase & rbm, std::vector<std::vector<double>> & dataset, std::vector<std::vector<double>> & cond_dataset) { train(reinterpret_cast<ConditionalGRBM &>(rbm), dataset, cond_dataset); }
@@ -104,8 +108,8 @@ public:
     void calcDataMean(ConditionalGRBM & rbm, std::vector<std::vector<double>> & dataset, std::vector<std::vector<double>> & cond_dataset, std::vector<int> & data_indexes);
 
     // サンプル平均の計算
-    void calcSampleMean(ConditionalRBMBase & rbm, std::vector<std::vector<double>> & dataset, std::vector<std::vector<double>> & cond_dataset, std::vector<int> & data_indexes) { calcSampleMean(reinterpret_cast<ConditionalGRBM &>(rbm), dataset, cond_dataset, data_indexes); }
-    void calcSampleMean(ConditionalGRBM & rbm, std::vector<std::vector<double>> & dataset, std::vector<std::vector<double>> & cond_dataset, std::vector<int> & data_indexes);
+    void calcRBMExpected(ConditionalRBMBase & rbm, std::vector<std::vector<double>> & dataset, std::vector<std::vector<double>> & cond_dataset, std::vector<int> & data_indexes) { calcRBMExpected(reinterpret_cast<ConditionalGRBM &>(rbm), dataset, cond_dataset, data_indexes); }
+    void calcRBMExpected(ConditionalGRBM & rbm, std::vector<std::vector<double>> & dataset, std::vector<std::vector<double>> & cond_dataset, std::vector<int> & data_indexes);
 
     // 勾配の計算
     void calcGradient(ConditionalRBMBase & rbm, std::vector<int> & data_indexes) { calcGradient(reinterpret_cast<ConditionalGRBM &>(rbm), data_indexes); }
