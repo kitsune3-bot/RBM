@@ -109,11 +109,23 @@ void GeneralizedRBMTrainer::calcContrastiveDivergence(GeneralizedRBM & rbm, std:
     calcDataMean(rbm, dataset, data_indexes);
 
     // サンプル平均の計算(CD)
-    calcSampleMean(rbm, dataset, data_indexes);
+    calcSampleMeanCD(rbm, dataset, data_indexes);
 
     // 勾配計算
     calcGradient(rbm, data_indexes);
 }
+
+void GeneralizedRBMTrainer::calcExact(GeneralizedRBM & rbm, std::vector<std::vector<double>> & dataset, std::vector<int> & data_indexes) {
+	// データ平均の計算
+	calcDataMean(rbm, dataset, data_indexes);
+
+	// サンプル平均の計算(CD)
+	calcSampleMeanCD(rbm, dataset, data_indexes);
+
+	// 勾配計算
+	calcGradient(rbm, data_indexes);
+}
+
 
 void GeneralizedRBMTrainer::calcDataMean(GeneralizedRBM & rbm, std::vector<std::vector<double>> & dataset, std::vector<int> & data_indexes) {
     // 0埋め初期化
@@ -135,7 +147,7 @@ void GeneralizedRBMTrainer::calcDataMean(GeneralizedRBM & rbm, std::vector<std::
     dataMean.hidden /= static_cast<double>(data_indexes.size());
 }
 
-void GeneralizedRBMTrainer::calcSampleMean(GeneralizedRBM & rbm, std::vector<std::vector<double>> & dataset, std::vector<int> & data_indexes) {
+void GeneralizedRBMTrainer::calcSampleMeanCD(GeneralizedRBM & rbm, std::vector<std::vector<double>> & dataset, std::vector<int> & data_indexes) {
     // 0埋め初期化
     initSampleMean();
 
@@ -165,6 +177,38 @@ void GeneralizedRBMTrainer::calcSampleMean(GeneralizedRBM & rbm, std::vector<std
     sampleMean.visible /= static_cast<double>(data_indexes.size());
     sampleMean.hidden /= static_cast<double>(data_indexes.size());
 }
+
+void GeneralizedRBMTrainer::calcSampleMeanExact(GeneralizedRBM & rbm, std::vector<std::vector<double>> & dataset, std::vector<int> & data_indexes) {
+	// 0埋め初期化
+	initSampleMean();
+
+	for (auto & n : data_indexes) {
+		auto & data = dataset[n];
+		Eigen::VectorXd vect = Eigen::Map<Eigen::VectorXd>(data.data(), data.size());
+
+		// GeneralizedRBMの初期値設定
+		rbm.nodes.v = vect;
+
+		for (int j = 0; j < rbm.getHiddenSize(); j++) {
+			rbm.nodes.h(j) = rbm.actHidJ(j);
+		}
+
+		// CD-K
+		GeneralizedRBMSampler sampler;
+		for (int k = 0; k < cdk; k++) {
+			sampler.updateByBlockedGibbsSamplingVisible(rbm);
+			sampler.updateByBlockedGibbsSamplingHidden(rbm);
+		}
+
+		// 結果を格納
+		sampleMean.visible += rbm.nodes.v;
+		sampleMean.hidden += rbm.nodes.h;
+	}
+
+	sampleMean.visible /= static_cast<double>(data_indexes.size());
+	sampleMean.hidden /= static_cast<double>(data_indexes.size());
+}
+
 
 // 勾配の計算
 void GeneralizedRBMTrainer::calcGradient(GeneralizedRBM & rbm, std::vector<int> & data_indexes) {

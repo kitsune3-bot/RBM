@@ -39,8 +39,8 @@ class RBMTrainerBase {
     // データ平均の計算
     virtual void calcDataMean(RBMBase & rbm, std::vector<std::vector<double>> & dataset, std::vector<int> & data_indexes) = 0;
 
-    // サンプル平均の計算
-    virtual void calcSampleMean(RBMBase & rbm, std::vector<std::vector<double>> & dataset, std::vector<int> & data_indexes) = 0;
+    // CD法でのサンプル平均の計算
+    virtual void calcSampleMeanCD(RBMBase & rbm, std::vector<std::vector<double>> & dataset, std::vector<int> & data_indexes) = 0;
 
     // 勾配の計算
     virtual void calcGradient(RBMBase & rbm, std::vector<int> & data_indexes) = 0;

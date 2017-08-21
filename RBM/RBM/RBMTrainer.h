@@ -93,8 +93,8 @@ public:
     void calcDataMean(RBM & rbm, std::vector<std::vector<double>> & dataset, std::vector<int> & data_indexes);
 
     // サンプル平均の計算
-    void calcSampleMean(RBMBase & rbm, std::vector<std::vector<double>> & dataset, std::vector<int> & data_indexes) { calcSampleMean(reinterpret_cast<RBM &>(rbm), dataset, data_indexes); }
-    void calcSampleMean(RBM & rbm, std::vector<std::vector<double>> & dataset, std::vector<int> & data_indexes);
+    void calcSampleMeanCD(RBMBase & rbm, std::vector<std::vector<double>> & dataset, std::vector<int> & data_indexes) { calcSampleMean(reinterpret_cast<RBM &>(rbm), dataset, data_indexes); }
+    void calcSampleMeanCD(RBM & rbm, std::vector<std::vector<double>> & dataset, std::vector<int> & data_indexes);
 
     // 勾配の計算
     void calcGradient(RBMBase & rbm, std::vector<int> & data_indexes) { calcGradient(reinterpret_cast<RBM &>(rbm), data_indexes); }
