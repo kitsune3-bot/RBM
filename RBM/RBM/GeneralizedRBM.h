@@ -57,6 +57,9 @@ public:
 	// exp(mu)の可視変数に関する全ての実現値の総和
 	double sumExpMu(int hindex);
 
+	// 可視変数の確率(隠れ変数周辺化済み)
+	double probVis(std::vector<double> data);
+
 	// 隠れ変数を条件で与えた可視変数の条件付き確率, P(v_i | h)
 	double condProbVis(int vindex, double value);
 
@@ -68,6 +71,9 @@ public:
 
 	// 隠れ変数の期待値, E[h_j]
 	double expectedValueHid(int hindex);
+
+	// 可視変数の期待値, E[v_i h_j]
+	double expectedValueVisHis(int vindex, int hindex);
 
 	//
 	//appendix methods
