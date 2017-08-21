@@ -19,14 +19,16 @@ class GeneralizedRBMTrainer : RBMTrainerBase {
     };
 
     struct DataMean {
-        Eigen::VectorXd visible;
-        Eigen::VectorXd hidden;
-    };
+        Eigen::VectorXd vBias;
+        Eigen::VectorXd hBias;
+		Eigen::MatrixXd weight;
+	};
 
     struct SampleMean {
-        Eigen::VectorXd visible;
-        Eigen::VectorXd hidden;
-    };
+		Eigen::VectorXd vBias;
+		Eigen::VectorXd hBias;
+		Eigen::MatrixXd weight;
+	};
 
 private:
     Momentum momentum;
