@@ -1,5 +1,6 @@
 ﻿#include "GeneralizedGRBM.h"
 #include "RBMMath.h"
+#include "StateCounter.h"
 #include <cmath>
 
 
@@ -41,8 +42,34 @@ size_t GeneralizedGRBM::getHiddenSize() {
 
 // 規格化を返します
 double GeneralizedGRBM::getNormalConstant() {
-    // 未実装なので保留
-    throw;
+	throw;
+	// 以下全部間違ってます///
+
+	StateCounter<std::vector<int>> sc(std::vector<int>(vSize, this->divSize + 1));  // 可視変数Vの状態カウンター
+	auto state_map = this->splitHiddenSet();  // 状態->値変換写像
+
+
+	double z = 0.0;
+	auto max_count = sc.getMaxCount();
+	for (int i = 0; i < max_count; i++, sc++) {
+		// TODO: ここに状態数の計算を記述せよ
+
+		// FIXME: stlのコピーは遅いぞ
+		auto v_state = sc.getState();
+		for (int i = 0; i < vSize; i++) {
+			this->nodes.v(i) = state_map[v_state[i]];
+		}
+
+		// 項計算
+		double term = exp(nodes.getVisibleLayer().dot(params.b));
+		for (int j = 0; j < hSize; j++) {
+			term *= 1 + exp(mu(j));
+		}
+
+		z += term;
+	}
+
+	return z;
 }
 
 
@@ -197,3 +224,4 @@ void GeneralizedGRBM::setHiddenDiveSize(size_t div_size) {
     // 区間分割
     hiddenValueSet = splitHiddenSet();
 }
+

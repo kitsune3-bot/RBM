@@ -41,22 +41,17 @@ size_t RBM::getHiddenSize() {
 
 // 規格化を返します
 double RBM::getNormalConstant() {
-    // 未実装なので保留
-    throw;
-
-
 	StateCounter<std::vector<int>> sc(std::vector<int>(vSize, 2));  // 可視変数Vの状態カウンター
+	int v_state_map[] = { 0, 1 };  // 可視変数の状態->値変換写像
+
 
 	double z = 0.0;
 	auto max_count = sc.getMaxCount();
-	for (int i = 0; i < max_count; i++) {
-		// TODO: ここに状態数の計算を記述せよ
-		int state_map[] = { 0, 1 };  // 状態->値変換写像
-
+	for (int i = 0; i < max_count; i++, sc++) {
 		// FIXME: stlのコピーは遅いぞ
 		auto v_state = sc.getState();
 		for (int i = 0; i < vSize; i++) {
-			this->nodes.v(i) = state_map[v_state[i]];
+			this->nodes.v(i) = v_state_map[v_state[i]];
 		}
 
 		// 項計算
@@ -66,10 +61,6 @@ double RBM::getNormalConstant() {
 		}
 
 		z += term;
-
-
-
-		sc++;
 	}
 
 	return z;

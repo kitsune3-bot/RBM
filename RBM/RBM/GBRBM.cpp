@@ -1,5 +1,6 @@
 ﻿#include "GBRBM.h"
 #include "RBMMath.h"
+#include "StateCounter.h"
 #include <cmath>
 
 
@@ -38,8 +39,33 @@ size_t GBRBM::getHiddenSize() {
 
 // 規格化を返します
 double GBRBM::getNormalConstant() {
-    // 未実装なので保留
-    throw;
+	throw;
+	// 以下全部間違ってます///
+
+	StateCounter<std::vector<int>> sc(std::vector<int>(vSize, 2));  // 可視変数Vの状態カウンター
+
+	double z = 0.0;
+	auto max_count = sc.getMaxCount();
+	for (int i = 0; i < max_count; i++, sc++) {
+		// TODO: ここに状態数の計算を記述せよ
+		int state_map[] = { 0, 1 };  // 状態->値変換写像
+
+									 // FIXME: stlのコピーは遅いぞ
+		auto v_state = sc.getState();
+		for (int i = 0; i < vSize; i++) {
+			this->nodes.v(i) = state_map[v_state[i]];
+		}
+
+		// 項計算
+		double term = exp(nodes.getVisibleLayer().dot(params.b));
+		for (int j = 0; j < hSize; j++) {
+			term *= 1 + exp(mu(j));
+		}
+
+		z += term;
+	}
+
+	return z;
 }
 
 
