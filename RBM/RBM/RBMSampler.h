@@ -1,7 +1,7 @@
 ﻿#pragma once
 #include "RBMSamplerBase.h"
-#include "RBM.h"
 
+class RBM;
 
 class RBMSampler : RBMSamplerBase{
 public:

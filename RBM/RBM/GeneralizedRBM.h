@@ -60,7 +60,7 @@ public:
 	double sumExpMu(int hindex);
 
 	// 可視変数の確率(隠れ変数周辺化済み)
-	double probVis(std::vector<double> data);
+	double probVis(std::vector<double> & data);
 
 	// 隠れ変数を条件で与えた可視変数の条件付き確率, P(v_i | h)
 	double condProbVis(int vindex, double value);

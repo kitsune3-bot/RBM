@@ -26,7 +26,7 @@ class GeneralizedGRBMTrainer : RBMTrainerBase {
         Eigen::VectorXd hidden;
     };
 
-    struct SampleMean {
+    struct RBMExpected {
         Eigen::VectorXd visible;
         Eigen::VectorXd visible2;  // Gausiann Unit限定 
         Eigen::VectorXd hidden;
@@ -36,7 +36,7 @@ private:
     Momentum momentum;
     Gradient gradient;
     DataMean dataMean;
-    SampleMean sampleMean;
+    RBMExpected sampleMean;
 
 
 public:
@@ -74,11 +74,11 @@ public:
     void initDataMean();
 
     // サンプル平均ベクトルを初期化
-    void initSampleMean(RBMBase & rbm) { initSampleMean(reinterpret_cast<GeneralizedGRBM &>(rbm)); }
-    void initSampleMean(GeneralizedGRBM & rbm);
+    void initRBMExpected(RBMBase & rbm) { initRBMExpected(reinterpret_cast<GeneralizedGRBM &>(rbm)); }
+    void initRBMExpected(GeneralizedGRBM & rbm);
 
     // 確保済みサンプル平均ベクトルを初期化
-    void initSampleMean();
+    void initRBMExpected();
 
     // 学習
     void train(RBMBase & rbm, std::vector<std::vector<double>> & dataset) { train(reinterpret_cast<GeneralizedGRBM &>(rbm), dataset); }
@@ -97,8 +97,8 @@ public:
     void calcDataMean(GeneralizedGRBM & rbm, std::vector<std::vector<double>> & dataset, std::vector<int> & data_indexes);
 
     // サンプル平均の計算
-    void calcSampleMean(RBMBase & rbm, std::vector<std::vector<double>> & dataset, std::vector<int> & data_indexes) { calcSampleMean(reinterpret_cast<GeneralizedGRBM &>(rbm), dataset, data_indexes); }
-    void calcSampleMean(GeneralizedGRBM & rbm, std::vector<std::vector<double>> & dataset, std::vector<int> & data_indexes);
+    void calcRBMExpectedCD(RBMBase & rbm, std::vector<std::vector<double>> & dataset, std::vector<int> & data_indexes) { calcRBMExpectedCD(reinterpret_cast<GeneralizedGRBM &>(rbm), dataset, data_indexes); }
+    void calcRBMExpectedCD(GeneralizedGRBM & rbm, std::vector<std::vector<double>> & dataset, std::vector<int> & data_indexes);
 
     // 勾配の計算
     void calcGradient(RBMBase & rbm, std::vector<int> & data_indexes) { calcGradient(reinterpret_cast<GeneralizedGRBM &>(rbm), data_indexes); }

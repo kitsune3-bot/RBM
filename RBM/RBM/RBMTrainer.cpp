@@ -19,7 +19,7 @@ RBMTrainer::RBMTrainer(RBM & rbm) {
     initMomentum(rbm);
     initGradient(rbm);
     initDataMean(rbm);
-    initSampleMean(rbm);
+    initRBMExpected(rbm);
 }
 
 void RBMTrainer::initMomentum(RBM & rbm) {
@@ -56,12 +56,12 @@ void RBMTrainer::initDataMean() {
     dataMean.hidden.setConstant(0.0);
 }
 
-void RBMTrainer::initSampleMean(RBM & rbm) {
+void RBMTrainer::initRBMExpected(RBM & rbm) {
     sampleMean.visible.setConstant(rbm.getVisibleSize(), 0.0);
     sampleMean.hidden.setConstant(rbm.getHiddenSize(), 0.0);
 }
 
-void RBMTrainer::initSampleMean() {
+void RBMTrainer::initRBMExpected() {
     sampleMean.visible.setConstant(0.0);
     sampleMean.hidden.setConstant(0.0);
 }
@@ -107,7 +107,7 @@ void RBMTrainer::calcContrastiveDivergence(RBM & rbm, std::vector<std::vector<do
     calcDataMean(rbm, dataset, data_indexes);
 
     // サンプル平均の計算(CD)
-    calcSampleMean(rbm, dataset, data_indexes);
+    calcRBMExpectedCD(rbm, dataset, data_indexes);
 
     // 勾配計算
     calcGradient(rbm, data_indexes);
@@ -133,9 +133,9 @@ void RBMTrainer::calcDataMean(RBM & rbm, std::vector<std::vector<double>> & data
     dataMean.hidden /= static_cast<double>(data_indexes.size());
 }
 
-void RBMTrainer::calcSampleMean(RBM & rbm, std::vector<std::vector<double>> & dataset, std::vector<int> & data_indexes) {
+void RBMTrainer::calcRBMExpectedCD(RBM & rbm, std::vector<std::vector<double>> & dataset, std::vector<int> & data_indexes) {
     // 0埋め初期化
-    initSampleMean();
+    initRBMExpected();
 
     for (auto & n : data_indexes) {
         auto & data = dataset[n];

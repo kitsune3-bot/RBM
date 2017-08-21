@@ -23,7 +23,7 @@ class RBMTrainer : RBMTrainerBase {
         Eigen::VectorXd hidden;
     };
 
-    struct SampleMean {
+    struct RBMExpected {
         Eigen::VectorXd visible;
         Eigen::VectorXd hidden;
     };
@@ -32,7 +32,7 @@ private:
     Momentum momentum;
     Gradient gradient;
     DataMean dataMean;
-    SampleMean sampleMean;
+    RBMExpected sampleMean;
 
 
 public:
@@ -70,11 +70,11 @@ public:
     void initDataMean();
 
     // サンプル平均ベクトルを初期化
-    void initSampleMean(RBMBase & rbm) { initSampleMean(reinterpret_cast<RBM &>(rbm)); }
-    void initSampleMean(RBM & rbm);
+    void initRBMExpected(RBMBase & rbm) { initRBMExpected(reinterpret_cast<RBM &>(rbm)); }
+    void initRBMExpected(RBM & rbm);
 
     // 確保済みサンプル平均ベクトルを初期化
-    void initSampleMean();
+    void initRBMExpected();
 
     // 学習
     void train(RBMBase & rbm, std::vector<std::vector<double>> & dataset) { train(reinterpret_cast<RBM &>(rbm), dataset); }
@@ -93,8 +93,8 @@ public:
     void calcDataMean(RBM & rbm, std::vector<std::vector<double>> & dataset, std::vector<int> & data_indexes);
 
     // サンプル平均の計算
-    void calcSampleMeanCD(RBMBase & rbm, std::vector<std::vector<double>> & dataset, std::vector<int> & data_indexes) { calcSampleMean(reinterpret_cast<RBM &>(rbm), dataset, data_indexes); }
-    void calcSampleMeanCD(RBM & rbm, std::vector<std::vector<double>> & dataset, std::vector<int> & data_indexes);
+    void calcRBMExpectedCD(RBMBase & rbm, std::vector<std::vector<double>> & dataset, std::vector<int> & data_indexes) { calcRBMExpectedCD(reinterpret_cast<RBM &>(rbm), dataset, data_indexes); }
+    void calcRBMExpectedCD(RBM & rbm, std::vector<std::vector<double>> & dataset, std::vector<int> & data_indexes);
 
     // 勾配の計算
     void calcGradient(RBMBase & rbm, std::vector<int> & data_indexes) { calcGradient(reinterpret_cast<RBM &>(rbm), data_indexes); }

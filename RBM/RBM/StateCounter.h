@@ -3,7 +3,7 @@
 #include <iostream>
 #include <numeric>
 
-template <typename T>
+template <class T>
 class StateCounter
 {
 protected:

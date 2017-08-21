@@ -1,4 +1,5 @@
 #include "GeneralizedRBMSampler.h"
+#include "GeneralizedRBM.h"
 #include <random>
 
 

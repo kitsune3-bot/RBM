@@ -1,8 +1,8 @@
 ﻿#pragma once
 #include "RBMSamplerBase.h"
-#include "GeneralizedRBM.h"
 #include <Eigen/Core>
 
+class GeneralizedRBM;
 
 class GeneralizedRBMSampler : RBMSamplerBase {
 public:

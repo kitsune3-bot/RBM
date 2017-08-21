@@ -154,13 +154,13 @@ double GeneralizedRBM::sumExpMu(int hindex) {
 }
 
 // 可視変数の確率(隠れ変数周辺化済み)
-double GeneralizedRBM::probVis(std::vector<double> data) {
-	for (int i = 0; i < vSize; i++) {
-		nodes.v(i) = data[i];
-	}
-
+double GeneralizedRBM::probVis(std::vector<double> & data) {
 	// 分配関数
 	double z = getNormalConstant();
+
+	for (int i = 0; i < getVisibleSize(); i++) {
+		this->nodes.v(i) = data[i];
+	}
 
 	// bとvの内積
 	auto b_dot_v = [&]() {

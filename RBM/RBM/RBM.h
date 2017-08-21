@@ -15,7 +15,7 @@ private:
 public:
     RBMParamator params;
     RBMNode nodes;
-	const RBMSampler sampler;
+	RBMSampler sampler;
 
 public:
     RBM();
