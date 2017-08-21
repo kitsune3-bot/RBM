@@ -443,7 +443,7 @@ double GeneralizedRBM::expectedValueHid(int hindex) {
 
 
 // 隠れ変数の期待値, E[v_i h_j]
-double GeneralizedRBM::expectedValueVisHis(int vindex, int hindex) {
+double GeneralizedRBM::expectedValueVisHid(int vindex, int hindex) {
 	throw;
 	// まだ未実装
 

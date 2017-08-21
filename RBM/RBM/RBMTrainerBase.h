@@ -22,10 +22,10 @@ class RBMTrainerBase {
     virtual void initDataMean() = 0;
 
     // サンプル平均ベクトルを初期化
-    virtual void initSampleMean(RBMBase & rbm) = 0;
+    virtual void initRBMExpected(RBMBase & rbm) = 0;
 
     // 確保済みサンプル平均ベクトルを初期化
-    virtual void initSampleMean() = 0;
+    virtual void initRBMExpected() = 0;
 
     // 学習
     virtual void train(RBMBase & rbm, std::vector<std::vector<double>> & dataset) = 0;
@@ -40,7 +40,7 @@ class RBMTrainerBase {
     virtual void calcDataMean(RBMBase & rbm, std::vector<std::vector<double>> & dataset, std::vector<int> & data_indexes) = 0;
 
     // CD法でのサンプル平均の計算
-    virtual void calcSampleMeanCD(RBMBase & rbm, std::vector<std::vector<double>> & dataset, std::vector<int> & data_indexes) = 0;
+    virtual void calcRBMExpectedCD(RBMBase & rbm, std::vector<std::vector<double>> & dataset, std::vector<int> & data_indexes) = 0;
 
     // 勾配の計算
     virtual void calcGradient(RBMBase & rbm, std::vector<int> & data_indexes) = 0;

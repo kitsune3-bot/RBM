@@ -73,7 +73,7 @@ public:
 	double expectedValueHid(int hindex);
 
 	// 可視変数の期待値, E[v_i h_j]
-	double expectedValueVisHis(int vindex, int hindex);
+	double expectedValueVisHid(int vindex, int hindex);
 
 	//
 	//appendix methods

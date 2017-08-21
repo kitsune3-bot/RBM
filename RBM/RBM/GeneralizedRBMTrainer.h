@@ -24,7 +24,7 @@ class GeneralizedRBMTrainer : RBMTrainerBase {
 		Eigen::MatrixXd weight;
 	};
 
-    struct SampleMean {
+    struct RBMExpected {
 		Eigen::VectorXd vBias;
 		Eigen::VectorXd hBias;
 		Eigen::MatrixXd weight;
@@ -34,7 +34,7 @@ private:
     Momentum momentum;
     Gradient gradient;
     DataMean dataMean;
-    SampleMean sampleMean;
+    RBMExpected rbmexpected;
 
 
 public:
@@ -72,11 +72,11 @@ public:
     void initDataMean();
 
     // サンプル平均ベクトルを初期化
-    void initSampleMean(RBMBase & rbm) { initSampleMean(reinterpret_cast<GeneralizedRBM &>(rbm)); }
-    void initSampleMean(GeneralizedRBM & rbm);
+    void initRBMExpected(RBMBase & rbm) { initRBMExpected(reinterpret_cast<GeneralizedRBM &>(rbm)); }
+    void initRBMExpected(GeneralizedRBM & rbm);
 
     // 確保済みサンプル平均ベクトルを初期化
-    void initSampleMean();
+    void initRBMExpected();
 
     // 学習
     void train(RBMBase & rbm, std::vector<std::vector<double>> & dataset) { train(reinterpret_cast<GeneralizedRBM &>(rbm), dataset); }
@@ -99,12 +99,12 @@ public:
     void calcDataMean(GeneralizedRBM & rbm, std::vector<std::vector<double>> & dataset, std::vector<int> & data_indexes);
 
     // サンプル平均の計算
-    void calcSampleMeanCD(RBMBase & rbm, std::vector<std::vector<double>> & dataset, std::vector<int> & data_indexes) { calcSampleMeanCD(reinterpret_cast<GeneralizedRBM &>(rbm), dataset, data_indexes); }
-    void calcSampleMeanCD(GeneralizedRBM & rbm, std::vector<std::vector<double>> & dataset, std::vector<int> & data_indexes);
+    void calcRBMExpectedCD(RBMBase & rbm, std::vector<std::vector<double>> & dataset, std::vector<int> & data_indexes) { calcRBMExpectedCD(reinterpret_cast<GeneralizedRBM &>(rbm), dataset, data_indexes); }
+    void calcRBMExpectedCD(GeneralizedRBM & rbm, std::vector<std::vector<double>> & dataset, std::vector<int> & data_indexes);
 
 	// サンプル平均の計算
-	void calcSampleMeanExact(RBMBase & rbm, std::vector<std::vector<double>> & dataset, std::vector<int> & data_indexes) { calcSampleMeanExact(reinterpret_cast<GeneralizedRBM &>(rbm), dataset, data_indexes); }
-	void calcSampleMeanExact(GeneralizedRBM & rbm, std::vector<std::vector<double>> & dataset, std::vector<int> & data_indexes);
+	void calcRBMExpectedExact(RBMBase & rbm, std::vector<std::vector<double>> & dataset, std::vector<int> & data_indexes) { calcRBMExpectedExact(reinterpret_cast<GeneralizedRBM &>(rbm), dataset, data_indexes); }
+	void calcRBMExpectedExact(GeneralizedRBM & rbm, std::vector<std::vector<double>> & dataset, std::vector<int> & data_indexes);
 
 
     // 勾配の計算

@@ -19,7 +19,7 @@ GeneralizedRBMTrainer::GeneralizedRBMTrainer(GeneralizedRBM & rbm) {
     initMomentum(rbm);
     initGradient(rbm);
     initDataMean(rbm);
-    initSampleMean(rbm);
+    initRBMExpected(rbm);
 }
 
 void GeneralizedRBMTrainer::initMomentum(GeneralizedRBM & rbm) {
@@ -58,16 +58,16 @@ void GeneralizedRBMTrainer::initDataMean() {
 	dataMean.weight.setConstant(0.0);
 }
 
-void GeneralizedRBMTrainer::initSampleMean(GeneralizedRBM & rbm) {
-	sampleMean.vBias.setConstant(rbm.getVisibleSize(), 0.0);
-	sampleMean.hBias.setConstant(rbm.getHiddenSize(), 0.0);
-	sampleMean.weight.setConstant(rbm.getVisibleSize(), rbm.getHiddenSize(), 0.0);
+void GeneralizedRBMTrainer::initRBMExpected(GeneralizedRBM & rbm) {
+	rbmexpected.vBias.setConstant(rbm.getVisibleSize(), 0.0);
+	rbmexpected.hBias.setConstant(rbm.getHiddenSize(), 0.0);
+	rbmexpected.weight.setConstant(rbm.getVisibleSize(), rbm.getHiddenSize(), 0.0);
 }
 
-void GeneralizedRBMTrainer::initSampleMean() {
-	sampleMean.vBias.setConstant(0.0);
-	sampleMean.hBias.setConstant(0.0);
-	sampleMean.weight.setConstant(0.0);
+void GeneralizedRBMTrainer::initRBMExpected() {
+	rbmexpected.vBias.setConstant(0.0);
+	rbmexpected.hBias.setConstant(0.0);
+	rbmexpected.weight.setConstant(0.0);
 }
 
 void GeneralizedRBMTrainer::train(GeneralizedRBM & rbm, std::vector<std::vector<double>> & dataset) {
@@ -113,7 +113,7 @@ void GeneralizedRBMTrainer::calcContrastiveDivergence(GeneralizedRBM & rbm, std:
     calcDataMean(rbm, dataset, data_indexes);
 
     // サンプル平均の計算(CD)
-    calcSampleMeanCD(rbm, dataset, data_indexes);
+    calcRBMExpectedCD(rbm, dataset, data_indexes);
 
     // 勾配計算
     calcGradient(rbm, data_indexes);
@@ -124,7 +124,7 @@ void GeneralizedRBMTrainer::calcExact(GeneralizedRBM & rbm, std::vector<std::vec
 	calcDataMean(rbm, dataset, data_indexes);
 
 	// サンプル平均の計算(CD)
-	calcSampleMeanCD(rbm, dataset, data_indexes);
+	calcRBMExpectedCD(rbm, dataset, data_indexes);
 
 	// 勾配計算
 	calcGradient(rbm, data_indexes);
@@ -148,16 +148,20 @@ void GeneralizedRBMTrainer::calcDataMean(GeneralizedRBM & rbm, std::vector<std::
 				dataMean.weight(i, j) += vect(i) * rbm.actHidJ(j);
 			}
 		}
-    }
+
+		for (int j = 0; j < rbm.getHiddenSize(); j++) {
+			dataMean.hBias(j) += rbm.actHidJ(j);
+		}
+	}
 
     dataMean.vBias /= static_cast<double>(data_indexes.size());
 	dataMean.hBias /= static_cast<double>(data_indexes.size());
 	dataMean.weight /= static_cast<double>(data_indexes.size());
 }
 
-void GeneralizedRBMTrainer::calcSampleMeanCD(GeneralizedRBM & rbm, std::vector<std::vector<double>> & dataset, std::vector<int> & data_indexes) {
+void GeneralizedRBMTrainer::calcRBMExpectedCD(GeneralizedRBM & rbm, std::vector<std::vector<double>> & dataset, std::vector<int> & data_indexes) {
     // 0埋め初期化
-    initSampleMean();
+    initRBMExpected();
 
     for (auto & n : data_indexes) {
         auto & data = dataset[n];
@@ -178,50 +182,39 @@ void GeneralizedRBMTrainer::calcSampleMeanCD(GeneralizedRBM & rbm, std::vector<s
         }
 
         // 結果を格納
-        sampleMean.vBias += rbm.nodes.v;
-        sampleMean.hBias += rbm.nodes.h;
+        rbmexpected.vBias += rbm.nodes.v;
+        rbmexpected.hBias += rbm.nodes.h;
 
 		for (int i = 0; i < rbm.getVisibleSize(); i++) {
 			for (int j = 0; j < rbm.getHiddenSize(); j++) {
-				sampleMean.weight(i, j) = rbm.nodes.v(i) * rbm.nodes.h(j);
+				rbmexpected.weight(i, j) = rbm.nodes.v(i) * rbm.nodes.h(j);
 			}
 		}
     }
 
-    sampleMean.vBias /= static_cast<double>(data_indexes.size());
-	sampleMean.hBias /= static_cast<double>(data_indexes.size());
-	sampleMean.weight /= static_cast<double>(data_indexes.size());
+    rbmexpected.vBias /= static_cast<double>(data_indexes.size());
+	rbmexpected.hBias /= static_cast<double>(data_indexes.size());
+	rbmexpected.weight /= static_cast<double>(data_indexes.size());
 }
 
-void GeneralizedRBMTrainer::calcSampleMeanExact(GeneralizedRBM & rbm, std::vector<std::vector<double>> & dataset, std::vector<int> & data_indexes) {
+void GeneralizedRBMTrainer::calcRBMExpectedExact(GeneralizedRBM & rbm, std::vector<std::vector<double>> & dataset, std::vector<int> & data_indexes) {
 	// 0埋め初期化
-	initSampleMean();
+	initRBMExpected();
 
-	for (auto & n : data_indexes) {
-		auto & data = dataset[n];
-		Eigen::VectorXd vect = Eigen::Map<Eigen::VectorXd>(data.data(), data.size());
-
-		// GeneralizedRBMの初期値設定
-		rbm.nodes.v = vect;
-
+	// FIXME: 分配関数の計算がネックになる。 規格化定数使いまわしで高速化可能
+	for (int i = 0; i < rbm.getVisibleSize(); i++) {
+		rbmexpected.vBias(i) = rbm.expectedValueVis(i);
+		
 		for (int j = 0; j < rbm.getHiddenSize(); j++) {
-			rbm.nodes.h(j) = rbm.actHidJ(j);
+			rbmexpected.weight(i, j) = rbm.expectedValueVisHid(i, j);
 		}
-
-		// CD-K
-		GeneralizedRBMSampler sampler;
-		for (int k = 0; k < cdk; k++) {
-			sampler.updateByBlockedGibbsSamplingVisible(rbm);
-			sampler.updateByBlockedGibbsSamplingHidden(rbm);
-		}
-
-		// 結果を格納
-		sampleMean.visible += rbm.nodes.v;
-		sampleMean.hidden += rbm.nodes.h;
 	}
 
-	sampleMean.visible /= static_cast<double>(data_indexes.size());
-	sampleMean.hidden /= static_cast<double>(data_indexes.size());
+	// FIXME: 分配関数の計算がネックになる。 規格化定数使いまわしで高速化可能
+	for (int j = 0; j < rbm.getHiddenSize(); j++) {
+		rbmexpected.hBias(j) = rbm.expectedValueHid(j);
+	}
+
 }
 
 
@@ -231,15 +224,15 @@ void GeneralizedRBMTrainer::calcGradient(GeneralizedRBM & rbm, std::vector<int> 
     initGradient();
 
     for (int i = 0; i < rbm.getVisibleSize(); i++) {
-        gradient.vBias(i) = dataMean.visible(i) - sampleMean.visible(i);
+        gradient.vBias(i) = dataMean.vBias(i) - rbmexpected.vBias(i);
 
         for (int j = 0; j < rbm.getHiddenSize(); j++) {
-            gradient.weight(i, j) = dataMean.visible(i) * dataMean.hidden(j) - sampleMean.visible(i) * sampleMean.hidden(j);
+            gradient.weight(i, j) = dataMean.weight(i) - rbmexpected.weight(i, j);
         }
     }
 
     for (int j = 0; j < rbm.getHiddenSize(); j++) {
-        gradient.hBias(j) = dataMean.hidden(j) - sampleMean.hidden(j);
+        gradient.hBias(j) = dataMean.hBias(j) - rbmexpected.hBias(j);
     }
 }
 
