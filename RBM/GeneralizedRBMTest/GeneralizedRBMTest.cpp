@@ -2,20 +2,58 @@
 //
 
 #include "stdafx.h"
-#include <rbmutil.h>
-#include <StateCounter.h>
 
-int main()
-{
-	GeneralizedRBM general_rbm(10, 10);
-	GeneralizedRBM general_rbm2(10, 10);
+TEST(RBMTest, NormalConstantTestBeforeTrain) {
+	GeneralizedRBM general_rbm(10, 100);
 	general_rbm.setHiddenMin(-1.0);
 	general_rbm.setHiddenMax(1.0);
-	std::vector<double> dat = { 1,1,1,1,1,1,1,1,1,1 };
-	StateCounter<std::vector<int>> sc(std::vector<int>(general_rbm.getVisibleSize(), 2));  // 可視変数Vの状態カウンター
 
-	std::cout << rbmutil::kld(general_rbm, general_rbm2, std::vector<int>{0, 1}) << std::endl;
+	// 0 < Z
+	auto z = general_rbm.getNormalConstant();
+	ASSERT_LT(0, z);
 
-	return 0;
+	// chk NaN
+	ASSERT_FALSE(isnan(z));
+
+	// chk inf, -inf
+	ASSERT_FALSE(isinf(z));
 }
+
+
+/*
+TEST(RBMTest, NormalConstantAfterTrainWithCDTest) {
+	GeneralizedRBM general_rbm(10, 100);
+	general_rbm.setHiddenMin(-1.0);
+	general_rbm.setHiddenMax(1.0);
+
+	// 0 < Z
+	auto z = general_rbm.getNormalConstant();
+	ASSERT_LT(0, z);
+
+	// chk NaN
+	ASSERT_FALSE(isnan(z));
+
+	// chk inf, -inf
+	ASSERT_FALSE(isinf(z));
+}
+*/
+
+/*
+TEST(RBMTest, NormalConstantAfterTrainWithExactTest) {
+	throw;
+	GeneralizedRBM general_rbm(10, 100);
+	general_rbm.setHiddenMin(-1.0);
+	general_rbm.setHiddenMax(1.0);
+
+	// 0 < Z
+	auto z = general_rbm.getNormalConstant();
+	ASSERT_LT(0, z);
+
+	// chk NaN
+	ASSERT_FALSE(isnan(z));
+
+	// chk inf, -inf
+	ASSERT_FALSE(isinf(z));
+}
+*/
 
