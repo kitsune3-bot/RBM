@@ -8,6 +8,7 @@
 #include "targetver.h"
 
 #include "GeneralizedRBM.h"
+#include "GeneralizedRBMTrainer.h"
 #include "StateCounter.h"
 #include <gtest/gtest.h>
 #include <iostream>

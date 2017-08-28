@@ -163,6 +163,7 @@
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="GeneralizedRBMTest.cpp" />
+    <ClCompile Include="GeneralizedRBMTrainTest.cpp" />
     <ClCompile Include="RBMTest.cpp" />
     <ClCompile Include="stdafx.cpp">
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Create</PrecompiledHeader>

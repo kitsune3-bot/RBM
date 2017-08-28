@@ -9,7 +9,7 @@
 class GeneralizedRBM :
 	public RBMBase
 {
-private:
+protected:
 	size_t vSize = 0;
 	size_t hSize = 0;
 	double hMin = 0.0;

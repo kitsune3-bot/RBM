@@ -76,7 +76,20 @@ void GeneralizedRBMTrainer::train(GeneralizedRBM & rbm, std::vector<std::vector<
     }
 }
 
+void GeneralizedRBMTrainer::trainCD(GeneralizedRBM & rbm, std::vector<std::vector<double>> & dataset) {
+	for (int e = 0; e < epoch; e++) {
+		trainOnceCD(rbm, dataset);
+	}
+}
 
+void GeneralizedRBMTrainer::trainExact(GeneralizedRBM & rbm, std::vector<std::vector<double>> & dataset) {
+	for (int e = 0; e < epoch; e++) {
+		trainOnceExact(rbm, dataset);
+	}
+}
+
+
+// FIXME: CDとExactをフラグで切り分けられるように
 // 1回だけ学習
 void GeneralizedRBMTrainer::trainOnce(GeneralizedRBM & rbm, std::vector<std::vector<double>> & dataset) {
     // 勾配初期化
@@ -98,7 +111,7 @@ void GeneralizedRBMTrainer::trainOnce(GeneralizedRBM & rbm, std::vector<std::vec
     std::copy(data_indexes.begin(), data_indexes.begin() + batch_size, minibatch_indexes.begin());
 
     // Contrastive Divergence
-    calcContrastiveDivergence(rbm, dataset, minibatch_indexes);
+	calcContrastiveDivergence(rbm, dataset, minibatch_indexes);
 
     // モーメンタムの更新
     updateMomentum(rbm);
@@ -107,6 +120,67 @@ void GeneralizedRBMTrainer::trainOnce(GeneralizedRBM & rbm, std::vector<std::vec
     updateParams(rbm);
 
 }
+
+void GeneralizedRBMTrainer::trainOnceCD(GeneralizedRBM & rbm, std::vector<std::vector<double>> & dataset) {
+	// 勾配初期化
+	initGradient();
+
+	// データインデックス集合
+	std::vector<int> data_indexes(dataset.size());
+
+	// ミニバッチ学習のためにデータインデックスをシャッフルする
+	std::iota(data_indexes.begin(), data_indexes.end(), 0);
+	std::shuffle(data_indexes.begin(), data_indexes.end(), std::mt19937());
+
+	// ミニバッチ
+	// バッチサイズの確認
+	int batch_size = this->batchSize < dataset.size() ? dataset.size() : this->batchSize;
+
+	// ミニバッチ学習に使うデータのインデックス集合
+	std::vector<int> minibatch_indexes(batch_size);
+	std::copy(data_indexes.begin(), data_indexes.begin() + batch_size, minibatch_indexes.begin());
+
+	// Contrastive Divergence
+	calcContrastiveDivergence(rbm, dataset, minibatch_indexes);
+
+	// モーメンタムの更新
+	updateMomentum(rbm);
+
+	// 勾配の更新
+	updateParams(rbm);
+
+}
+
+void GeneralizedRBMTrainer::trainOnceExact(GeneralizedRBM & rbm, std::vector<std::vector<double>> & dataset) {
+	// 勾配初期化
+	initGradient();
+
+	// データインデックス集合
+	std::vector<int> data_indexes(dataset.size());
+
+	// ミニバッチ学習のためにデータインデックスをシャッフルする
+	std::iota(data_indexes.begin(), data_indexes.end(), 0);
+	std::shuffle(data_indexes.begin(), data_indexes.end(), std::mt19937());
+
+	// ミニバッチ
+	// バッチサイズの確認
+	int batch_size = this->batchSize < dataset.size() ? dataset.size() : this->batchSize;
+
+	// ミニバッチ学習に使うデータのインデックス集合
+	std::vector<int> minibatch_indexes(batch_size);
+	std::copy(data_indexes.begin(), data_indexes.begin() + batch_size, minibatch_indexes.begin());
+
+	// Contrastive Divergence
+	calcExact(rbm, dataset, minibatch_indexes);
+
+	// モーメンタムの更新
+	updateMomentum(rbm);
+
+	// 勾配の更新
+	updateParams(rbm);
+
+}
+
 
 void GeneralizedRBMTrainer::calcContrastiveDivergence(GeneralizedRBM & rbm, std::vector<std::vector<double>> & dataset, std::vector<int> & data_indexes) {
     // データ平均の計算

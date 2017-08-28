@@ -82,9 +82,17 @@ public:
     void train(RBMBase & rbm, std::vector<std::vector<double>> & dataset) { train(reinterpret_cast<GeneralizedRBM &>(rbm), dataset); }
     void train(GeneralizedRBM & rbm, std::vector<std::vector<double>> & dataset);
 
+	void trainCD(GeneralizedRBM & rbm, std::vector<std::vector<double>> & dataset);
+	void trainExact(GeneralizedRBM & rbm, std::vector<std::vector<double>> & dataset);
+
+
     // 1回だけ学習
     void trainOnce(RBMBase & rbm, std::vector<std::vector<double>> & dataset) { trainOnce(reinterpret_cast<GeneralizedRBM &>(rbm), dataset); }
     void trainOnce(GeneralizedRBM & rbm, std::vector<std::vector<double>> & dataset);
+
+	void trainOnceCD(GeneralizedRBM & rbm, std::vector<std::vector<double>> & dataset);
+	void trainOnceExact(GeneralizedRBM & rbm, std::vector<std::vector<double>> & dataset);
+
 
     // CD計算
     void calcContrastiveDivergence(RBMBase & rbm, std::vector<std::vector<double>> & dataset, std::vector<int> & data_indexes) { calcContrastiveDivergence(reinterpret_cast<GeneralizedRBM &>(rbm), dataset, data_indexes); }
