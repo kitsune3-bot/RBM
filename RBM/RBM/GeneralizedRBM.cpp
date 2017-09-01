@@ -59,6 +59,7 @@ double GeneralizedRBM::getNormalConstant() {
 		for (int j = 0; j < hSize; j++) {
 			auto mu_j = mu(j);
 
+			// 離散型
 			auto sum_h_j_discrete = [&](double mu_j) {
 				double sum = 0.0;
 
@@ -69,6 +70,7 @@ double GeneralizedRBM::getNormalConstant() {
 				return sum;
 			};
 
+			// 連続型
 			auto sum_h_j_real = [&](double mu_j) {
 				double sum = (exp(hMax * mu_j) - exp(hMin * mu_j)) / mu_j;
 
@@ -105,9 +107,28 @@ double GeneralizedRBM::actHidJ(int hindex) {
 	double numer = 0.0;  // 分子
 	double denom = sumExpMu(hindex);  // 分母
 
-	for (auto & value : value_set) {
-		numer += value * exp(mu(hindex) * value);
-	}
+	// 離散型
+	auto numer_discrete = [&]() 
+	{
+		double value = 0.0;
+		auto mu_j = mu(hindex);
+		for (auto & h_j : value_set) {
+			value += h_j * exp(mu_j * h_j);
+		}
+
+		return value;
+	};
+
+	// 連続型
+	auto numer_real = [&]() {
+		auto value = 0.0;
+		auto mu_j = mu(hindex);
+		numer = (hMax * exp(hMax * mu_j) - hMin * exp(hMin * mu_j)) / mu_j - (exp(hMax * mu_j) - exp(hMin * mu_j)) / (mu_j * mu_j);
+
+		return value;
+	};
+
+	numer = realFlag ? numer_real() : numer_discrete();
 
 	return numer / denom;
 }
@@ -144,11 +165,28 @@ double GeneralizedRBM::mu(int hindex) {
 
 // muの可視変数に関する全ての実現値の総和
 double GeneralizedRBM::sumExpMu(int hindex) {
-	double sum = 0.0;
+	// 離散型
+	auto sum_discrete = [&]() {
+		double value = 0.0;
+		double mu_j = mu(hindex);
 
-	for (auto & value : hiddenValueSet) {
-		sum += exp(mu(hindex) * value);
-	}
+		for (auto & h_j : hiddenValueSet) {
+			value += exp(mu_j * h_j);
+		}
+
+		return value;
+	};
+
+	// 連続型
+	auto sum_real = [&]() {
+		double mu_j = mu(hindex);
+		double value = (exp(hMax * mu_j) - exp(hMin * mu_j)) / mu_j;
+
+		return value;
+	};
+
+
+	double sum = realFlag ? sum_real() : sum_discrete();
 
 	return sum;
 }

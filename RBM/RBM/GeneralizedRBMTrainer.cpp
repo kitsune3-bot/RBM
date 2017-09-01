@@ -300,7 +300,7 @@ void GeneralizedRBMTrainer::calcGradient(GeneralizedRBM & rbm, std::vector<int> 
         gradient.vBias(i) = dataMean.vBias(i) - rbmexpected.vBias(i);
 
         for (int j = 0; j < rbm.getHiddenSize(); j++) {
-            gradient.weight(i, j) = dataMean.weight(i) - rbmexpected.weight(i, j);
+            gradient.weight(i, j) = dataMean.weight(i, j) - rbmexpected.weight(i, j);
         }
     }
 
