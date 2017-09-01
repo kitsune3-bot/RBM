@@ -1,6 +1,6 @@
 ﻿#pragma once
 #include "RBMSamplerBase.h"
-#include <Eigen/Core>
+#include "Eigen/Core"
 
 class GeneralizedRBM;
 

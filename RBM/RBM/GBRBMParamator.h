@@ -1,6 +1,6 @@
 ﻿#pragma once
 #include "RBMParamatorBase.h"
-#include <Eigen/Core>
+#include "Eigen/Core"
 
 class GBRBMParamator : RBMParamatorBase {
 private:

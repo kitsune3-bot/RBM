@@ -1,5 +1,5 @@
 ﻿#pragma once
-#include <Eigen/Core>
+#include "Eigen/Core"
 
 class ConditionalRBMParamatorBase {
     // 可視変数の総数を返す

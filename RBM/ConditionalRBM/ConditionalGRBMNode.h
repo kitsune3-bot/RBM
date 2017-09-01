@@ -1,6 +1,6 @@
 ﻿#pragma once
 #include "ConditionalRBMNodeBase.h"
-#include <Eigen/Core>
+#include "Eigen/Core"
 #include <vector>
 
 class ConditionalGRBMNode : ConditionalRBMNodeBase {

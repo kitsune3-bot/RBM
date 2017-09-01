@@ -1,7 +1,7 @@
 ﻿#pragma once
 #include "ConditionalRBMTrainerBase.h"
 #include "ConditionalGRBM.h"
-#include <Eigen/Core>
+#include "Eigen/Core"
 #include <vector>
 
 

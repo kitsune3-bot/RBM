@@ -1,5 +1,5 @@
 ﻿#pragma once
-#include <Eigen/Core>
+#include "Eigen/Core"
 
 class RBMParamatorBase{
     // 可視変数の総数を返す

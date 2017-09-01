@@ -1,6 +1,6 @@
 ﻿#pragma once
 #include "ConditionalRBMParamatorBase.h"
-#include <Eigen/Core>
+#include "Eigen/Core"
 
 class ConditionalGRBMParamator : ConditionalRBMParamatorBase {
 private:

@@ -14,7 +14,7 @@
 #include <iostream>
 #include <vector>
 #include <numeric>
-#include <Eigen/Core>
+#include "Eigen/Core"
 #include "ConditionalGRBM.h"
 #include "ConditionalGRBMTrainer.h"
 #include "ConditionalGRBMSampler.h"

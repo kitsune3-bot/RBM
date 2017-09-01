@@ -1,5 +1,5 @@
 ﻿#pragma once
-#include <Eigen/Core>
+#include "Eigen/Core"
 #include <vector>
 
 class RBMNodeBase {

@@ -1,6 +1,6 @@
 ﻿#pragma once
 #include "ConditionalRBMTrainerBase.h"
-#include <Eigen/Core>
+#include "Eigen/Core"
 #include <vector>
 
 class ConditionalRBM;

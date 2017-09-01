@@ -1,6 +1,6 @@
 ﻿#pragma once
 #include "RBMNodeBase.h"
-#include <Eigen/Core>
+#include "Eigen/Core"
 #include <vector>
 
 class GeneralizedGRBMNode : RBMNodeBase {
