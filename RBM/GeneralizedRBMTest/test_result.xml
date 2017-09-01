@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<testsuites tests="4" failures="0" disabled="0" errors="0" timestamp="2017-08-28T20:15:12" time="38.887" name="AllTests">
+  <testsuite name="RBMTest" tests="1" failures="0" disabled="0" errors="0" time="0.01">
+    <testcase name="NormalConstantTestBeforeTrain" status="run" time="0.007" classname="RBMTest" />
+  </testsuite>
+  <testsuite name="GeneralizeRBMTrainTest" tests="2" failures="0" disabled="0" errors="0" time="38.867">
+    <testcase name="TrainCDTest" status="run" time="0.574" classname="GeneralizeRBMTrainTest" />
+    <testcase name="TrainExactTest" status="run" time="38.291" classname="GeneralizeRBMTrainTest" />
+  </testsuite>
+  <testsuite name="AddTest" tests="1" failures="0" disabled="0" errors="0" time="0.008">
+    <testcase name="Test2" status="run" time="0.006" classname="AddTest" />
+  </testsuite>
+</testsuites>

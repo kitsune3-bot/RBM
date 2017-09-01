@@ -51,6 +51,7 @@ namespace rbmutil{
 		int max_count = sc.getMaxCount();
 		double value = 0.0;
 		for (int c = 0; c < max_count; c++, sc++) {
+			setting_data_from_state();
 			double prob[2];
 			prob[0] = rbm1.probVis(dat);
 			prob[1] = rbm2.probVis(dat);

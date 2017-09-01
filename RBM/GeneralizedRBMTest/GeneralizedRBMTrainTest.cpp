@@ -37,7 +37,7 @@ TEST(GeneralizeRBMTrainTest, TrainCDTest) {
 
 TEST(GeneralizeRBMTrainTest, TrainExactTest) {
 	int vsize = 10;
-	int hsize = 1;
+	int hsize = 10;
 	auto rbm = GeneralizedRBM(vsize, hsize);
 	auto rbm_train = GeneralizedRBMTrainer(rbm);
 
@@ -48,12 +48,11 @@ TEST(GeneralizeRBMTrainTest, TrainExactTest) {
 	dataset.push_back(std::vector<double>{ 0, 1, 0, 1, 0, 1, 1, 1, 1, 1 });
 	dataset.push_back(std::vector<double>{ 0, 0, 0, 1, 0, 0, 0, 1, 0, 0 });
 
-	rbm_train.epoch = 1;
+	rbm_train.epoch = 100;
 	rbm_train.batchSize = 5;
 	rbm_train.cdk = 1;
 
 	rbm_train.trainExact(rbm, dataset);
-
 
 	// chk params
 	auto b = rbm.params.b.sum();

@@ -22,7 +22,7 @@ GeneralizedRBM::GeneralizedRBM(size_t v_size, size_t h_size) {
 
 	// パラメータ初期化
 	params = GeneralizedRBMParamator(v_size, h_size);
-	params.initParamsRandom(0.01, 0.01);
+	params.initParamsRandom(-0.1, 0.1);
 
 	// 区間分割
 	hiddenValueSet = splitHiddenSet();
@@ -442,11 +442,8 @@ double GeneralizedRBM::expectedValueHid(int hindex) {
 }
 
 
-// 隠れ変数の期待値, E[v_i h_j]
+// 可視変数と隠れ変数の期待値, E[v_i h_j]
 double GeneralizedRBM::expectedValueVisHid(int vindex, int hindex) {
-	throw;
-	// まだ未実装
-
 	StateCounter<std::vector<int>> sc(std::vector<int>(vSize, 2));  // 可視変数Vの状態カウンター
 	int v_state_map[] = { 0, 1 };  // 可視変数の状態->値変換写像
 
