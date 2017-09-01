@@ -22,10 +22,10 @@ class ConditionalRBMTrainerBase {
     virtual void initDataMean() = 0;
 
     // サンプル平均ベクトルを初期化
-    virtual void initSampleMean(ConditionalRBMBase & rbm) = 0;
+    virtual void initRBMExpected(ConditionalRBMBase & rbm) = 0;
 
     // 確保済みサンプル平均ベクトルを初期化
-    virtual void initSampleMean() = 0;
+    virtual void initRBMExpected() = 0;
 
     // 学習
     virtual void train(ConditionalRBMBase & rbm, std::vector<std::vector<double>> & dataset, std::vector<std::vector<double>> & cond_dataset) = 0;
@@ -40,7 +40,7 @@ class ConditionalRBMTrainerBase {
     virtual void calcDataMean(ConditionalRBMBase & rbm, std::vector<std::vector<double>> & dataset, std::vector<std::vector<double>> & cond_dataset, std::vector<int> & data_indexes) = 0;
 
     // サンプル平均の計算
-    virtual void calcSampleMean(ConditionalRBMBase & rbm, std::vector<std::vector<double>> & dataset, std::vector<std::vector<double>> & cond_dataset, std::vector<int> & data_indexes) = 0;
+    virtual void calcRBMExpected(ConditionalRBMBase & rbm, std::vector<std::vector<double>> & dataset, std::vector<std::vector<double>> & cond_dataset, std::vector<int> & data_indexes) = 0;
 
     // 勾配の計算
     virtual void calcGradient(ConditionalRBMBase & rbm, std::vector<int> & data_indexes) = 0;

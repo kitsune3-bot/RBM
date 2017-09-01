@@ -79,7 +79,7 @@ double ConditionalGRBM::lambda(int vindex) {
 
     // TODO: Eigen使ってるから内積計算で高速化できる
     for (int j = 0; j < hSize; j++) {
-        lam += params.w(vindex, j) * nodes.h(j);
+        lam += params.hvW(j, vindex) * nodes.h(j);
     }
 
     return lam;
@@ -112,12 +112,12 @@ double ConditionalGRBM::mu(int hindex) {
 
     // 条件変数からの影響
     for (int k = 0; k < xSize; k++) {
-        mu += params.hxW(hindex, k) * nodes.x(k);
+        mu += params.xhW(k, hindex) * nodes.x(k);
     }
 
     // TODO: Eigen使ってるから内積計算で高速化できる
     for (int i = 0; i < vSize; i++) {
-        mu += params.w(i, hindex) * nodes.v(i);
+        mu += params.hvW(hindex, i) * nodes.v(i);
     }
 
     return mu;

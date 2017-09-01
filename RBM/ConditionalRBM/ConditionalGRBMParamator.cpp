@@ -27,20 +27,20 @@ void ConditionalGRBMParamator::initParams() {
     lambda.setConstant(1.0);  // 逆分散は非負制約がある, 逆分散 = 10 -> 分散0.1
     c.resize(hSize);
     c.setConstant(0.0);
-    w.resize(vSize, hSize);
-    w.setConstant(0.0);
+    hvW.resize(hSize, vSize);
+    hvW.setConstant(0.0);
     //vxW.resize(vSize, xSize);
     //vxW.setConstant(0.0);
-    hxW.resize(hSize, xSize);
-    hxW.setConstant(0.0);
+    xhW.resize(xSize, hSize);
+    xhW.setConstant(0.0);
 }
 
 void ConditionalGRBMParamator::initParamsRandom(double range_min, double range_max) {
     b.resize(vSize);
     c.resize(hSize);
-    w.resize(vSize, hSize);
+    hvW.resize(hSize, vSize);
     //vxW.resize(vSize, xSize);
-    hxW.resize(hSize, xSize);
+    xhW.resize(xSize, hSize);
 
     std::random_device rd;
     std::mt19937 mt(rd());
@@ -50,7 +50,7 @@ void ConditionalGRBMParamator::initParamsRandom(double range_min, double range_m
         b(i) = dist(mt);
 
         for (int j = 0; j < hSize; j++) {
-            w(i, j) = dist(mt) * 100;
+            hvW(j, i) = dist(mt) * 100;
         }
 
         //for (int k = 0; k < xSize; k++) {
@@ -62,7 +62,7 @@ void ConditionalGRBMParamator::initParamsRandom(double range_min, double range_m
         c(j) = dist(mt);
        
         for (int k = 0; k < xSize; k++) {
-            hxW(j, k) = dist(mt) * 100;
+            xhW(k, j) = dist(mt) * 100;
         }
     }
 

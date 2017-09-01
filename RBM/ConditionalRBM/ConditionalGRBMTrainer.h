@@ -10,43 +10,43 @@ class ConditionalGRBMTrainer : ConditionalRBMTrainerBase {
         Eigen::VectorXd vBias;
         Eigen::VectorXd vLambda;
         Eigen::VectorXd hBias;
-        Eigen::MatrixXd weight;
+        Eigen::MatrixXd hvWeight;
         Eigen::MatrixXd vxWeight;
-        Eigen::MatrixXd hxWeight;
+        Eigen::MatrixXd xhWeight;
     };
 
     struct Gradient {
         Eigen::VectorXd vBias;
         Eigen::VectorXd vLambda;
         Eigen::VectorXd hBias;
-        Eigen::MatrixXd weight;
+        Eigen::MatrixXd hvWeight;
         Eigen::MatrixXd vxWeight;
-        Eigen::MatrixXd hxWeight;
+        Eigen::MatrixXd xhWeight;
     };
 
     struct DataMean {
 		Eigen::VectorXd vBias;
 		Eigen::VectorXd vLambda;
 		Eigen::VectorXd hBias;
-		Eigen::MatrixXd weight;
+		Eigen::MatrixXd hvWeight;
 		Eigen::MatrixXd vxWeight;
-		Eigen::MatrixXd hxWeight;
+		Eigen::MatrixXd xhWeight;
 	};
 
     struct RBMExpected {
 		Eigen::VectorXd vBias;
 		Eigen::VectorXd vLambda;
 		Eigen::VectorXd hBias;
-		Eigen::MatrixXd weight;
+		Eigen::MatrixXd hvWeight;
 		Eigen::MatrixXd vxWeight;
-		Eigen::MatrixXd hxWeight;
+		Eigen::MatrixXd xhWeight;
 	};
 
 private:
     Momentum momentum;
     Gradient gradient;
     DataMean dataMean;
-    RBMExpected sampleMean;
+    RBMExpected rbmExpected;
 
 
 public:
