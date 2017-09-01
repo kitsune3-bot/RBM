@@ -574,3 +574,7 @@ double GeneralizedRBM::expectedValueVisHid(int vindex, int hindex) {
 
 	return value;
 }
+
+bool GeneralizedRBM::isRealHiddenValue() {
+	return realFlag;
+}
