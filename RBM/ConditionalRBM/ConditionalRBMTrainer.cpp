@@ -19,63 +19,71 @@ ConditionalRBMTrainer::ConditionalRBMTrainer(ConditionalRBM & rbm) {
     initMomentum(rbm);
     initGradient(rbm);
     initDataMean(rbm);
-    initSampleMean(rbm);
+    initRBMExpected(rbm);
 }
 
 void ConditionalRBMTrainer::initMomentum(ConditionalRBM & rbm) {
     momentum.vBias.setConstant(rbm.getVisibleSize(), 0.0);
     momentum.hBias.setConstant(rbm.getHiddenSize(), 0.0);
-    momentum.weight.setConstant(rbm.getVisibleSize(), rbm.getHiddenSize(), 0.0);
+    momentum.hvWeight.setConstant(rbm.getHiddenSize(), rbm.getVisibleSize(), 0.0);
     //momentum.vxWeight.setConstant(rbm.getVisibleSize(), rbm.getCondSize(), 0.0);
-    momentum.hxWeight.setConstant(rbm.getHiddenSize(), rbm.getCondSize(), 0.0);
+    momentum.xhWeight.setConstant(rbm.getCondSize(), rbm.getHiddenSize(), 0.0);
 }
 
 void ConditionalRBMTrainer::initMomentum() {
     momentum.vBias.setConstant(0.0);
     momentum.hBias.setConstant(0.0);
-    momentum.weight.setConstant(0.0);
+    momentum.hvWeight.setConstant(0.0);
     //momentum.vxWeight.setConstant(0.0);
-    momentum.hxWeight.setConstant(0.0);
+    momentum.xhWeight.setConstant(0.0);
 }
 
 void ConditionalRBMTrainer::initGradient(ConditionalRBM & rbm) {
     gradient.vBias.setConstant(rbm.getVisibleSize(), 0.0);
     gradient.hBias.setConstant(rbm.getHiddenSize(), 0.0);
-    gradient.weight.setConstant(rbm.getVisibleSize(), rbm.getHiddenSize(), 0.0);
+    gradient.hvWeight.setConstant(rbm.getHiddenSize(), rbm.getVisibleSize(), 0.0);
     //gradient.vxWeight.setConstant(rbm.getVisibleSize(), rbm.getCondSize(), 0.0);
-    gradient.hxWeight.setConstant(rbm.getHiddenSize(), rbm.getCondSize(), 0.0);
+    gradient.xhWeight.setConstant(rbm.getCondSize(), rbm.getHiddenSize(), 0.0);
 }
 
 void ConditionalRBMTrainer::initGradient() {
     gradient.vBias.setConstant(0.0);
     gradient.hBias.setConstant(0.0);
-    gradient.weight.setConstant(0.0);
+    gradient.hvWeight.setConstant(0.0);
     //gradient.vxWeight.setConstant(0.0);
-    gradient.hxWeight.setConstant(0.0);
+    gradient.xhWeight.setConstant(0.0);
 }
 
 void ConditionalRBMTrainer::initDataMean(ConditionalRBM & rbm) {
-    dataMean.visible.setConstant(rbm.getVisibleSize(), 0.0);
-    dataMean.hidden.setConstant(rbm.getHiddenSize(), 0.0);
-    dataMean.conditional.setConstant(rbm.getHiddenSize(), 0.0);
+	dataMean.vBias.setConstant(rbm.getVisibleSize(), 0.0);
+	dataMean.hBias.setConstant(rbm.getHiddenSize(), 0.0);
+	dataMean.hvWeight.setConstant(rbm.getHiddenSize(), rbm.getVisibleSize(), 0.0);
+	//dataMean.vxWeight.setConstant(rbm.getVisibleSize(), rbm.getCondSize(), 0.0);
+	dataMean.xhWeight.setConstant(rbm.getCondSize(), rbm.getHiddenSize(), 0.0);
 }
 
 void ConditionalRBMTrainer::initDataMean() {
-    dataMean.visible.setConstant(0.0);
-    dataMean.hidden.setConstant(0.0);
-    dataMean.conditional.setConstant(0.0);
+	dataMean.vBias.setConstant(0.0);
+	dataMean.hBias.setConstant(0.0);
+	dataMean.hvWeight.setConstant(0.0);
+	//dataMean.vxWeight.setConstant(0.0);
+	dataMean.xhWeight.setConstant(0.0);
 }
 
-void ConditionalRBMTrainer::initSampleMean(ConditionalRBM & rbm) {
-    sampleMean.visible.setConstant(rbm.getVisibleSize(), 0.0);
-    sampleMean.hidden.setConstant(rbm.getHiddenSize(), 0.0);
-    sampleMean.conditional.setConstant(rbm.getHiddenSize(), 0.0);
+void ConditionalRBMTrainer::initRBMExpected(ConditionalRBM & rbm) {
+	rbmExpected.vBias.setConstant(rbm.getVisibleSize(), 0.0);
+	rbmExpected.hBias.setConstant(rbm.getHiddenSize(), 0.0);
+	rbmExpected.hvWeight.setConstant(rbm.getHiddenSize(), rbm.getVisibleSize(), 0.0);
+	//rbmExpected.vxWeight.setConstant(rbm.getVisibleSize(), rbm.getCondSize(), 0.0);
+	rbmExpected.xhWeight.setConstant(rbm.getCondSize(), rbm.getHiddenSize(), 0.0);
 }
 
-void ConditionalRBMTrainer::initSampleMean() {
-    sampleMean.visible.setConstant(0.0);
-    sampleMean.hidden.setConstant(0.0);
-    sampleMean.conditional.setConstant(0.0);
+void ConditionalRBMTrainer::initRBMExpected() {
+	rbmExpected.vBias.setConstant(0.0);
+	rbmExpected.hBias.setConstant(0.0);
+	rbmExpected.hvWeight.setConstant(0.0);
+	//rbmExpected.vxWeight.setConstant(0.0);
+	rbmExpected.xhWeight.setConstant(0.0);
 }
 
 void ConditionalRBMTrainer::train(ConditionalRBM & rbm, std::vector<std::vector<double>> & dataset, std::vector<std::vector<double>> & cond_dataset) {
@@ -118,7 +126,7 @@ void ConditionalRBMTrainer::calcContrastiveDivergence(ConditionalRBM & rbm, std:
     calcDataMean(rbm, dataset, cond_dataset, data_indexes);
 
     // サンプル平均の計算(CD)
-    calcSampleMean(rbm, dataset, cond_dataset, data_indexes);
+    calcRBMExpected(rbm, dataset, cond_dataset, data_indexes);
 
     // 勾配計算
     calcGradient(rbm, data_indexes);
@@ -136,23 +144,32 @@ void ConditionalRBMTrainer::calcDataMean(ConditionalRBM & rbm, std::vector<std::
         Eigen::VectorXd cond_vect = Eigen::Map<Eigen::VectorXd>(cond_data.data(), cond_data.size());
         rbm.nodes.x = cond_vect;
 
-        dataMean.visible += vect;
-        dataMean.conditional += cond_vect;
+        dataMean.vBias += vect;
 
-        for (int j = 0; j < rbm.getHiddenSize(); j++) {
-            dataMean.hidden(j) += rbm.actHidJ(j);
-        }
+        for (int h_counter = 0; h_counter < rbm.getHiddenSize(); h_counter++) {
+            dataMean.hBias(h_counter) += rbm.actHidJ(h_counter);
+
+			// 使いまわせるものは使いまわせ
+			for (int v_counter = 0; v_counter < rbm.getVisibleSize(); v_counter++) {
+				dataMean.hvWeight(h_counter, v_counter) += dataMean.hBias(h_counter) *  dataMean.vBias(v_counter);
+			}
+		
+			for (int x_counter = 0; x_counter < rbm.getCondSize(); x_counter++) {
+				dataMean.xhWeight(x_counter, h_counter) += dataMean.hBias(h_counter) *  cond_vect(x_counter);
+			}
+		}
 
     }
 
-    dataMean.visible /= static_cast<double>(data_indexes.size());
-    dataMean.hidden /= static_cast<double>(data_indexes.size());
-    dataMean.conditional /= static_cast<double>(data_indexes.size());
+    dataMean.vBias /= static_cast<double>(data_indexes.size());
+    dataMean.hBias /= static_cast<double>(data_indexes.size());
+	dataMean.xhWeight /= static_cast<double>(data_indexes.size());
+	dataMean.hvWeight /= static_cast<double>(data_indexes.size());
 }
 
-void ConditionalRBMTrainer::calcSampleMean(ConditionalRBM & rbm, std::vector<std::vector<double>> & dataset, std::vector<std::vector<double>> & cond_dataset, std::vector<int> & data_indexes) {
+void ConditionalRBMTrainer::calcRBMExpected(ConditionalRBM & rbm, std::vector<std::vector<double>> & dataset, std::vector<std::vector<double>> & cond_dataset, std::vector<int> & data_indexes) {
     // 0埋め初期化
-    initSampleMean();
+    initRBMExpected();
 
     for (auto & n : data_indexes) {
         auto & data = dataset[n];
@@ -165,26 +182,38 @@ void ConditionalRBMTrainer::calcSampleMean(ConditionalRBM & rbm, std::vector<std
         rbm.nodes.v = vect;
         rbm.nodes.x = cond_vect;
 
-        for (int j = 0; j < rbm.getHiddenSize(); j++) {
-            rbm.nodes.h(j) = rbm.actHidJ(j);
+        for (int h_counter = 0; h_counter < rbm.getHiddenSize(); h_counter++) {
+            rbm.nodes.h(h_counter) = rbm.actHidJ(h_counter);
         }
 
         // CD-K
         ConditionalRBMSampler sampler;
-        for (int k = 0; k < cdk; k++) {
+        for (int x_counter = 0; x_counter < cdk; x_counter++) {
             sampler.updateByBlockedGibbsSamplingVisible(rbm);
             sampler.updateByBlockedGibbsSamplingHidden(rbm);
         }
 
         // 結果を格納
-        sampleMean.visible += rbm.nodes.v;
-        sampleMean.hidden += rbm.nodes.h;
-        sampleMean.hidden += cond_vect;
-    }
+        rbmExpected.vBias += rbm.nodes.v;
+        rbmExpected.hBias += rbm.nodes.h;
 
-    sampleMean.visible /= static_cast<double>(data_indexes.size());
-    sampleMean.hidden /= static_cast<double>(data_indexes.size());
-    sampleMean.conditional /= static_cast<double>(data_indexes.size());
+		for (int h_counter = 0; h_counter < rbm.getHiddenSize(); h_counter++) {
+			// 計算使いまわせるところは使いまわします
+			for (int x_counter = 0; x_counter < rbm.getCondSize(); x_counter++) {
+				rbmExpected.xhWeight(x_counter, h_counter) = cond_vect(x_counter) * rbmExpected.hBias(h_counter);
+			}
+
+			for (int v_counter = 0; v_counter < rbm.getVisibleSize(); v_counter++) {
+				rbmExpected.hvWeight(h_counter, v_counter) = rbmExpected.hBias(h_counter) * rbmExpected.vBias(v_counter);
+			}
+		}
+	}
+
+	rbmExpected.vBias /= static_cast<double>(data_indexes.size());
+	rbmExpected.hBias /= static_cast<double>(data_indexes.size());
+	rbmExpected.hvWeight /= static_cast<double>(data_indexes.size());
+	//rbmExpected.vxWeight /= static_cast<double>(data_indexes.size());
+	rbmExpected.xhWeight /= static_cast<double>(data_indexes.size());
 }
 
 // 勾配の計算
@@ -192,37 +221,37 @@ void ConditionalRBMTrainer::calcGradient(ConditionalRBM & rbm, std::vector<int> 
     // 勾配ベクトルリセット
     initGradient();
 
-    for (int i = 0; i < rbm.getVisibleSize(); i++) {
-        gradient.vBias(i) = dataMean.visible(i) - sampleMean.visible(i);
+    for (int v_counter = 0; v_counter < rbm.getVisibleSize(); v_counter++) {
+        gradient.vBias(v_counter) = dataMean.vBias(v_counter) - rbmExpected.vBias(v_counter);
 
-        for (int j = 0; j < rbm.getHiddenSize(); j++) {
-            gradient.weight(i, j) = dataMean.visible(i) * dataMean.hidden(j) - sampleMean.visible(i) * sampleMean.hidden(j);
+        for (int h_counter = 0; h_counter < rbm.getHiddenSize(); h_counter++) {
+            gradient.hvWeight(h_counter, v_counter) = dataMean.hvWeight(h_counter, v_counter) - rbmExpected.hvWeight(h_counter, v_counter);
         }
     }
 
-    for (int j = 0; j < rbm.getHiddenSize(); j++) {
-        gradient.hBias(j) = dataMean.hidden(j) - sampleMean.hidden(j);
+    for (int h_counter = 0; h_counter < rbm.getHiddenSize(); h_counter++) {
+        gradient.hBias(h_counter) = dataMean.hBias(h_counter) - rbmExpected.hBias(h_counter);
 
-        for (int k = 0; k < rbm.getCondSize(); k++) {
-            gradient.hxWeight(j, k) = dataMean.hidden(j) * dataMean.conditional(k) - sampleMean.hidden(j) * sampleMean.conditional(k);
+        for (int x_counter = 0; x_counter < rbm.getCondSize(); x_counter++) {
+			gradient.xhWeight(x_counter, h_counter) = dataMean.xhWeight(x_counter, h_counter) - rbmExpected.xhWeight(x_counter, h_counter);
         }
     }
 }
 
 void ConditionalRBMTrainer::updateMomentum(ConditionalRBM & rbm) {
-    for (int i = 0; i < rbm.getVisibleSize(); i++) {
-        momentum.vBias(i) = momentumRate * momentum.vBias(i) + learningRate * gradient.vBias(i);
+    for (int v_counter = 0; v_counter < rbm.getVisibleSize(); v_counter++) {
+        momentum.vBias(v_counter) = momentumRate * momentum.vBias(v_counter) + learningRate * gradient.vBias(v_counter);
 
-        for (int j = 0; j < rbm.getHiddenSize(); j++) {
-            momentum.weight(i, j) = momentumRate * momentum.weight(i, j) + learningRate * gradient.weight(i, j);
+        for (int h_counter = 0; h_counter < rbm.getHiddenSize(); h_counter++) {
+            momentum.hvWeight(h_counter, v_counter) = momentumRate * momentum.hvWeight(h_counter, v_counter) + learningRate * gradient.hvWeight(h_counter, v_counter);
         }
     }
 
-    for (int j = 0; j < rbm.getHiddenSize(); j++) {
-        momentum.hBias(j) = momentumRate * momentum.hBias(j) + learningRate * gradient.hBias(j);
+    for (int h_counter = 0; h_counter < rbm.getHiddenSize(); h_counter++) {
+        momentum.hBias(h_counter) = momentumRate * momentum.hBias(h_counter) + learningRate * gradient.hBias(h_counter);
        
-        for (int k = 0; k < rbm.getCondSize(); k++) {
-            momentum.hxWeight(j, k) = momentumRate * momentum.hxWeight(j, k) + learningRate * gradient.hxWeight(j, k);
+        for (int x_counter = 0; x_counter < rbm.getCondSize(); x_counter++) {
+            momentum.xhWeight(x_counter, h_counter) = momentumRate * momentum.xhWeight(x_counter, h_counter) + learningRate * gradient.xhWeight(x_counter, h_counter);
         }
     }
 }
@@ -230,19 +259,19 @@ void ConditionalRBMTrainer::updateMomentum(ConditionalRBM & rbm) {
 // パラメータの更新
 void ConditionalRBMTrainer::updateParams(ConditionalRBM & rbm) {
 
-    for (int i = 0; i < rbm.getVisibleSize(); i++) {
-        rbm.params.b(i) += momentum.vBias(i);
+    for (int v_counter = 0; v_counter < rbm.getVisibleSize(); v_counter++) {
+        rbm.params.b(v_counter) += momentum.vBias(v_counter);
 
-        for (int j = 0; j < rbm.getHiddenSize(); j++) {
-            rbm.params.w(i, j) += momentum.weight(i, j);
+        for (int h_counter = 0; h_counter < rbm.getHiddenSize(); h_counter++) {
+            rbm.params.hvW(h_counter, v_counter) += momentum.hvWeight(h_counter, v_counter);
         }
     }
 
-    for (int j = 0; j < rbm.getHiddenSize(); j++) {
-        rbm.params.c(j) += momentum.hBias(j);
+    for (int h_counter = 0; h_counter < rbm.getHiddenSize(); h_counter++) {
+        rbm.params.c(h_counter) += momentum.hBias(h_counter);
 
-        for (int k = 0; k < rbm.getCondSize(); k++) {
-            rbm.params.hxW(j, k) += momentum.hxWeight(j, k);
+        for (int x_counter = 0; x_counter < rbm.getCondSize(); x_counter++) {
+            rbm.params.xhW(x_counter, h_counter) += momentum.xhWeight(x_counter, h_counter);
         }
     }
 }

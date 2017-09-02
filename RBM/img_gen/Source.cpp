@@ -80,9 +80,9 @@ int main(void) {
     cgrbm_train.cdk = 1;
     cgrbm_train.learningRate = 0.3;
     // FIXME: 学習にバグがあるらしい
-    auto w1(cgrbm.params.w);
+    auto w1(cgrbm.params.hvW);
     cgrbm_train.train(cgrbm, dataset, cond_dataset);
-    auto w2(cgrbm.params.w);
+    auto w2(cgrbm.params.hvW);
     std::cout << (w1 - w2).sum() << std::endl;
     {
         Eigen::VectorXd vect = Eigen::Map<Eigen::VectorXd>(cond_dataset[0].data(), cond_dataset[0].size());

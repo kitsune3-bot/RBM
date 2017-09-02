@@ -10,8 +10,8 @@ private:
 public:
     Eigen::VectorXd b;  // 可視変数のバイアス
     Eigen::VectorXd c;  // 隠れ変数のバイアス
-    Eigen::MatrixXd w;  // 可視変数-隠れ変数間のカップリング
-    Eigen::MatrixXd hxW;  // 隠れ変数-条件変数間のカップリング
+    Eigen::MatrixXd hvW;  // 可視変数-隠れ変数間のカップリング
+    Eigen::MatrixXd xhW;  // 隠れ変数-条件変数間のカップリング
 
 
 public:
@@ -96,20 +96,20 @@ inline Eigen::VectorXd ConditionalRBMParamator::getHiddenBiasVector() {
 
 // ウェイトパラメータを返す
 inline double ConditionalRBMParamator::getWeight(int vindex, int hindex) {
-    return w(vindex, hindex);
+    return hvW(hindex, vindex);
 }
 
 // ウェイト行列を返す
 inline Eigen::MatrixXd ConditionalRBMParamator::getWeightMatrix() {
-    return w;
+    return hvW;
 }
 
 // 隠れ変数-条件変数間ウェイトパラメータを返す
 inline double ConditionalRBMParamator::getHXWeight(int hindex, int xindex) {
-    return hxW(hindex, xindex);
+    return xhW(xindex, hindex);
 }
 
 // 隠れ変数-条件変数間ウェイト行列を返す
 inline Eigen::MatrixXd ConditionalRBMParamator::getHXWeightMatrix() {
-    return hxW;
+    return xhW;
 }
