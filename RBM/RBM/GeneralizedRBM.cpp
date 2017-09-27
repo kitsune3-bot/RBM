@@ -319,15 +319,12 @@ void GeneralizedRBM::setRealHiddenValue(bool flag) {
 
 // 可視変数の期待値, E[v_i]
 double GeneralizedRBM::expectedValueVis(int vindex) {
+	// TODO: とりあえず可視変数は{0, 1}のボルツマンマシンなので則値代入してます
 	StateCounter<std::vector<int>> sc(std::vector<int>(vSize, 2));  // 可視変数Vの状態カウンター
 	int v_state_map[] = { 0, 1 };  // 可視変数の状態->値変換写像
 
-	auto z = getNormalConstant();  // 分配関数
+	volatile auto z = getNormalConstant();  // 分配関数
 	
-	// bとvの内積
-	auto b_dot_v = [&](){
-		return nodes.getVisibleLayer().dot(params.b);
-	};
 
 	// 隠れ変数h_jの値の総和計算
 	auto sum_h_j = [&](int j) {
@@ -356,7 +353,7 @@ double GeneralizedRBM::expectedValueVis(int vindex) {
 		return value;
 	};
 
-	double value = 1.0 / z;
+	double value = 0.0;
 
 	auto max_count = sc.getMaxCount();
 	for (int c = 0; c < max_count; c++, sc++) {
@@ -371,7 +368,11 @@ double GeneralizedRBM::expectedValueVis(int vindex) {
 		}
 
 		// 項計算
-		double term =this->nodes.v(vindex) * exp(b_dot_v());
+		// bとvの内積
+		auto b_dot_v = [&]() {
+			return nodes.getVisibleLayer().dot(params.b);
+		}();
+		double term =this->nodes.v(vindex) * exp(b_dot_v);
 
 		for (int j = 0; j < hSize; j++) {
 			term *= sum_h_j(j);
@@ -386,6 +387,7 @@ double GeneralizedRBM::expectedValueVis(int vindex) {
 		}
 	}
 
+	value = value / z;
 	return value;
 }
 
@@ -457,7 +459,7 @@ double GeneralizedRBM::expectedValueHid(int hindex) {
 	};
 
 
-	double value = 1.0 / z;
+	double value = 0.0;
 	auto max_count = sc.getMaxCount();
 	for (int c = 0; c < max_count; c++, sc++) {
 		// FIXME: stlのコピーは遅いぞ
@@ -489,7 +491,7 @@ double GeneralizedRBM::expectedValueHid(int hindex) {
 		throw;
 	}
 
-
+	value = value / z;
 	return value;
 }
 
@@ -560,7 +562,7 @@ double GeneralizedRBM::expectedValueVisHid(int vindex, int hindex) {
 		return value;
 	};
 	
-	double value = 1.0 / z;
+	double value = 0.0;
 	auto max_count = sc.getMaxCount();
 	for (int c = 0; c < max_count; c++, sc++) {
 		// FIXME: stlのコピーは遅いぞ
@@ -592,7 +594,7 @@ double GeneralizedRBM::expectedValueVisHid(int vindex, int hindex) {
 		throw;
 	}
 
-
+	value = value / z;
 	return value;
 }
 
