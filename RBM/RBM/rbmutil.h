@@ -58,10 +58,6 @@ namespace rbmutil{
 
 			value += prob[0] * (log(prob[0]) -log(prob[1]));
 			if (isinf(value)) {
-				volatile auto p1 = prob[0];
-				volatile auto p2 = prob[1];
-				volatile auto z1 = rbm1.getNormalConstant();
-				volatile auto z2 = rbm2.getNormalConstant();
 
 				throw;
 			}
@@ -69,4 +65,16 @@ namespace rbmutil{
 
 		return value;
 	}
+
+	template<class RBM>
+	void print_params(RBM & rbm) {
+		std::cout << "--- b ---" << std::endl;
+		std::cout << rbm.params.b.transpose() << std::endl;
+		std::cout << "--- c ---" << std::endl;
+		std::cout << rbm.params.c.transpose() << std::endl;
+		std::cout << "--- w ---" << std::endl;
+		std::cout << rbm.params.w << std::endl;
+
+	}
 }
+

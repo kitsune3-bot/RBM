@@ -27,9 +27,7 @@ int main(void) {
 
 	std::cout << rbmutil::kld(rbm_gen, rbm_t, std::vector<int>{0, 1}) << std::endl;
 	rbm_train.trainExact(rbm_t, dataset);
-	volatile auto z1 = rbm_gen.getNormalConstant();
-	volatile auto z2 = rbm_t.getNormalConstant();
 	std::cout << rbmutil::kld(rbm_gen, rbm_t, std::vector<int>{0, 1}) << std::endl;
 
-
+	return 0;
 }
