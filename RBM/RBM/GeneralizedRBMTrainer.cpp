@@ -1,6 +1,7 @@
 ﻿#include "GeneralizedRBMTrainer.h"
 #include "GeneralizedRBM.h"
 #include "GeneralizedRBMSampler.h"
+#include "rbmutil.h"
 #include <vector>
 #include <numeric>
 #include <random>
@@ -230,6 +231,10 @@ void GeneralizedRBMTrainer::calcDataMean(GeneralizedRBM & rbm, std::vector<std::
     dataMean.vBias /= static_cast<double>(data_indexes.size());
 	dataMean.hBias /= static_cast<double>(data_indexes.size());
 	dataMean.weight /= static_cast<double>(data_indexes.size());
+
+	std::cout << "------Data Mean------" << std::endl;
+	std::cout << dataMean.vBias.transpose() << std::endl;
+	std::cout << dataMean.hBias.transpose() << std::endl;
 }
 
 void GeneralizedRBMTrainer::calcRBMExpectedCD(GeneralizedRBM & rbm, std::vector<std::vector<double>> & dataset, std::vector<int> & data_indexes) {
@@ -257,7 +262,7 @@ void GeneralizedRBMTrainer::calcRBMExpectedCD(GeneralizedRBM & rbm, std::vector<
         // 結果を格納
         rbmexpected.vBias += rbm.nodes.v;
         rbmexpected.hBias += rbm.nodes.h;
-
+		
 		for (int i = 0; i < rbm.getVisibleSize(); i++) {
 			for (int j = 0; j < rbm.getHiddenSize(); j++) {
 				rbmexpected.weight(i, j) = rbm.nodes.v(i) * rbm.nodes.h(j);
@@ -268,6 +273,10 @@ void GeneralizedRBMTrainer::calcRBMExpectedCD(GeneralizedRBM & rbm, std::vector<
     rbmexpected.vBias /= static_cast<double>(data_indexes.size());
 	rbmexpected.hBias /= static_cast<double>(data_indexes.size());
 	rbmexpected.weight /= static_cast<double>(data_indexes.size());
+
+	std::cout << "------Expected Value------" << std::endl;
+	std::cout << rbmexpected.vBias.transpose() << std::endl;
+	std::cout << rbmexpected.hBias.transpose() << std::endl;
 }
 
 void GeneralizedRBMTrainer::calcRBMExpectedExact(GeneralizedRBM & rbm, std::vector<std::vector<double>> & dataset, std::vector<int> & data_indexes) {
@@ -288,6 +297,9 @@ void GeneralizedRBMTrainer::calcRBMExpectedExact(GeneralizedRBM & rbm, std::vect
 		rbmexpected.hBias(j) = rbm.expectedValueHid(j);
 	}
 
+	std::cout << "------Expected Value------" << std::endl;
+	std::cout << rbmexpected.vBias.transpose() << std::endl;
+	std::cout << rbmexpected.hBias.transpose() << std::endl;
 }
 
 
