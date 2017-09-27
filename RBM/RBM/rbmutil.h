@@ -60,6 +60,8 @@ namespace rbmutil{
 			if (isinf(value)) {
 				volatile auto p1 = prob[0];
 				volatile auto p2 = prob[1];
+				volatile auto z1 = rbm1.getNormalConstant();
+				volatile auto z2 = rbm2.getNormalConstant();
 
 				throw;
 			}
