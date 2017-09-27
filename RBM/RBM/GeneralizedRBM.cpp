@@ -51,9 +51,12 @@ double GeneralizedRBM::getNormalConstant() {
 		// FIXME: stlのコピーは遅いぞ
 		auto v_state = sc.getState();
 		
+		this->nodes.set
+		/*
 		for (int i = 0; i < vSize; i++) {
 			this->nodes.v(i) = v_state_map[v_state[i]];
 		}
+		*/
 
 		// 項計算
 		double term = exp(nodes.getVisibleLayer().dot(params.b));
