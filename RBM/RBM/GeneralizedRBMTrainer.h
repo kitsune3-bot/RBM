@@ -126,5 +126,8 @@ public:
     // 勾配更新
     void updateParams(RBMBase & rbm) { updateParams(reinterpret_cast<GeneralizedRBM &>(rbm)); }
     void updateParams(GeneralizedRBM & rbm);
+
+	// 対数尤度関数
+	double logLikeliHood(GeneralizedRBM & rbm, std::vector<std::vector<double>> & dataset);
 };
 

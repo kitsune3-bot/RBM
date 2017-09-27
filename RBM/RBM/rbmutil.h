@@ -58,6 +58,13 @@ namespace rbmutil{
 
 			value += prob[0] * (log(prob[0]) -log(prob[1]));
 			if (isinf(value)) {
+				print_params(rbm1);
+				print_params(rbm2);
+				volatile auto debug_value = value;
+				volatile auto p1 = prob[0];
+				volatile auto p2 = prob[1];
+				volatile auto z1 = rbm1.getNormalConstant();
+				volatile auto z2 = rbm2.getNormalConstant();
 
 				throw;
 			}

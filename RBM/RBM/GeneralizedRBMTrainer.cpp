@@ -337,3 +337,17 @@ void GeneralizedRBMTrainer::updateParams(GeneralizedRBM & rbm) {
         rbm.params.c(j) += momentum.hBias(j);
     }
 }
+
+
+// 対数尤度関数
+double GeneralizedRBMTrainer::logLikeliHood(GeneralizedRBM & rbm, std::vector<std::vector<double>> & dataset) {
+	double value = 0.0;
+
+	for (auto & data : dataset) {
+		// FIXME: 分配関数使いまわしで高速化可能
+		auto prob = rbm.probVis(data);
+		value += log(prob);
+	}
+
+	return value;
+}

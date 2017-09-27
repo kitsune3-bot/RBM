@@ -11,22 +11,23 @@ int main(void) {
 	int hsize = 10;
 	int datasize = 1000;
 	int epoch = 100;
-	int batchsize = datasize/10;
-	double learning_rate = 0.01;
+	int cdk = 3;
+	int batchsize = datasize;
+	double learning_rate = 0.1;
 
 	auto rbm_gen = GeneralizedRBM(vsize, hsize);
-	auto rbm_exact = GeneralizedRBM(vsize, hsize);
-	auto rbm_cd = GeneralizedRBM(vsize, hsize);
+	auto rbm_exact = GeneralizedRBM(vsize, hsize+5);
+	auto rbm_cd = GeneralizedRBM(vsize, hsize+5);
 
 	auto rbm_trainer_exact = GeneralizedRBMTrainer(rbm_exact);
 	rbm_trainer_exact.epoch = epoch;
-	rbm_trainer_exact.cdk = 1;
+	rbm_trainer_exact.cdk = cdk;
 	rbm_trainer_exact.batchSize = batchsize;
 	rbm_trainer_exact.learningRate = learning_rate;
 
 	auto rbm_trainer_cd = GeneralizedRBMTrainer(rbm_cd);
 	rbm_trainer_cd.epoch = epoch;
-	rbm_trainer_cd.cdk = 1;
+	rbm_trainer_cd.cdk = cdk;
 	rbm_trainer_cd.batchSize = batchsize;
 	rbm_trainer_cd.learningRate = learning_rate;
 
@@ -37,16 +38,20 @@ int main(void) {
 
 
 	std::cout << "[Exact]" << std::endl;
-	std::cout << rbmutil::kld(rbm_gen, rbm_exact, std::vector<int>{0, 1}) << std::endl;
+	std::cout << "KLD: " << rbmutil::kld(rbm_gen, rbm_exact, std::vector<int>{0, 1}) << std::endl;
+	std::cout << "Logliklihood: " << rbm_trainer_exact.logLikeliHood(rbm_exact, dataset) << std::endl;
 	rbm_trainer_exact.trainExact(rbm_exact, dataset);
-	std::cout << rbmutil::kld(rbm_gen, rbm_exact, std::vector<int>{0, 1}) << std::endl;
+	std::cout << "KLD: " << rbmutil::kld(rbm_gen, rbm_exact, std::vector<int>{0, 1}) << std::endl;
+	std::cout << "Logliklihood: " << rbm_trainer_exact.logLikeliHood(rbm_exact, dataset) << std::endl;
 
 	std::cout << std::endl;
 
 	std::cout << "[Contrastive Divergence]" << std::endl;
-	std::cout << rbmutil::kld(rbm_gen, rbm_cd, std::vector<int>{0, 1}) << std::endl;
+	std::cout << "KLD: " << rbmutil::kld(rbm_gen, rbm_cd, std::vector<int>{0, 1}) << std::endl;
+	std::cout << "Logliklihood: " << rbm_trainer_cd.logLikeliHood(rbm_cd, dataset) << std::endl;
 	rbm_trainer_cd.trainCD(rbm_cd, dataset);
-	std::cout << rbmutil::kld(rbm_gen, rbm_cd, std::vector<int>{0, 1}) << std::endl;
+	std::cout << "KLD: " << rbmutil::kld(rbm_gen, rbm_cd, std::vector<int>{0, 1}) << std::endl;
+	std::cout << "Logliklihood: " << rbm_trainer_cd.logLikeliHood(rbm_cd, dataset) << std::endl;
 
 	return 0;
 }
