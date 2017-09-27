@@ -7,13 +7,13 @@
 // 生成モデルと学習モデルとのカルバックライブラー情報量を比較
 //
 int main(void) {
-	int vsize = 10;
+	int vsize = 5;
 	int hsize = 10;
 	auto rbm_gen = GeneralizedRBM(vsize, hsize);
 	auto rbm_t = GeneralizedRBM(vsize, hsize);
 
 	auto rbm_train = GeneralizedRBMTrainer(rbm_t);
-	rbm_train.epoch = 1000;
+	rbm_train.epoch = 1;
 	rbm_train.cdk = 1;
 	rbm_train.batchSize = 10;
 	rbm_train.learningRate = 0.01;
@@ -25,7 +25,7 @@ int main(void) {
 
 
 	std::cout << rbmutil::kld(rbm_gen, rbm_t, std::vector<int>{0, 1}) << std::endl;
-	rbm_train.trainCD(rbm_t, dataset);
+	rbm_train.trainExact(rbm_t, dataset);
 	std::cout << rbmutil::kld(rbm_gen, rbm_t, std::vector<int>{0, 1}) << std::endl;
 
 

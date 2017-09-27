@@ -1,105 +1,49 @@
 #include <iostream>
-#include "RBM.h"
-#include "RBMTrainer.h"
 #include "GeneralizedRBM.h"
 #include "GeneralizedRBMTrainer.h"
-#include "GBRBM.h"
-#include "GBRBMTrainer.h"
-#include "GeneralizedGRBM.h"
-#include "GeneralizedGRBMTrainer.h"
-#include "ConditionalGRBM.h"
-#include "ConditionalGRBMTrainer.h"
+#include "GeneralizedRBMSampler.h"
+#include "rbmutil.h"
 
 int main(int argc, char **argv) {
-    std::vector<std::vector<double>> dataset(10);
-    dataset[0] = std::vector<double>({ 1,1,1,1,1,1,1,0,1,1 });
-    dataset[1] = std::vector<double>({ 0,0,1,1,1,1,1,1,0,1 });
-    dataset[2] = std::vector<double>({ 1,1,0,1,1,1,0,1,1,0 });
-    dataset[3] = std::vector<double>({ 0,1,1,0,1,1,1,1,0,1 });
-    dataset[4] = std::vector<double>({ 1,1,1,1,0,1,1,0,1,1 });
-    dataset[5] = std::vector<double>({ 0,0,1,0,1,1,1,1,1,0 });
-    dataset[6] = std::vector<double>({ 1,1,1,0,1,1,0,1,1,1 });
-    dataset[7] = std::vector<double>({ 1,0,1,1,1,1,1,0,0,1 });
-    dataset[8] = std::vector<double>({ 1,1,1,1,1,1,1,1,1,1 });
-    dataset[9] = std::vector<double>({ 0,1,0,1,0,1,0,0,1,1 });
+	auto dataset = std::vector<std::vector<double>>();
+	dataset.push_back(std::vector<double>({ 1,1,1,0,0,0,0,0,0,1 }));
+	dataset.push_back(std::vector<double>({ 0,0,0,1,1,1,0,0,0,1 }));
+	dataset.push_back(std::vector<double>({ 0,0,0,0,0,0,1,1,1,1 }));
+	auto cond_dataset = dataset;
 
-    auto cond_dataset = dataset;
+	size_t vsize = 10;
+	size_t hsize = 20;
 
-    /*
-    RBM rbm(10, 10);
-    RBMTrainer rbm_t(rbm);
-    
-    rbm_t.epoch = 300;
-    rbm_t.cdk = 3;
-    rbm_t.batchSize = 5;
-    rbm_t.learningRate = 0.001;
-    std::cout << rbm.params.w << std::endl;
-    rbm_t.train(rbm, dataset);
-    std::cout << rbm.params.w << std::endl;
-    */
-    
-    /*
-    GeneralizedRBM grbm(10, 10);
-    grbm.setHiddenDiveSize(5);
-    grbm.setHiddenMax(2);
-    grbm.setHiddenMin(-2);
-    auto set = grbm.splitHiddenSet();
-    GeneralizedRBMTrainer grbm_t(grbm);
-    grbm_t.epoch = 300;
-    grbm_t.cdk = 3;
-    grbm_t.batchSize = 5;
-    grbm_t.learningRate = 0.001;
-    std::cout << grbm.mu(1) << std::endl;
+	auto rbm = GeneralizedRBM(vsize, hsize);
+	rbm.setHiddenMax(1.0);
+	rbm.setHiddenMin(-1.0);
+	rbm.setHiddenDiveSize(1);
+	rbm.setRealHiddenValue(false);
 
-    std::cout << grbm.params.w << std::endl;
-    grbm_t.train(grbm, dataset);
-    std::cout << grbm.params.w << std::endl;
-    */
+	auto trainer = GeneralizedRBMTrainer(rbm);
+	trainer.learningRate = 0.1;
+	trainer.cdk = 1;
+	trainer.batchSize = 1;
+	trainer.epoch = 50;
 
-    
-    GBRBM gbrbm(10, 10);
-    GBRBMTrainer gbrbm_t(gbrbm);
-    gbrbm_t.epoch = 10000;
-    gbrbm_t.cdk = 3;
-    gbrbm_t.batchSize = 5;
-    gbrbm_t.learningRate = 0.01;
-    std::cout << gbrbm.mu(1) << std::endl;
+	trainer.trainExact(rbm, dataset);
 
-    std::cout << gbrbm.params.w << std::endl;
-    gbrbm_t.train(gbrbm, dataset);
-    std::cout << gbrbm.params.w << std::endl;
-    
+	auto set_data = [&](auto data) {
+		for (int i = 0; i < rbm.getVisibleSize(); i++) {
+			rbm.nodes.v(i) = data[i];
+		}
+	};
 
-    /*
-    GeneralizedGRBM gen_grbm(10, 10);
-    gen_grbm.setHiddenDiveSize(1);
-    gen_grbm.setHiddenMax(2);
-    gen_grbm.setHiddenMin(-2);
-    auto set = gen_grbm.splitHiddenSet();
-    GeneralizedGRBMTrainer gen_grbm_t(gen_grbm);
-    gen_grbm_t.epoch = 10000;
-    gen_grbm_t.cdk = 3;
-    gen_grbm_t.batchSize = 5;
-    gen_grbm_t.learningRate = 0.1;
-    std::cout << gen_grbm.mu(1) << std::endl;
+	auto sampler = GeneralizedRBMSampler();
+	for (int i = 0; i < dataset.size(); i++) {
+		set_data(dataset[i]);
 
-    std::cout << gen_grbm.params.w << std::endl;
-    gen_grbm_t.train(gen_grbm, dataset);
-    std::cout << gen_grbm.params.w << std::endl;
-    */
-    
-    /*
-    ConditionalGRBM cond_grbm(10, 10, 10);
-    ConditionalGRBMTrainer cond_grbm_train(cond_grbm);
+		sampler.updateByBlockedGibbsSamplingHidden(rbm);
+		sampler.updateByBlockedGibbsSamplingVisible(rbm);
 
-    cond_grbm_train.batchSize = 5;
-    cond_grbm_train.epoch = 10000;
-    cond_grbm_train.learningRate = 0.01;
+		rbmutil::print_stl(dataset[i]);
+		std::cout << rbm.nodes.v.transpose() << std::endl;
+	}
 
-    std::cout << cond_grbm.params.w << std::endl;
-    cond_grbm_train.train(cond_grbm, dataset, cond_dataset);
-    std::cout << cond_grbm.params.w << std::endl;
-    */
-
-    return 0;
+	return 0;
 }

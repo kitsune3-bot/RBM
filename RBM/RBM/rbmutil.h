@@ -56,7 +56,13 @@ namespace rbmutil{
 			prob[0] = rbm1.probVis(dat);
 			prob[1] = rbm2.probVis(dat);
 
-			value += prob[0] * log(prob[0] / prob[1]);
+			value += prob[0] * (log(prob[0]) -log(prob[1]));
+			if (isinf(value)) {
+				volatile auto p1 = prob[0];
+				volatile auto p2 = prob[1];
+
+				throw;
+			}
 		}
 
 		return value;
