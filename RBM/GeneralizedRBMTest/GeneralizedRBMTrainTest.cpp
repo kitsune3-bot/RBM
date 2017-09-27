@@ -13,7 +13,7 @@ TEST(GeneralizeRBMTrainTest, TrainCDTest) {
 	dataset.push_back(std::vector<double>{ 0, 1, 0, 1, 0, 1, 1, 1, 1, 1 });
 	dataset.push_back(std::vector<double>{ 0, 0, 0, 1, 0, 0, 0, 1, 0, 0 });
 
-	rbm_train.epoch = 100;
+	rbm_train.epoch = 10;
 	rbm_train.batchSize = 5;
 	rbm_train.cdk = 1;
 
@@ -48,7 +48,7 @@ TEST(GeneralizeRBMTrainTest, TrainExactTest) {
 	dataset.push_back(std::vector<double>{ 0, 1, 0, 1, 0, 1, 1, 1, 1, 1 });
 	dataset.push_back(std::vector<double>{ 0, 0, 0, 1, 0, 0, 0, 1, 0, 0 });
 
-	rbm_train.epoch = 100;
+	rbm_train.epoch = 10;
 	rbm_train.batchSize = 5;
 	rbm_train.cdk = 1;
 

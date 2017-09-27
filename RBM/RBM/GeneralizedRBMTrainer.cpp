@@ -231,10 +231,6 @@ void GeneralizedRBMTrainer::calcDataMean(GeneralizedRBM & rbm, std::vector<std::
     dataMean.vBias /= static_cast<double>(data_indexes.size());
 	dataMean.hBias /= static_cast<double>(data_indexes.size());
 	dataMean.weight /= static_cast<double>(data_indexes.size());
-
-	std::cout << "------Data Mean------" << std::endl;
-	std::cout << dataMean.vBias.transpose() << std::endl;
-	std::cout << dataMean.hBias.transpose() << std::endl;
 }
 
 void GeneralizedRBMTrainer::calcRBMExpectedCD(GeneralizedRBM & rbm, std::vector<std::vector<double>> & dataset, std::vector<int> & data_indexes) {
@@ -273,10 +269,6 @@ void GeneralizedRBMTrainer::calcRBMExpectedCD(GeneralizedRBM & rbm, std::vector<
     rbmexpected.vBias /= static_cast<double>(data_indexes.size());
 	rbmexpected.hBias /= static_cast<double>(data_indexes.size());
 	rbmexpected.weight /= static_cast<double>(data_indexes.size());
-
-	std::cout << "------Expected Value------" << std::endl;
-	std::cout << rbmexpected.vBias.transpose() << std::endl;
-	std::cout << rbmexpected.hBias.transpose() << std::endl;
 }
 
 void GeneralizedRBMTrainer::calcRBMExpectedExact(GeneralizedRBM & rbm, std::vector<std::vector<double>> & dataset, std::vector<int> & data_indexes) {
@@ -296,10 +288,6 @@ void GeneralizedRBMTrainer::calcRBMExpectedExact(GeneralizedRBM & rbm, std::vect
 	for (int j = 0; j < rbm.getHiddenSize(); j++) {
 		rbmexpected.hBias(j) = rbm.expectedValueHid(j);
 	}
-
-	std::cout << "------Expected Value------" << std::endl;
-	std::cout << rbmexpected.vBias.transpose() << std::endl;
-	std::cout << rbmexpected.hBias.transpose() << std::endl;
 }
 
 
@@ -319,6 +307,13 @@ void GeneralizedRBMTrainer::calcGradient(GeneralizedRBM & rbm, std::vector<int> 
     for (int j = 0; j < rbm.getHiddenSize(); j++) {
         gradient.hBias(j) = dataMean.hBias(j) - rbmexpected.hBias(j);
     }
+
+	//std::cout << "------Gradient------" << std::endl;
+	//std::cout << dataMean.vBias.transpose() << std::endl;
+	//std::cout << rbmexpected.vBias.transpose() << std::endl;
+	//std::cout << dataMean.hBias.transpose() << std::endl;
+	//std::cout << rbmexpected.hBias.transpose() << std::endl;
+	
 }
 
 void GeneralizedRBMTrainer::updateMomentum(GeneralizedRBM & rbm) {

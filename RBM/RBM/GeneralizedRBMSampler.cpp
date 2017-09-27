@@ -19,8 +19,9 @@ double GeneralizedRBMSampler::gibbsSamplingVisible(GeneralizedRBM & rbm, int vin
     std::mt19937 mt(rd());
     std::uniform_real_distribution<double> dist(0.0, 1.0);
 
-    double value = dist(mt) < rbm.condProbVis(vindex, 0.0) ? 0.0 : 1.0;
-    return value;
+	double value = dist(mt) < rbm.condProbVis(vindex, 0.0) ? 0.0 : 1.0;
+    
+	return value;
 }
 
 double GeneralizedRBMSampler::gibbsSamplingHidden(GeneralizedRBM & rbm, int hindex) {

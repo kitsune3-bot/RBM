@@ -265,3 +265,5 @@ __pycache__/
 /RBM/img_gen/out1.png
 /RBM/ConsoleApplication1
 /RBM/UnitTestRBM
+
+*.xml
