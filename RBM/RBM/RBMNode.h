@@ -71,3 +71,10 @@ inline double RBMNode::getHiddenUnit(int hindex) {
     return h(hindex);
 }
 
+// 可視変数に値をセット
+template<typename ARRAY>
+void setVisibleData(ARRAY & data) {
+	for (int i = 0; i < vSize; i++) {
+		v[i] = data[i];
+	}
+}

@@ -50,6 +50,7 @@ double GeneralizedRBM::getNormalConstant() {
 	for (int c = 0; c < max_count; c++, sc++) {
 		// FIXME: stlのコピーは遅いぞ
 		auto v_state = sc.getState();
+		
 		for (int i = 0; i < vSize; i++) {
 			this->nodes.v(i) = v_state_map[v_state[i]];
 		}
