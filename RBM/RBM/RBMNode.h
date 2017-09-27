@@ -39,6 +39,10 @@ public:
 
     // 隠れ変数のノード番号集合を返す
     std::vector<int> getHnodeIndexSet();
+
+	// 可視変数に値をセット
+	template<typename ARRAY>
+	void setVisibleData(ARRAY & data);
 };
 
 // 可視変数の総数を返す
@@ -73,7 +77,7 @@ inline double RBMNode::getHiddenUnit(int hindex) {
 
 // 可視変数に値をセット
 template<typename ARRAY>
-void setVisibleData(ARRAY & data) {
+void RBMNode::setVisibleData(ARRAY & data) {
 	for (int i = 0; i < vSize; i++) {
 		v[i] = data[i];
 	}
