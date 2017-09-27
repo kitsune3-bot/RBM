@@ -42,7 +42,7 @@ public:
 
 	// 可視変数に値をセット
 	template<typename ARRAY>
-	void setVisibleData(ARRAY & data)
+	void setVisibleData(ARRAY & data);
 };
 
 // 可視変数の総数を返す

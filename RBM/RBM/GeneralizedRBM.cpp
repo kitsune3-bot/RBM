@@ -378,6 +378,12 @@ double GeneralizedRBM::expectedValueVis(int vindex) {
 		}
 
 		value += term;
+
+		// debug
+		if (isinf(value) || isnan(value)) {
+			volatile auto debug_value = value;
+			throw;
+		}
 	}
 
 	return value;
@@ -477,6 +483,13 @@ double GeneralizedRBM::expectedValueHid(int hindex) {
 		value += term;
 	}
 
+	// debug
+	if (isinf(value) || isnan(value)) {
+		volatile auto debug_value = value;
+		throw;
+	}
+
+
 	return value;
 }
 
@@ -572,6 +585,13 @@ double GeneralizedRBM::expectedValueVisHid(int vindex, int hindex) {
 
 		value += term;
 	}
+
+	// debug
+	if (isinf(value) || isnan(value)) {
+		volatile auto debug_value = value;
+		throw;
+	}
+
 
 	return value;
 }
