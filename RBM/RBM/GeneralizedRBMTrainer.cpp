@@ -244,13 +244,14 @@ void GeneralizedRBMTrainer::calcRBMExpectedCD(GeneralizedRBM & rbm, std::vector<
         // GeneralizedRBMの初期値設定
         rbm.nodes.v = vect;
 
-        for (int j = 0; j < rbm.getHiddenSize(); j++) {
-            rbm.nodes.h(j) = rbm.actHidJ(j);
-        }
+        //for (int j = 0; j < rbm.getHiddenSize(); j++) {
+        //    rbm.nodes.h(j) = rbm.actHidJ(j);
+        //}
 
         // CD-K
         GeneralizedRBMSampler sampler;
-        for (int k = 0; k < cdk; k++) {
+		sampler.updateByBlockedGibbsSamplingHidden(rbm);
+		for (int k = 0; k < cdk; k++) {
             sampler.updateByBlockedGibbsSamplingVisible(rbm);
             sampler.updateByBlockedGibbsSamplingHidden(rbm);
         }
@@ -261,7 +262,7 @@ void GeneralizedRBMTrainer::calcRBMExpectedCD(GeneralizedRBM & rbm, std::vector<
 		
 		for (int i = 0; i < rbm.getVisibleSize(); i++) {
 			for (int j = 0; j < rbm.getHiddenSize(); j++) {
-				rbmexpected.weight(i, j) = rbm.nodes.v(i) * rbm.nodes.h(j);
+				rbmexpected.weight(i, j) += rbm.nodes.v(i) * rbm.nodes.h(j);
 			}
 		}
     }
