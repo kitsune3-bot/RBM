@@ -53,13 +53,74 @@ TEST(RBMTest, ParamsTest) {
 	p = general_rbm.condProbHid(0, 0.0);
 	ASSERT_LT(p, 0.5);
 
-	//　TODO: w: 同符号, 位符号のとりやすさをチェック
-	reset_params();
-	general_rbm.params.w.setConstant(10);
-	general_rbm.nodes.v.setConstant(0.0);
-	general_rbm.nodes.h.setConstant(1.0);
-	volatile auto p_v = general_rbm.condProbVis(0, 0.0);
-	volatile auto p_h = general_rbm.condProbHid(0, 0.0);
-	p = general_rbm.condProbHid(0, 0.0);
+	////　TODO: w: 同符号, 位符号のとりやすさをチェック
+	//// w << 0
+	//reset_params();
+	//general_rbm.params.w.setConstant(-10);
+	//general_rbm.nodes.v.setConstant(0.0);
+	//general_rbm.nodes.h.setConstant(0.0);
+	//volatile auto p_v = general_rbm.condProbVis(0, 0.0);
+	//volatile auto p_h = general_rbm.condProbHid(0, 0.0);
+	//p = general_rbm.condProbHid(0, 0.0);
+	//ASSERT_LT(p_v, 0.5);  //
+	//ASSERT_LT(p_h, 0.5);  //
+
+	//reset_params();
+	//general_rbm.params.w.setConstant(-10);
+	//general_rbm.nodes.v.setConstant(0.0);
+	//general_rbm.nodes.h.setConstant(1.0);
+	//p_v = general_rbm.condProbVis(0, 0.0);
+	//p_h = general_rbm.condProbHid(0, 0.0);
+	//p = general_rbm.condProbHid(0, 0.0);
+
+	//reset_params();
+	//general_rbm.params.w.setConstant(-10);
+	//general_rbm.nodes.v.setConstant(1.0);
+	//general_rbm.nodes.h.setConstant(0.0);
+	//p_v = general_rbm.condProbVis(0, 0.0);
+	//p_h = general_rbm.condProbHid(0, 0.0);
+	//p = general_rbm.condProbHid(0, 0.0);
+
+	//reset_params();
+	//general_rbm.params.w.setConstant(-10);
+	//general_rbm.nodes.v.setConstant(1.0);
+	//general_rbm.nodes.h.setConstant(1.0);
+	//p_v = general_rbm.condProbVis(0, 0.0);
+	//p_h = general_rbm.condProbHid(0, 0.0);
+	//p = general_rbm.condProbHid(0, 0.0);
+
+
+	//// 0 << w
+	//reset_params();
+	//general_rbm.params.w.setConstant(-10);
+	//general_rbm.nodes.v.setConstant(0.0);
+	//general_rbm.nodes.h.setConstant(0.0);
+	//p_v = general_rbm.condProbVis(0, 0.0);
+	//p_h = general_rbm.condProbHid(0, 0.0);
+	//p = general_rbm.condProbHid(0, 0.0);
+
+	//reset_params();
+	//general_rbm.params.w.setConstant(-10);
+	//general_rbm.nodes.v.setConstant(0.0);
+	//general_rbm.nodes.h.setConstant(1.0);
+	//p_v = general_rbm.condProbVis(0, 0.0);
+	//p_h = general_rbm.condProbHid(0, 0.0);
+	//p = general_rbm.condProbHid(0, 0.0);
+
+	//reset_params();
+	//general_rbm.params.w.setConstant(-10);
+	//general_rbm.nodes.v.setConstant(1.0);
+	//general_rbm.nodes.h.setConstant(0.0);
+	//p_v = general_rbm.condProbVis(0, 0.0);
+	//p_h = general_rbm.condProbHid(0, 0.0);
+	//p = general_rbm.condProbHid(0, 0.0);
+
+	//reset_params();
+	//general_rbm.params.w.setConstant(-10);
+	//general_rbm.nodes.v.setConstant(1.0);
+	//general_rbm.nodes.h.setConstant(1.0);
+	//p_v = general_rbm.condProbVis(0, 0.0);
+	//p_h = general_rbm.condProbHid(0, 0.0);
+	//p = general_rbm.condProbHid(0, 0.0);
 
 }
