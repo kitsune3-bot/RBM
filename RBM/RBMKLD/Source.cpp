@@ -7,10 +7,10 @@
 // 生成モデルと学習モデルとのカルバックライブラー情報量を比較
 //
 int main(void) {
-	int vsize = 10;
+	int vsize = 5;
 	int hsize = 5;
-	int datasize = 1000;
-	int epoch = 20;
+	int datasize = 100;
+	int epoch = 50;
 	int cdk = 1;
 	int batchsize = datasize;
 	double learning_rate = 0.1;
@@ -21,9 +21,13 @@ int main(void) {
 	auto rbm_exact = GeneralizedRBM(vsize, hsize+5);
 	rbm_exact.params.initParamsRandom(-0.01, 0.01);
 	rbm_exact.setHiddenDiveSize(3);
+	rbm_exact.setHiddenMin(-1.0);
+	rbm_exact.setHiddenMax(1.0);
 	auto rbm_cd = GeneralizedRBM(vsize, hsize+5);
 	rbm_cd.params.initParamsRandom(-0.01, 0.01);
 	rbm_cd.setHiddenDiveSize(3);
+	rbm_cd.setHiddenMin(-1.0);
+	rbm_cd.setHiddenMax(1.0);
 
 	auto rbm_trainer_exact = GeneralizedRBMTrainer(rbm_exact);
 	rbm_trainer_exact.epoch = epoch;
