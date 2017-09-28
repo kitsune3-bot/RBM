@@ -7,19 +7,22 @@
 // 生成モデルと学習モデルとのカルバックライブラー情報量を比較
 //
 int main(void) {
-	int vsize = 10;
-	int hsize = 1;
+	int vsize = 5;
+	int hsize = 3;
 	int datasize = 100;
-	int epoch = 100;
+	int epoch = 50;
 	int cdk = 1;
 	int batchsize = datasize;
 	double learning_rate = 0.1;
 	double momentum_rate = 0.0;
 
 	auto rbm_gen = GeneralizedRBM(vsize, hsize);
+	rbm_gen.params.initParamsRandom(-2, 2);
 	auto rbm_exact = GeneralizedRBM(vsize, hsize+5);
+	rbm_exact.params.initParamsRandom(-0.01, 0.01);
 	rbm_exact.setHiddenDiveSize(3);
 	auto rbm_cd = GeneralizedRBM(vsize, hsize+5);
+	rbm_cd.params.initParamsRandom(-0.01, 0.01);
 	rbm_cd.setHiddenDiveSize(3);
 
 	auto rbm_trainer_exact = GeneralizedRBMTrainer(rbm_exact);
@@ -40,6 +43,10 @@ int main(void) {
 	for (int i = 0; i < datasize; i++) {
 		dataset.push_back(rbmutil::data_gen<GeneralizedRBM, std::vector<double> >(rbm_gen, vsize));
 	}
+
+	std::cout << "[Generative Model]" << std::endl;
+	rbmutil::print_params(rbm_gen);
+
 
 	//std::cout << "[Exact]" << std::endl;
 	//rbmutil::print_params(rbm_exact);
