@@ -244,13 +244,12 @@ void GeneralizedRBMTrainer::calcRBMExpectedCD(GeneralizedRBM & rbm, std::vector<
         // GeneralizedRBMの初期値設定
         rbm.nodes.v = vect;
 
-        //for (int j = 0; j < rbm.getHiddenSize(); j++) {
-        //    rbm.nodes.h(j) = rbm.actHidJ(j);
-        //}
+        for (int j = 0; j < rbm.getHiddenSize(); j++) {
+            rbm.nodes.h(j) = rbm.actHidJ(j);
+        }
 
         // CD-K
         GeneralizedRBMSampler sampler;
-		sampler.updateByBlockedGibbsSamplingHidden(rbm);
 		for (int k = 0; k < cdk; k++) {
             sampler.updateByBlockedGibbsSamplingVisible(rbm);
             sampler.updateByBlockedGibbsSamplingHidden(rbm);
@@ -307,14 +306,7 @@ void GeneralizedRBMTrainer::calcGradient(GeneralizedRBM & rbm, std::vector<int> 
 
     for (int j = 0; j < rbm.getHiddenSize(); j++) {
         gradient.hBias(j) = dataMean.hBias(j) - rbmexpected.hBias(j);
-    }
-
-	//std::cout << "------Gradient------" << std::endl;
-	//std::cout << dataMean.vBias.transpose() << std::endl;
-	//std::cout << rbmexpected.vBias.transpose() << std::endl;
-	//std::cout << dataMean.hBias.transpose() << std::endl;
-	//std::cout << rbmexpected.hBias.transpose() << std::endl;
-	
+    }	
 }
 
 void GeneralizedRBMTrainer::updateMomentum(GeneralizedRBM & rbm) {

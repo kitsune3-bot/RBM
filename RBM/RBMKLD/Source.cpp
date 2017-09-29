@@ -10,24 +10,28 @@ int main(void) {
 	int vsize = 5;
 	int hsize = 5;
 	int datasize = 100;
-	int epoch = 50;
+	int epoch = 30;
 	int cdk = 1;
 	int batchsize = datasize;
 	double learning_rate = 0.1;
 	double momentum_rate = 0.9;
+	int div_size = 100;
 
 	auto rbm_gen = GeneralizedRBM(vsize, hsize);
 	rbm_gen.params.initParamsRandom(-2, 2);
 	auto rbm_exact = GeneralizedRBM(vsize, hsize+5);
 	rbm_exact.params.initParamsRandom(-0.01, 0.01);
-	rbm_exact.setHiddenDiveSize(3);
+	rbm_exact.setHiddenDiveSize(div_size);
 	rbm_exact.setHiddenMin(-1.0);
 	rbm_exact.setHiddenMax(1.0);
+	rbm_exact.setRealHiddenValue(true);
+
 	auto rbm_cd = GeneralizedRBM(vsize, hsize+5);
 	rbm_cd.params.initParamsRandom(-0.01, 0.01);
-	rbm_cd.setHiddenDiveSize(3);
+	rbm_cd.setHiddenDiveSize(div_size);
 	rbm_cd.setHiddenMin(-1.0);
 	rbm_cd.setHiddenMax(1.0);
+	rbm_cd.setRealHiddenValue(true);
 
 	auto rbm_trainer_exact = GeneralizedRBMTrainer(rbm_exact);
 	rbm_trainer_exact.epoch = epoch;
