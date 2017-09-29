@@ -104,34 +104,35 @@ double GeneralizedRBM::getFreeEnergy() {
 
 // 隠れ変数の活性化関数的なもの
 double GeneralizedRBM::actHidJ(int hindex) {
-	auto value_set = splitHiddenSet();
-	double numer = 0.0;  // 分子
-	double denom = sumExpMu(hindex);  // 分母
 
 	// 離散型
-	auto numer_discrete = [&]() 
+	auto discrete = [&]() 
 	{
-		double value = 0.0;
+		auto value_set = splitHiddenSet();
+		double numer = 0.0;  // 分子
+		double denom = sumExpMu(hindex);  // 分母
 		auto mu_j = mu(hindex);
 		for (auto & h_j : value_set) {
-			value += h_j * exp(mu_j * h_j);
+			numer += h_j * exp(mu_j * h_j);
 		}
+
+		auto value = numer / denom;
 
 		return value;
 	};
 
 	// 連続型
-	auto numer_real = [&]() {
-		auto value = 0.0;
+	auto real = [&]() {
 		auto mu_j = mu(hindex);
-		numer = (hMax * exp(hMax * mu_j) - hMin * exp(hMin * mu_j)) / mu_j - (exp(hMax * mu_j) - exp(hMin * mu_j)) / (mu_j * mu_j);
+		// FIXME: 0除算の可能性あり, 要テイラー展開
+		auto value = (hMax * exp(hMax * mu_j) - hMin * exp(hMin * mu_j)) / (exp(hMax * mu_j) - exp(hMin * mu_j))  - 1 / mu_j ;
 
 		return value;
 	};
 
-	numer = realFlag ? numer_real() : numer_discrete();
+	auto value = realFlag ? real() : discrete();
 
-	return numer / denom;
+	return value;
 }
 
 // 可視変数に関する外部磁場と相互作用

@@ -8,14 +8,14 @@
 //
 int main(void) {
 	int vsize = 5;
-	int hsize = 5;
+	int hsize = 10;
 	int datasize = 100;
-	int epoch = 30;
+	int epoch = 50;
 	int cdk = 1;
 	int batchsize = datasize;
 	double learning_rate = 0.1;
-	double momentum_rate = 0.9;
-	int div_size = 100;
+	double momentum_rate = 0.5;
+	int div_size = 2;
 
 	auto rbm_gen = GeneralizedRBM(vsize, hsize);
 	rbm_gen.params.initParamsRandom(-2, 2);
