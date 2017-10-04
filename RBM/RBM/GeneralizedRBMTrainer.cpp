@@ -216,7 +216,7 @@ void GeneralizedRBMTrainer::calcDataMean(GeneralizedRBM & rbm, std::vector<std::
         rbm.nodes.v = vect;
 
 		for (int i = 0; i < rbm.getVisibleSize(); i++) {
-			dataMean.vBias(i) = vect(i);
+			dataMean.vBias(i) += vect(i);
 
 			for (int j = 0; j < rbm.getHiddenSize(); j++) {
 				dataMean.weight(i, j) += vect(i) * rbm.actHidJ(j);
