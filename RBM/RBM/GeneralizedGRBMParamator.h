@@ -127,5 +127,17 @@ inline std::string GeneralizedGRBMParamator::serialize() {
 
 // パラメータ情報のデシリアライズ
 inline void GeneralizedGRBMParamator::deserialize(std::string js) {
+	auto json = nlohmann::json::parse(js);;
 
+	vSize = json["vSize"];
+	hSize = json["hSize"];
+	std::vector<double> tmp_b(json["params"]["b"].begin(), json["params"]["b"].end());
+	std::vector<double> tmp_c(json["params"]["c"].begin(), json["params"]["c"].end());
+	std::vector<double> tmp_w(json["params"]["w"].begin(), json["params"]["w"].end());
+	std::vector<double> tmp_lambda(json["params"]["lambda"].begin(), json["params"]["lambda"].end());
+
+	this->b = Eigen::Map<Eigen::VectorXd>(tmp_b.data(), vSize);
+	this->c = Eigen::Map<Eigen::VectorXd>(tmp_c.data(), hSize);
+	this->w = Eigen::Map<Eigen::MatrixXd>(tmp_w.data(), vSize, hSize);
+	this->lambda = Eigen::Map<Eigen::VectorXd>(tmp_lambda.data(), vSize);
 }

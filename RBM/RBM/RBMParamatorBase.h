@@ -37,5 +37,5 @@ class RBMParamatorBase{
 	virtual std::string serialize() = 0;
 
 	// パラメータ情報のデシリアライズ
-	//virtual void deserialize(std::string js) = 0;
+	virtual void deserialize(std::string js) = 0;
 };
