@@ -1,6 +1,7 @@
 ﻿#pragma once
 #include "RBMParamatorBase.h"
 #include "Eigen/Core"
+#include "json.hpp"
 
 class GeneralizedRBMParamator : RBMParamatorBase {
 private:
@@ -46,6 +47,12 @@ public:
 
     // 全てのパラメータを[min, max]の一様乱数で初期化
     void initParamsRandom(double range_min, double range_max);
+
+	// パラメータ情報のシリアライズ
+	std::string serialize();
+
+	// パラメータ情報のデシリアライズ
+	void deserialize(std::string js);
 };
 
 // 可視変数の総数を返す
@@ -86,4 +93,21 @@ inline double GeneralizedRBMParamator::getWeight(int vindex, int hindex) {
 // ウェイト行列を返す
 inline Eigen::MatrixXd GeneralizedRBMParamator::getWeightMatrix() {
     return w;
+}
+
+// パラメータ情報のシリアライズ
+std::string GeneralizedRBMParamator::serialize() {
+	nlohmann::json json;
+	json["vSize"] = vSize;
+	json["hSize"] = hSize;
+	json["params"]["b"] = std::vector<double>(this->b.data(), this->b.data() + this->b.cols() * this->b.rows());
+	json["params"]["c"] = std::vector<double>(this->c.data(), this->c.data() + this->c.cols() * this->c.rows());
+	json["params"]["w"] = std::vector<double>(this->w.data(), this->w.data() + this->w.cols() * this->w.rows());
+
+	return json.dump();
+}
+
+// パラメータ情報のデシリアライズ
+void GeneralizedRBMParamator::deserialize(std::string js) {
+
 }

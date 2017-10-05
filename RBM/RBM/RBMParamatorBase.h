@@ -31,4 +31,11 @@ class RBMParamatorBase{
 
     // 全てのパラメータを[min, max]の一様乱数で初期化
     virtual void initParamsRandom(double range_min, double range_max) = 0;
+
+
+	// パラメータ情報のシリアライズ
+	virtual std::string serialize() = 0;
+
+	// パラメータ情報のデシリアライズ
+	//virtual void deserialize(std::string js) = 0;
 };
