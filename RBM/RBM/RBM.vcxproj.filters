@@ -49,6 +49,12 @@
     <Filter Include="ヘッダー ファイル\GeneralizedGRBM">
       <UniqueIdentifier>{9ee5976a-263f-48f7-a102-bb11590cf4d4}</UniqueIdentifier>
     </Filter>
+    <Filter Include="ソース ファイル\GeneralizedSparseRBM">
+      <UniqueIdentifier>{7baea9a2-71d9-4d9f-8dd8-bf25df6f76a1}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="ヘッダー ファイル\GeneralizedSparseRBM">
+      <UniqueIdentifier>{77cb8611-10ef-41c6-89ed-5a5d8014497a}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="RBM.h">
@@ -135,6 +141,21 @@
     <ClInclude Include="rbmutil.h">
       <Filter>ヘッダー ファイル\Common</Filter>
     </ClInclude>
+    <ClInclude Include="GeneralizedSparseRBM.h">
+      <Filter>ヘッダー ファイル\GeneralizedSparseRBM</Filter>
+    </ClInclude>
+    <ClInclude Include="GeneralizedSparseRBMNode.h">
+      <Filter>ヘッダー ファイル\GeneralizedSparseRBM</Filter>
+    </ClInclude>
+    <ClInclude Include="GeneralizedSparseRBMParamator.h">
+      <Filter>ヘッダー ファイル\GeneralizedSparseRBM</Filter>
+    </ClInclude>
+    <ClInclude Include="GeneralizedSparseRBMSampler.h">
+      <Filter>ヘッダー ファイル\GeneralizedSparseRBM</Filter>
+    </ClInclude>
+    <ClInclude Include="GeneralizedSparseRBMTrainer.h">
+      <Filter>ヘッダー ファイル\GeneralizedSparseRBM</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="RBM.cpp">
@@ -199,6 +220,21 @@
     </ClCompile>
     <ClCompile Include="GeneralizedGRBMTrainer.cpp">
       <Filter>ソース ファイル\GeneralizedGRBM</Filter>
+    </ClCompile>
+    <ClCompile Include="GeneralizedSparseRBMParamator.cpp">
+      <Filter>ソース ファイル</Filter>
+    </ClCompile>
+    <ClCompile Include="GeneralizedSparseRBM.cpp">
+      <Filter>ソース ファイル</Filter>
+    </ClCompile>
+    <ClCompile Include="GeneralizedSparseRBMNode.cpp">
+      <Filter>ソース ファイル</Filter>
+    </ClCompile>
+    <ClCompile Include="GeneralizedSparseRBMSampler.cpp">
+      <Filter>ソース ファイル</Filter>
+    </ClCompile>
+    <ClCompile Include="GeneralizedSparseRBMTrainer.cpp">
+      <Filter>ソース ファイル</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

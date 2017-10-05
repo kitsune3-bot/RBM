@@ -145,6 +145,11 @@
     <ClInclude Include="GeneralizedRBMParamator.h" />
     <ClInclude Include="GeneralizedRBMSampler.h" />
     <ClInclude Include="GeneralizedRBMTrainer.h" />
+    <ClInclude Include="GeneralizedSparseRBM.h" />
+    <ClInclude Include="GeneralizedSparseRBMNode.h" />
+    <ClInclude Include="GeneralizedSparseRBMParamator.h" />
+    <ClInclude Include="GeneralizedSparseRBMSampler.h" />
+    <ClInclude Include="GeneralizedSparseRBMTrainer.h" />
     <ClInclude Include="RBM.h" />
     <ClInclude Include="RBMBase.h" />
     <ClInclude Include="RBMMath.h" />
@@ -175,6 +180,11 @@
     <ClCompile Include="GeneralizedRBMParamator.cpp" />
     <ClCompile Include="GeneralizedRBMSampler.cpp" />
     <ClCompile Include="GeneralizedRBMTrainer.cpp" />
+    <ClCompile Include="GeneralizedSparseRBM.cpp" />
+    <ClCompile Include="GeneralizedSparseRBMNode.cpp" />
+    <ClCompile Include="GeneralizedSparseRBMParamator.cpp" />
+    <ClCompile Include="GeneralizedSparseRBMSampler.cpp" />
+    <ClCompile Include="GeneralizedSparseRBMTrainer.cpp" />
     <ClCompile Include="RBM.cpp" />
     <ClCompile Include="RBMMath.cpp" />
     <ClCompile Include="RBMNode.cpp" />
