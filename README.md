@@ -7,3 +7,10 @@
 - GeneralizedGRBM: Gaussian RBM(可視変数連続値, 隠れ変数が{min, MAX}を多値に分割)
 \
 GBRBMって名前にするんでなかった…
+
+
+Require
+- JSON for Modern C++
+https://nlohmann.github.io/json/
+- Eigen
+http://eigen.tuxfamily.org/index.php?title=Main_Page
