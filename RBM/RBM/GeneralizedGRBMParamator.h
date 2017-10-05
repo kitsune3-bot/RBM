@@ -113,7 +113,7 @@ inline Eigen::MatrixXd GeneralizedGRBMParamator::getWeightMatrix() {
 }
 
 // パラメータ情報のシリアライズ
-std::string GeneralizedGRBMParamator::serialize() {
+inline std::string GeneralizedGRBMParamator::serialize() {
 	nlohmann::json json;
 	json["vSize"] = vSize;
 	json["hSize"] = hSize;
@@ -126,6 +126,6 @@ std::string GeneralizedGRBMParamator::serialize() {
 }
 
 // パラメータ情報のデシリアライズ
-void GeneralizedGRBMParamator::deserialize(std::string js) {
+inline void GeneralizedGRBMParamator::deserialize(std::string js) {
 
 }

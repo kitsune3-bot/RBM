@@ -113,7 +113,7 @@ inline Eigen::MatrixXd GBRBMParamator::getWeightMatrix() {
 }
 
 // パラメータ情報のシリアライズ
-std::string GBRBMParamator::serialize() {
+inline std::string GBRBMParamator::serialize() {
 	nlohmann::json json;
 	json["vSize"] = vSize;
 	json["hSize"] = hSize;
@@ -126,6 +126,6 @@ std::string GBRBMParamator::serialize() {
 }
 
 // パラメータ情報のデシリアライズ
-void GBRBMParamator::deserialize(std::string js) {
+inline void GBRBMParamator::deserialize(std::string js) {
 
 }
