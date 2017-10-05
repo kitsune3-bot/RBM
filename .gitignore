@@ -267,3 +267,4 @@ __pycache__/
 /RBM/UnitTestRBM
 
 *.xml
+/RBM/src/json_hpp/json.hpp

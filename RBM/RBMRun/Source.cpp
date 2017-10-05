@@ -17,11 +17,11 @@ int main(int argc, char **argv) {
 
 
 	size_t vsize = 10;
-	size_t hsize = 30;
+	size_t hsize = 10;
 	auto learning_rate = 0.1;
 	auto cdk = 3;
-	auto batch_size = 3;
-	auto epoch = 100;
+	auto batch_size = 1;
+	auto epoch = 10;
 
 
 	auto rbm = GeneralizedRBM(vsize, hsize);

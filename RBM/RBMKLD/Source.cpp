@@ -7,15 +7,16 @@
 // 生成モデルと学習モデルとのカルバックライブラー情報量を比較
 //
 int main(void) {
-	int vsize = 5;
-	int hsize = 10;
-	int datasize = 100;
-	int epoch = 50;
+	int vsize = 3;
+	int hsize = 20;
+	int datasize = 10000;
+	int epoch = 10000;
 	int cdk = 1;
-	int batchsize = datasize;
+	int batchsize = 1;// datasize;
 	double learning_rate = 0.1;
-	double momentum_rate = 0.5;
-	int div_size = 2;
+	double momentum_rate = 0.9;
+	int div_size = 20;
+
 
 	auto rbm_gen = GeneralizedRBM(vsize, hsize);
 	rbm_gen.params.initParamsRandom(-2, 2);
@@ -25,6 +26,23 @@ int main(void) {
 	rbm_exact.setHiddenMin(-1.0);
 	rbm_exact.setHiddenMax(1.0);
 	rbm_exact.setRealHiddenValue(true);
+
+	std::cout << rbm_gen.params.serialize() << std::endl;
+	std::cout << std::endl;
+	std::cout << std::endl;
+	rbmutil::print_params(rbm_gen);
+	auto js = rbm_gen.params.serialize();
+	std::cout << std::endl;
+	std::cout << std::endl;
+	rbm_gen.params.b.setConstant(0);
+	rbm_gen.params.c.setConstant(0);
+	rbm_gen.params.w.setConstant(0);
+	rbmutil::print_params(rbm_gen);
+	std::cout << std::endl;
+	std::cout << std::endl;
+	rbm_gen.params.deserialize(js);
+	rbmutil::print_params(rbm_gen);
+
 
 	auto rbm_cd = GeneralizedRBM(vsize, hsize+5);
 	rbm_cd.params.initParamsRandom(-0.01, 0.01);
@@ -52,7 +70,7 @@ int main(void) {
 		dataset.push_back(rbmutil::data_gen<GeneralizedRBM, std::vector<double> >(rbm_gen, vsize));
 	}
 
-	//std::cout << "[Generative Model]" << std::endl;
+	std::cout << "[Generative Model]" << std::endl;
 	//rbmutil::print_params(rbm_gen);
 
 

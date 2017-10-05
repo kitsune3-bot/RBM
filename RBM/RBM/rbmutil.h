@@ -64,6 +64,8 @@ namespace rbmutil{
 				volatile auto z1 = rbm1.getNormalConstant();
 				volatile auto z2 = rbm2.getNormalConstant();
 
+				print_params(rbm2);
+
 				throw;
 			}
 		}
