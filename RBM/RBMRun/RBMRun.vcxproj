@@ -89,7 +89,7 @@
       <WarningLevel>Level4</WarningLevel>
       <Optimization>Disabled</Optimization>
       <PreprocessorDefinitions>WIN32;_DEBUG;_CONSOLE;%(PreprocessorDefinitions);_ITERATOR_DEBUG_LEVEL=1</PreprocessorDefinitions>
-      <AdditionalIncludeDirectories>C:\src\opencv-3.2.0\include;$(SolutionDir)RBM;$(SolutionDir)ConditionalRBM;C:\src\eigen-eigen-dbab66d00651</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(SolutionDir)src\json_hpp\;C:\src\opencv-3.2.0\include;$(SolutionDir)RBM;$(SolutionDir)ConditionalRBM;C:\src\eigen-eigen-dbab66d00651</AdditionalIncludeDirectories>
       <BufferSecurityCheck>true</BufferSecurityCheck>
       <SDLCheck>true</SDLCheck>
       <DisableLanguageExtensions>true</DisableLanguageExtensions>
@@ -107,7 +107,7 @@
       <WarningLevel>Level4</WarningLevel>
       <Optimization>Disabled</Optimization>
       <PreprocessorDefinitions>_DEBUG;_CONSOLE;%(PreprocessorDefinitions);_ITERATOR_DEBUG_LEVEL=1</PreprocessorDefinitions>
-      <AdditionalIncludeDirectories>C:\src\opencv-3.2.0\include;$(SolutionDir)RBM;$(SolutionDir)ConditionalRBM;C:\src\eigen-eigen-dbab66d00651</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(SolutionDir)src\json_hpp\;C:\src\opencv-3.2.0\include;$(SolutionDir)RBM;$(SolutionDir)ConditionalRBM;C:\src\eigen-eigen-dbab66d00651</AdditionalIncludeDirectories>
       <BufferSecurityCheck>true</BufferSecurityCheck>
       <SDLCheck>true</SDLCheck>
       <DisableLanguageExtensions>true</DisableLanguageExtensions>
@@ -127,7 +127,7 @@
       <FunctionLevelLinking>true</FunctionLevelLinking>
       <IntrinsicFunctions>true</IntrinsicFunctions>
       <PreprocessorDefinitions>WIN32;NDEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
-      <AdditionalIncludeDirectories>C:\src\opencv-3.2.0\include;$(SolutionDir)RBM;$(SolutionDir)ConditionalRBM;C:\src\eigen-eigen-dbab66d00651</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(SolutionDir)src\json_hpp\;C:\src\opencv-3.2.0\include;$(SolutionDir)RBM;$(SolutionDir)ConditionalRBM;C:\src\eigen-eigen-dbab66d00651</AdditionalIncludeDirectories>
       <BufferSecurityCheck>true</BufferSecurityCheck>
       <SDLCheck>true</SDLCheck>
       <DisableLanguageExtensions>true</DisableLanguageExtensions>
@@ -149,7 +149,7 @@
       <FunctionLevelLinking>true</FunctionLevelLinking>
       <IntrinsicFunctions>true</IntrinsicFunctions>
       <PreprocessorDefinitions>NDEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
-      <AdditionalIncludeDirectories>C:\src\opencv-3.2.0\include;$(SolutionDir)RBM;$(SolutionDir)ConditionalRBM;C:\src\eigen-eigen-dbab66d00651</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(SolutionDir)src\json_hpp\;C:\src\opencv-3.2.0\include;$(SolutionDir)RBM;$(SolutionDir)ConditionalRBM;C:\src\eigen-eigen-dbab66d00651</AdditionalIncludeDirectories>
       <BufferSecurityCheck>true</BufferSecurityCheck>
       <SDLCheck>true</SDLCheck>
       <DisableLanguageExtensions>true</DisableLanguageExtensions>
