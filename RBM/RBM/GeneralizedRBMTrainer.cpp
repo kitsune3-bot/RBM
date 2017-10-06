@@ -366,6 +366,8 @@ std::string GeneralizedRBMTrainer::trainInfoJson(GeneralizedRBM & rbm) {
 	js["learningRate"] = learningRate;
 	js["momentumRate"] = momentumRate;
 	js["cdk"] = cdk;
+	js["divSize"] = rbm.getHiddenDivSize();
+	js["realFlag"] = rbm.isRealHiddenValue();
 
 	return js.dump();
 }
@@ -377,4 +379,6 @@ void GeneralizedRBMTrainer::trainFromTrainInfo(GeneralizedRBM & rbm, std::string
 	learningRate = js["learningRate"];
 	momentumRate = js["momentumRate"];
 	cdk = js["cdk"];
+	rbm.setHiddenDiveSize(js["divSize"]);
+	rbm.setRealHiddenValue(js["realFlag"]);
 }
