@@ -35,6 +35,7 @@ private:
     Gradient gradient;
     DataMean dataMean;
     RBMExpected rbmexpected;
+	int _trainCount = 0;
 
 
 public:

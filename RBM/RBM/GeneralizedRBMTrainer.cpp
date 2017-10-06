@@ -120,6 +120,8 @@ void GeneralizedRBMTrainer::trainOnce(GeneralizedRBM & rbm, std::vector<std::vec
     // 勾配の更新
     updateParams(rbm);
 
+	// Trainer情報更新
+	_trainCount++;
 }
 
 void GeneralizedRBMTrainer::trainOnceCD(GeneralizedRBM & rbm, std::vector<std::vector<double>> & dataset) {
@@ -150,6 +152,8 @@ void GeneralizedRBMTrainer::trainOnceCD(GeneralizedRBM & rbm, std::vector<std::v
 	// 勾配の更新
 	updateParams(rbm);
 
+	// Trainer情報更新
+	_trainCount++;
 }
 
 void GeneralizedRBMTrainer::trainOnceExact(GeneralizedRBM & rbm, std::vector<std::vector<double>> & dataset) {
@@ -180,6 +184,8 @@ void GeneralizedRBMTrainer::trainOnceExact(GeneralizedRBM & rbm, std::vector<std
 	// 勾配の更新
 	updateParams(rbm);
 
+	// Trainer情報更新
+	_trainCount++;
 }
 
 

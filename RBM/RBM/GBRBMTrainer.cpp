@@ -108,6 +108,8 @@ void GBRBMTrainer::trainOnce(GBRBM & rbm, std::vector<std::vector<double>> & dat
     // 勾配の更新
     updateParams(rbm);
 
+	// Trainer情報更新
+	_trainCount++;
 }
 
 void GBRBMTrainer::calcContrastiveDivergence(GBRBM & rbm, std::vector<std::vector<double>> & dataset, std::vector<int> & data_indexes) {
