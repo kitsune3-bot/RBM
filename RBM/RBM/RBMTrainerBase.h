@@ -54,4 +54,7 @@ class RBMTrainerBase {
 
 	// 学習情報出力(JSON)
 	virtual std::string trainInfoJson(RBMBase & rbm) = 0;
+
+	// 学習情報から学習(JSON)
+	virtual void trainFromTrainInfo(RBMBase & rbm, std::string json) = 0;
 };

@@ -232,3 +232,24 @@ void GeneralizedGRBMTrainer::updateParams(GeneralizedGRBM & rbm) {
         rbm.params.c(j) += momentum.hBias(j);
     }
 }
+
+// 学習情報出力(JSON)
+std::string GeneralizedGRBMTrainer::trainInfoJson(GeneralizedGRBM & rbm) {
+	auto js = nlohmann::json();
+	js["rbm"] = nlohmann::json::parse(rbm.params.serialize());
+	js["trainCount"] = _trainCount;
+	js["learningRate"] = learningRate;
+	js["momentumRate"] = momentumRate;
+	js["cdk"] = cdk;
+
+	return js.dump();
+}
+
+void GeneralizedGRBMTrainer::trainFromTrainInfo(GeneralizedGRBM & rbm, std::string json) {
+	auto js = nlohmann::json::parse(json);
+	rbm.params.deserialize(js["rbm"].dump());
+	_trainCount = js["trainCount"];
+	learningRate = js["learningRate"];
+	momentumRate = js["momentumRate"];
+	cdk = js["cdk"];
+}

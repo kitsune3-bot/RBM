@@ -116,5 +116,10 @@ public:
 	// 学習情報出力(JSON)
 	std::string trainInfoJson(RBMBase & rbm) { trainInfoJson(reinterpret_cast<GBRBM &>(rbm)); };
 	std::string trainInfoJson(GBRBM & rbm);
+
+	// 学習情報から学習(JSON)
+	void trainFromTrainInfo(RBMBase & rbm, std::string json) { trainFromTrainInfo(reinterpret_cast<GBRBM &>(rbm), json); };
+	void trainFromTrainInfo(GBRBM & rbm, std::string json);
+
 };
 

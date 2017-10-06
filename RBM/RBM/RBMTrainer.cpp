@@ -1,6 +1,7 @@
 ﻿#include "RBMTrainer.h"
 #include "RBM.h"
 #include "RBMSampler.h"
+#include "json.hpp"
 #include <vector>
 #include <numeric>
 #include <random>
@@ -212,3 +213,25 @@ void RBMTrainer::updateParams(RBM & rbm) {
         rbm.params.c(j) += momentum.hBias(j);
     }
 }
+
+// 学習情報出力(JSON)
+std::string RBMTrainer::trainInfoJson(RBM & rbm) {
+	auto js = nlohmann::json();
+	js["rbm"] = nlohmann::json::parse(rbm.params.serialize());
+	js["trainCount"] = _trainCount;
+	js["learningRate"] = learningRate;
+	js["momentumRate"] = momentumRate;
+	js["cdk"] = cdk;
+
+	return js.dump();
+}
+
+void RBMTrainer::trainFromTrainInfo(RBM & rbm, std::string json) {
+	auto js = nlohmann::json::parse(json);
+	rbm.params.deserialize(js["rbm"].dump());
+	_trainCount = js["trainCount"];
+	learningRate = js["learningRate"];
+	momentumRate = js["momentumRate"];
+	cdk = js["cdk"];
+}
+
