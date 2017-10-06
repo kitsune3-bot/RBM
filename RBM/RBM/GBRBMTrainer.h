@@ -112,5 +112,9 @@ public:
     // 勾配更新
     void updateParams(RBMBase & rbm) { updateParams(reinterpret_cast<GBRBM &>(rbm)); }
     void updateParams(GBRBM & rbm);
+
+	// 学習情報出力(JSON)
+	std::string trainInfoJson(RBMBase & rbm) { trainInfoJson(reinterpret_cast<GBRBM &>(rbm)); };
+	std::string trainInfoJson(GBRBM & rbm);
 };
 

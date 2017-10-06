@@ -1,5 +1,6 @@
 ﻿#pragma once
 #include <vector>
+#include <string>
 class RBMBase;
 
 class RBMTrainerBase {
@@ -50,4 +51,7 @@ class RBMTrainerBase {
 
     // 勾配更新
     virtual void updateParams(RBMBase & rbm) = 0;
+
+	// 学習情報出力(JSON)
+	virtual std::string trainInfoJson(RBMBase & rbm) = 0;
 };

@@ -130,5 +130,9 @@ public:
 
 	// 対数尤度関数
 	double logLikeliHood(GeneralizedRBM & rbm, std::vector<std::vector<double>> & dataset);
+
+	// 学習情報出力(JSON)
+	std::string trainInfoJson(RBMBase & rbm) { trainInfoJson(reinterpret_cast<GeneralizedRBM &>(rbm)); };
+	std::string trainInfoJson(GeneralizedRBM & rbm);
 };
 

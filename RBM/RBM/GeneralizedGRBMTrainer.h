@@ -112,5 +112,9 @@ public:
     // 勾配更新
     void updateParams(RBMBase & rbm) { updateParams(reinterpret_cast<GeneralizedGRBM &>(rbm)); }
     void updateParams(GeneralizedGRBM & rbm);
+
+	// 学習情報出力(JSON)
+	std::string trainInfoJson(RBMBase & rbm) { trainInfoJson(reinterpret_cast<GeneralizedGRBM &>(rbm)); };
+	std::string trainInfoJson(GeneralizedGRBM & rbm);
 };
 
