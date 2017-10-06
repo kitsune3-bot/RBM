@@ -221,20 +221,20 @@
     <ClCompile Include="GeneralizedGRBMTrainer.cpp">
       <Filter>ソース ファイル\GeneralizedGRBM</Filter>
     </ClCompile>
-    <ClCompile Include="GeneralizedSparseRBMParamator.cpp">
-      <Filter>ソース ファイル</Filter>
-    </ClCompile>
     <ClCompile Include="GeneralizedSparseRBM.cpp">
-      <Filter>ソース ファイル</Filter>
+      <Filter>ソース ファイル\GeneralizedSparseRBM</Filter>
     </ClCompile>
     <ClCompile Include="GeneralizedSparseRBMNode.cpp">
-      <Filter>ソース ファイル</Filter>
+      <Filter>ソース ファイル\GeneralizedSparseRBM</Filter>
+    </ClCompile>
+    <ClCompile Include="GeneralizedSparseRBMParamator.cpp">
+      <Filter>ソース ファイル\GeneralizedSparseRBM</Filter>
     </ClCompile>
     <ClCompile Include="GeneralizedSparseRBMSampler.cpp">
-      <Filter>ソース ファイル</Filter>
+      <Filter>ソース ファイル\GeneralizedSparseRBM</Filter>
     </ClCompile>
     <ClCompile Include="GeneralizedSparseRBMTrainer.cpp">
-      <Filter>ソース ファイル</Filter>
+      <Filter>ソース ファイル\GeneralizedSparseRBM</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

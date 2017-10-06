@@ -12,7 +12,7 @@ public:
 	Eigen::VectorXd b;  // 可視変数のバイアス
 	Eigen::VectorXd c;  // 隠れ変数のバイアス
 	Eigen::MatrixXd w;  // 可視変数-隠れ変数間のカップリング
-	Eigen::MatrixXd sparse;  // 隠れ変数のスパースパラメータ
+	Eigen::VectorXd sparse;  // 隠れ変数のスパースパラメータ
 
 
 public:
