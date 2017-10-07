@@ -29,9 +29,9 @@ std::vector<double> make_colordata(const std::string & fname) {
 
     for (int i = 0; i < img.cols; i++) {
         for (int j = 0; j < img.rows; j++) {
-            data[img_size * 0 + j * img.cols + i] = static_cast<double>(img.at<cv::Vec3b>(j, i)[0]) / 255.0;
-            data[img_size * 1 + j * img.cols + i] = static_cast<double>(img.at<cv::Vec3b>(j, i)[1]) / 255.0;
-            data[img_size * 2 + j * img.cols + i] = static_cast<double>(img.at<cv::Vec3b>(j, i)[2]) / 255.0;
+			data[img_size * 0 + j * img.cols + i] = static_cast<double>(img.at<cv::Vec3b>(j, i)[0]);// / 255.0;
+			data[img_size * 1 + j * img.cols + i] = static_cast<double>(img.at<cv::Vec3b>(j, i)[1]);// / 255.0;
+			data[img_size * 2 + j * img.cols + i] = static_cast<double>(img.at<cv::Vec3b>(j, i)[2]);// / 255.0;
         }
     }
 
@@ -48,9 +48,9 @@ std::vector<double> make_monodata(const std::string & fname) {
         for (int j = 0; j < img.rows; j++) {
             double pixel = 0.0;
 
-            pixel += static_cast<double>(img.at<cv::Vec3b>(j, i)[0]) / 255.0;
-            pixel += static_cast<double>(img.at<cv::Vec3b>(j, i)[1]) / 255.0;
-            pixel += static_cast<double>(img.at<cv::Vec3b>(j, i)[2]) / 255.0;
+			pixel += static_cast<double>(img.at<cv::Vec3b>(j, i)[0]);// / 255.0;
+			pixel += static_cast<double>(img.at<cv::Vec3b>(j, i)[1]);// / 255.0;
+			pixel += static_cast<double>(img.at<cv::Vec3b>(j, i)[2]);// / 255.0;
             data[j * img.cols + i] = pixel / 3.0;
         }
     }
@@ -73,12 +73,12 @@ int main(void) {
 
     int v_size = dataset[0].size();
     int x_size = cond_dataset[0].size();
-    ConditionalGRBM cgrbm(v_size, 100, x_size);
+    ConditionalGRBM cgrbm(v_size, 10, x_size);
     ConditionalGRBMTrainer cgrbm_train(cgrbm);
     cgrbm_train.batchSize = 1;
-    cgrbm_train.epoch = 10;
+    cgrbm_train.epoch = 1000;
     cgrbm_train.cdk = 1;
-    cgrbm_train.learningRate = 0.1;
+    cgrbm_train.learningRate = 0.01;
     // FIXME: 学習にバグがあるらしい
     auto w1(cgrbm.params.hvW);
     cgrbm_train.train(cgrbm, dataset, cond_dataset);
@@ -119,9 +119,9 @@ int main(void) {
 
         for (int i = 0; i < img.cols; i++) {
             for (int j = 0; j < img.rows; j++) {
-                img.at<cv::Vec3b>(j, i)[0] = cgrbm.nodes.v(img_size * 0 + j * img.cols + i) *255.0;
-                img.at<cv::Vec3b>(j, i)[1] = cgrbm.nodes.v(img_size * 1 + j * img.cols + i) *255.0;
-                img.at<cv::Vec3b>(j, i)[2] = cgrbm.nodes.v(img_size * 2 + j * img.cols + i) *255.0;
+				img.at<cv::Vec3b>(j, i)[0] = cgrbm.nodes.v(img_size * 0 + j * img.cols + i);// *255.0;
+				img.at<cv::Vec3b>(j, i)[1] = cgrbm.nodes.v(img_size * 1 + j * img.cols + i);// *255.0;
+				img.at<cv::Vec3b>(j, i)[2] = cgrbm.nodes.v(img_size * 2 + j * img.cols + i);// *255.0;
             }
         }
 
@@ -164,9 +164,9 @@ int main(void) {
 
         for (int i = 0; i < img.cols; i++) {
             for (int j = 0; j < img.rows; j++) {
-                img.at<cv::Vec3b>(j, i)[0] = cgrbm.nodes.v(img_size * 0 + j * img.cols + i) *255.0;
-                img.at<cv::Vec3b>(j, i)[1] = cgrbm.nodes.v(img_size * 1 + j * img.cols + i) *255.0;
-                img.at<cv::Vec3b>(j, i)[2] = cgrbm.nodes.v(img_size * 2 + j * img.cols + i) *255.0;
+				img.at<cv::Vec3b>(j, i)[0] = cgrbm.nodes.v(img_size * 0 + j * img.cols + i);// *255.0;
+				img.at<cv::Vec3b>(j, i)[1] = cgrbm.nodes.v(img_size * 1 + j * img.cols + i);// *255.0;
+				img.at<cv::Vec3b>(j, i)[2] = cgrbm.nodes.v(img_size * 2 + j * img.cols + i);// *255.0;
             }
         }
 

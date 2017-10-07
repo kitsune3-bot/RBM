@@ -172,12 +172,12 @@ void ConditionalGRBMTrainer::calcDataMean(ConditionalGRBM & rbm, std::vector<std
 		for (int h_counter = 0; h_counter < rbm.getHiddenSize(); h_counter++) {
 			for (int x_counter = 0; x_counter < rbm.getCondSize(); x_counter++) {
 				// 計算使いまわしています
-				dataMean.xhWeight(x_counter, h_counter) = cond_vect(x_counter) * dataMean.hBias(h_counter);
+				dataMean.xhWeight(x_counter, h_counter) += cond_vect(x_counter) * dataMean.hBias(h_counter);
 			}
 
 			for (int v_counter = 0; v_counter < rbm.getVisibleSize(); v_counter++) {
 				// 計算使いまわしています
-				dataMean.hvWeight(h_counter, v_counter) = dataMean.vBias(v_counter) * dataMean.hBias(h_counter);
+				dataMean.hvWeight(h_counter, v_counter) += dataMean.vBias(v_counter) * dataMean.hBias(h_counter);
 			}
 		}
 
@@ -217,17 +217,17 @@ void ConditionalGRBMTrainer::calcRBMExpected(ConditionalGRBM & rbm, std::vector<
 		}
 
 		// 結果を格納
-		rbmExpected.vBias = rbm.nodes.v;
-		rbmExpected.hBias = rbm.nodes.h;
+		rbmExpected.vBias += rbm.nodes.v;
+		rbmExpected.hBias += rbm.nodes.h;
 
 		for (int h_counter = 0; h_counter < rbm.getHiddenSize(); h_counter++) {
 			// 計算使いまわせるところは使いまわします
 			for (int x_counter = 0; x_counter < rbm.getCondSize(); x_counter++) {
-				rbmExpected.xhWeight(x_counter, h_counter) = cond_vect(x_counter) * rbmExpected.hBias(h_counter);
+				rbmExpected.xhWeight(x_counter, h_counter) += cond_vect(x_counter) * rbmExpected.hBias(h_counter);
 			}
 
 			for (int v_counter = 0; v_counter < rbm.getVisibleSize(); v_counter++) {
-				rbmExpected.hvWeight(h_counter, v_counter) = rbmExpected.hBias(h_counter) * rbmExpected.vBias(v_counter);
+				rbmExpected.hvWeight(h_counter, v_counter) += rbmExpected.hBias(h_counter) * rbmExpected.vBias(v_counter);
 			}
 		}
 

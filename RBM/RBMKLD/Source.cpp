@@ -158,15 +158,19 @@ int main(void) {
 		write_params(rbm_gen, ss_gen_fname.str());
 
 		// try rbm 2, 3, 4, 5, cont
+		option.realFlag = false;
 		option.divSize = 1;
 		run(option, try_count, rbm_gen, dataset);
 
+		option.realFlag = false;
 		option.divSize = 2;
 		run(option, try_count, rbm_gen, dataset);
 
+		option.realFlag = false;
 		option.divSize = 3;
 		run(option, try_count, rbm_gen, dataset);
 
+		option.realFlag = false;
 		option.divSize = 4;
 		run(option, try_count, rbm_gen, dataset);
 
