@@ -270,3 +270,11 @@ __pycache__/
 /RBM/src/json_hpp/json.hpp
 /RBM/RBMKLD/output
 /RBM/SparseRBMKLD/output
+/RBM/RBMKLD/sqlite3.dll
+/RBM/RBMKLD/sqlite3.def
+/RBM/RBMKLD/sqlite3.lib
+/RBM/RBMKLD/sqlite3.exp
+/RBM/RBMKLD/sqlite3.h
+/RBM/RBMKLD/SQLiteCpp.lib
+/RBM/RBMKLD/SQLiteCpp
+/RBM/src

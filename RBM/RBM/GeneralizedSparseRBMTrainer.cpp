@@ -1,7 +1,6 @@
 ﻿#include "GeneralizedSparseRBMTrainer.h"
 #include "GeneralizedSparseRBM.h"
 #include "GeneralizedSparseRBMSampler.h"
-#include "rbmutil.h"
 #include <vector>
 #include <numeric>
 #include <random>
