@@ -107,6 +107,12 @@ public:
 	// 隠れ変数を連続値にするか離散値にするか
 	void setRealHiddenValue(bool flag);
 
+	// 隠れ変数の期待値, E[ abs(h_j)]
+	double expectedValueAbsHid(int hindex);
+
+	// 隠れ変数の(Abs)した活性化関数的なもの
+	double actHidSparseJ(int hindex);
+
 	bool isRealHiddenValue();
 };
 

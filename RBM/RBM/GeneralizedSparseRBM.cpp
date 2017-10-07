@@ -65,7 +65,7 @@ double GeneralizedSparseRBM::getNormalConstant() {
 				double sum = 0.0;
 
 				for (auto & h_val : this->hiddenValueSet) {
-					sum += exp(mu_j * h_val);
+					sum += exp(mu_j * h_val + params.sparse(j) * abs(h_val));
 				}
 
 				return sum;
@@ -73,6 +73,8 @@ double GeneralizedSparseRBM::getNormalConstant() {
 
 			// 連続型
 			auto sum_h_j_real = [&](double mu_j) {
+				// TODO: 導出せよ
+				throw;
 				double sum = (exp(hMax * mu_j) - exp(hMin * mu_j)) / mu_j;
 
 				return sum;
@@ -113,7 +115,7 @@ double GeneralizedSparseRBM::actHidJ(int hindex) {
 		double denom = sumExpMu(hindex);  // 分母
 		auto mu_j = mu(hindex);
 		for (auto & h_j : value_set) {
-			numer += h_j * exp(mu_j * h_j);
+			numer += h_j * exp(mu_j * h_j + params.sparse(hindex) * abs(h_j));
 		}
 
 		auto value = numer / denom;
@@ -123,6 +125,8 @@ double GeneralizedSparseRBM::actHidJ(int hindex) {
 
 	// 連続型
 	auto real = [&]() {
+		// TODO: 導出せよ
+		throw;
 		auto mu_j = mu(hindex);
 		// FIXME: 0除算の可能性あり, 要テイラー展開
 		auto value = (hMax * exp(hMax * mu_j) - hMin * exp(hMin * mu_j)) / (exp(hMax * mu_j) - exp(hMin * mu_j)) - 1 / mu_j;
@@ -165,6 +169,7 @@ double GeneralizedSparseRBM::mu(int hindex) {
 	return mu;
 }
 
+// FIXME: z_jだけども名前変えたほうがよさそうだ。
 // muの可視変数に関する全ての実現値の総和
 double GeneralizedSparseRBM::sumExpMu(int hindex) {
 	// 離散型
@@ -173,7 +178,7 @@ double GeneralizedSparseRBM::sumExpMu(int hindex) {
 		double mu_j = mu(hindex);
 
 		for (auto & h_j : hiddenValueSet) {
-			value += exp(mu_j * h_j);
+			value += exp(mu_j * h_j + params.sparse(hindex) * abs(h_j));
 		}
 
 		return value;
@@ -181,6 +186,8 @@ double GeneralizedSparseRBM::sumExpMu(int hindex) {
 
 	// 連続型
 	auto sum_real = [&]() {
+		// TODO: 導出せよ
+		throw;
 		double mu_j = mu(hindex);
 		double value = (exp(hMax * mu_j) - exp(hMin * mu_j)) / mu_j;
 
@@ -216,7 +223,7 @@ double GeneralizedSparseRBM::probVis(std::vector<double> & data) {
 			double sum = 0.0;
 
 			for (auto & h_val : this->hiddenValueSet) {
-				sum += exp(mu_j * h_val);
+				sum += exp(mu_j * h_val + params.sparse(j) * abs(h_val));
 			}
 
 			return sum;
@@ -224,6 +231,8 @@ double GeneralizedSparseRBM::probVis(std::vector<double> & data) {
 
 		// 連続型
 		auto sum_h_j_real = [&](double mu_j) {
+			// TODO: 導出せよ
+			throw;
 			double sum = (exp(hMax * mu_j) - exp(hMin * mu_j)) / mu_j;
 
 			return sum;
@@ -336,7 +345,7 @@ double GeneralizedSparseRBM::expectedValueVis(int vindex) {
 			double sum = 0.0;
 
 			for (auto & h_val : this->hiddenValueSet) {
-				sum += exp(mu_j * h_val);
+				sum += exp(mu_j * h_val + params.sparse(j) * abs(h_val));
 			}
 
 			return sum;
@@ -344,6 +353,7 @@ double GeneralizedSparseRBM::expectedValueVis(int vindex) {
 
 		// 連続型
 		auto sum_h_j_real = [&](double mu_j) {
+			// TODO: 導出せよ
 			double sum = (exp(hMax * mu_j) - exp(hMin * mu_j)) / mu_j;
 
 			return sum;
@@ -400,12 +410,12 @@ double GeneralizedSparseRBM::expectedValueHid(int hindex) {
 
 	auto z = getNormalConstant();  // 分配関数
 
-								   // bとvの内積
+    // bとvの内積
 	auto b_dot_v = [&]() {
 		return nodes.getVisibleLayer().dot(params.b);
 	};
 
-	// sum( h_j exp(mu_j h_j))
+	// sum( h_j exp(mu_j h_j + sparse_j |h_j|))
 	auto sum_h_j = [&](int j) {
 		auto mu_j = mu(j);
 
@@ -414,7 +424,7 @@ double GeneralizedSparseRBM::expectedValueHid(int hindex) {
 			double sum = 0.0;
 
 			for (auto & h_val : this->hiddenValueSet) {
-				sum += h_val * exp(mu_j * h_val);
+				sum += h_val * exp(mu_j * h_val + params.sparse(j) * abs(h_val));
 			}
 
 			return sum;
@@ -422,6 +432,8 @@ double GeneralizedSparseRBM::expectedValueHid(int hindex) {
 
 		// 連続型
 		auto sum_h_j_real = [&](double mu_j) {
+			// TODO: 導出せよ
+			throw;
 			double sum = ((hMax * exp(hMax * mu_j) - hMin * exp(hMin * mu_j)) / mu_j) - ((exp(hMax * mu_j) - exp(hMin * mu_j)) / (mu_j * mu_j));
 
 			return sum;
@@ -441,7 +453,7 @@ double GeneralizedSparseRBM::expectedValueHid(int hindex) {
 			double sum = 0.0;
 
 			for (auto & h_val : this->hiddenValueSet) {
-				sum += exp(mu_l * h_val);
+				sum += exp(mu_l * h_val + params.sparse(l) * abs(h_val));
 			}
 
 			return sum;
@@ -449,6 +461,7 @@ double GeneralizedSparseRBM::expectedValueHid(int hindex) {
 
 		// 連続型
 		auto sum_h_l_real = [&](double mu_l) {
+			// TODO: 導出せよ
 			double sum = (exp(hMax * mu_l) - exp(hMin * mu_l)) / mu_l;
 
 			return sum;
@@ -509,7 +522,7 @@ double GeneralizedSparseRBM::expectedValueVisHid(int vindex, int hindex) {
 		return nodes.getVisibleLayer().dot(params.b);
 	};
 
-	// sum( h_j exp(mu_j h_j))
+	// sum( h_j exp(mu_j h_j + sparse_j |h_j|))
 	auto sum_h_j = [&](int j) {
 		auto mu_j = mu(j);
 
@@ -518,7 +531,7 @@ double GeneralizedSparseRBM::expectedValueVisHid(int vindex, int hindex) {
 			double sum = 0.0;
 
 			for (auto & h_val : this->hiddenValueSet) {
-				sum += h_val * exp(mu_j * h_val);
+				sum += h_val * exp(mu_j * h_val + params.sparse(j) * abs(h_val));
 			}
 
 			return sum;
@@ -526,6 +539,8 @@ double GeneralizedSparseRBM::expectedValueVisHid(int vindex, int hindex) {
 
 		// 連続型
 		auto sum_h_j_real = [&](double mu_j) {
+			// TODO: 導出せよ
+			throw;
 			double sum = ((hMax * exp(hMax * mu_j) - hMin * exp(hMin * mu_j)) / mu_j) - ((exp(hMax * mu_j) - exp(hMin * mu_j)) / (mu_j * mu_j));
 
 			return sum;
@@ -545,7 +560,7 @@ double GeneralizedSparseRBM::expectedValueVisHid(int vindex, int hindex) {
 			double sum = 0.0;
 
 			for (auto & h_val : this->hiddenValueSet) {
-				sum += exp(mu_j * h_val);
+				sum += exp(mu_j * h_val + params.sparse(j) * abs(h_val));
 			}
 
 			return sum;
@@ -553,6 +568,8 @@ double GeneralizedSparseRBM::expectedValueVisHid(int vindex, int hindex) {
 
 		// 連続型
 		auto sum_h_j_real = [&](double mu_j) {
+			// TODO: 導出せよ
+			throw;
 			double sum = (exp(hMax * mu_j) - exp(hMin * mu_j)) / mu_j;
 
 			return sum;
@@ -599,6 +616,148 @@ double GeneralizedSparseRBM::expectedValueVisHid(int vindex, int hindex) {
 	return value;
 }
 
+// 隠れ変数の期待値, E[|h_j|]
+double GeneralizedSparseRBM::expectedValueAbsHid(int hindex) {
+	StateCounter<std::vector<int>> sc(std::vector<int>(vSize, 2));  // 可視変数Vの状態カウンター
+	int v_state_map[] = { 0, 1 };  // 可視変数の状態->値変換写像
+
+	auto z = getNormalConstant();  // 分配関数
+
+								   // bとvの内積
+	auto b_dot_v = [&]() {
+		return nodes.getVisibleLayer().dot(params.b);
+	};
+
+	// sum( h_j exp(mu_j h_j + sparse_j |h_j|))
+	auto sum_h_j = [&](int j) {
+		auto mu_j = mu(j);
+
+		// 離散型
+		auto sum_h_j_discrete = [&](double mu_j) {
+			double sum = 0.0;
+
+			for (auto & h_val : this->hiddenValueSet) {
+				sum += abs(h_val) * exp(mu_j * h_val + params.sparse(j) * abs(h_val));
+			}
+
+			return sum;
+		};
+
+		// 連続型
+		auto sum_h_j_real = [&](double mu_j) {
+			// TODO: 導出せよ
+			throw;
+			double sum = ((hMax * exp(hMax * mu_j) - hMin * exp(hMin * mu_j)) / mu_j) - ((exp(hMax * mu_j) - exp(hMin * mu_j)) / (mu_j * mu_j));
+
+			return sum;
+		};
+
+		auto value = realFlag ? sum_h_j_real(mu_j) : sum_h_j_discrete(mu_j);
+
+		return value;
+	};
+
+	// 隠れ変数h_lの値の総和計算
+	auto sum_h_l = [&](int l) {
+		auto mu_l = mu(l);
+
+		// 離散型
+		auto sum_h_l_discrete = [&](double mu_l) {
+			double sum = 0.0;
+
+			for (auto & h_val : this->hiddenValueSet) {
+				sum += exp(mu_l * h_val + params.sparse(l) * abs(h_val));
+			}
+
+			return sum;
+		};
+
+		// 連続型
+		auto sum_h_l_real = [&](double mu_l) {
+			// TODO: 導出せよ
+			double sum = (exp(hMax * mu_l) - exp(hMin * mu_l)) / mu_l;
+
+			return sum;
+		};
+
+		auto value = realFlag ? sum_h_l_real(mu_l) : sum_h_l_discrete(mu_l);
+
+		return value;
+	};
+
+
+	double value = 0.0;
+	auto max_count = sc.getMaxCount();
+	for (int c = 0; c < max_count; c++, sc++) {
+		// FIXME: stlのコピーは遅いぞ
+		auto v_state = sc.getState();
+
+		// FIXME: v_i == 0 ときそのままcontinueしたほうが速いぞ
+
+		for (int i = 0; i < vSize; i++) {
+			this->nodes.v(i) = v_state_map[v_state[i]];
+		}
+
+		// 項計算
+		double term = exp(b_dot_v());
+
+		term *= sum_h_j(hindex);
+
+		for (int l = 0; l < hSize; l++) {
+			if (l == hindex) continue;
+
+			term *= sum_h_l(l);
+		}
+
+		value += term;
+	}
+
+	// debug
+	if (isinf(value) || isnan(value)) {
+		volatile auto debug_value = value;
+		throw;
+	}
+
+	value = value / z;
+	return value;
+}
+
+
 bool GeneralizedSparseRBM::isRealHiddenValue() {
 	return realFlag;
+}
+
+// 隠れ変数の活性化関数(ABS)的なもの
+double GeneralizedSparseRBM::actHidSparseJ(int hindex) {
+
+	// 離散型
+	auto discrete = [&]()
+	{
+		auto value_set = splitHiddenSet();
+		double numer = 0.0;  // 分子
+		double denom = sumExpMu(hindex);  // 分母
+		auto mu_j = mu(hindex);
+		for (auto & h_j : value_set) {
+			numer += abs(h_j) * exp(mu_j * h_j + params.sparse(hindex) * abs(h_j));
+		}
+
+		auto value = numer / denom;
+
+		return value;
+	};
+
+	// 連続型
+	auto real = [&]() {
+		// TODO: 導出せよ
+		throw;
+		auto mu_j = mu(hindex);
+		// FIXME: 0除算の可能性あり, 要テイラー展開
+		auto value = (hMax * exp(hMax * mu_j) - hMin * exp(hMin * mu_j)) / (exp(hMax * mu_j) - exp(hMin * mu_j)) - 1 / mu_j;
+
+		return value;
+	};
+
+	auto value = realFlag ? real() : discrete();
+
+	return value;
 }
