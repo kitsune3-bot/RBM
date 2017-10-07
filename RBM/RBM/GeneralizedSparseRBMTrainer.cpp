@@ -239,8 +239,7 @@ void GeneralizedSparseRBMTrainer::calcDataMean(GeneralizedSparseRBM & rbm, std::
 
 		for (int j = 0; j < rbm.getHiddenSize(); j++) {
 			dataMean.hBias(j) += rbm.actHidJ(j);
-
-			dataMean.hSparse(j) = rbm.actHidSparseJ(j);
+			dataMean.hSparse(j) += rbm.actHidSparseJ(j);
 		}
 	}
 
