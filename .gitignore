@@ -269,3 +269,4 @@ __pycache__/
 *.xml
 /RBM/src/json_hpp/json.hpp
 /RBM/RBMKLD/output
+/RBM/SparseRBMKLD/output
