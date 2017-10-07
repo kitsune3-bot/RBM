@@ -261,8 +261,8 @@ double GeneralizedSparseRBM::condProbVis(int vindex, double value) {
 
 // 可視変数を条件で与えた隠れ変数の条件付き確率, P(h_j | v)
 double GeneralizedSparseRBM::condProbHid(int hindex, double value) {
-	double m = mu(hindex);
-	double prob = exp(m * value) / sumExpMu(hindex);
+	double mu_j = mu(hindex);
+	double prob = exp(mu_j * value + params.sparse(hindex) * abs(value)) / sumExpMu(hindex);
 	return prob;
 }
 
