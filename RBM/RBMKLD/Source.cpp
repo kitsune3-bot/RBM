@@ -307,7 +307,7 @@ void run(SQLite::Database & db, OPTION & option, int try_count, RBM & rbm_gen, D
 template<class SRBM, class DATASET>
 void run_sparse(SQLite::Database & db, OPTION & option, int try_count, SRBM & rbm_gen, DATASET & dataset) {
 	auto rbm_exact = GeneralizedSparseRBM(option.vSize, option.hSize + option.appendH);
-	rbm_exact.params.sparse.setConstant(4);
+	rbm_exact.params.sparse.setRandom() *= 0.5;
 	rbm_exact.params.initParamsRandom(-0.01, 0.01);
 	rbm_exact.setHiddenDiveSize(option.divSize);
 	rbm_exact.setHiddenMin(-1.0);
@@ -322,7 +322,7 @@ void run_sparse(SQLite::Database & db, OPTION & option, int try_count, SRBM & rb
 	rbm_trainer_exact.momentumRate = option.momentumRate;
 
 	auto rbm_cd = GeneralizedSparseRBM(option.vSize, option.hSize + option.appendH);
-	rbm_cd.params.sparse.setConstant(4);
+	rbm_exact.params.sparse.setRandom() *= 0.5;
 	rbm_cd.params.initParamsRandom(-0.01, 0.01);
 	rbm_cd.setHiddenDiveSize(option.divSize);
 	rbm_cd.setHiddenMin(-1.0);
@@ -410,7 +410,7 @@ int main(void) {
 	option.momentumRate = 0.9;
 	option.divSize = 1;
 	option.realFlag = false;
-	int try_num = 1000;
+	int try_num = 100;
 
 
 	SQLite::Database db("./output/sqlite3.db", SQLite::OPEN_CREATE | SQLite::OPEN_READWRITE);
