@@ -1,7 +1,5 @@
 #include <iostream>
-#include "GeneralizedRBM.h"
-#include "GeneralizedRBMTrainer.h"
-#include "GeneralizedRBMSampler.h"
+#include "RBMCore.h"
 #include "rbmutil.h"
 
 int main(int argc, char **argv) {

@@ -1,5 +1,5 @@
 ﻿#pragma once
-#include "RBMTrainerBase.h"
+#include "../RBMTrainerBase.h"
 #include "Eigen/Core"
 #include <vector>
 

@@ -1,5 +1,5 @@
 ﻿#pragma once
-#include "RBMBase.h"
+#include "../RBMBase.h"
 #include "GeneralizedRBMNode.h"
 #include "GeneralizedRBMParamator.h"
 #include "GeneralizedRBMSampler.h"

@@ -3,10 +3,7 @@
 #include <string>
 #include <sstream>
 #include "rbmutil.h"
-#include "GeneralizedRBM.h"
-#include "GeneralizedRBMTrainer.h"
-#include "GeneralizedSparseRBM.h"
-#include "GeneralizedSparseRBMTrainer.h"
+#include "RBMCore.h"
 #include "SQLiteCpp/SQLiteCpp.h"
 #include "sqlite3.h"
 

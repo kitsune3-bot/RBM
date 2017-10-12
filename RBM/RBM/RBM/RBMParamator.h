@@ -1,5 +1,6 @@
 ﻿#pragma once
-#include "RBMParamatorBase.h"
+
+#include "../RBMParamatorBase.h"
 #include "Eigen/Core"
 #include "json.hpp"
 #include <string>

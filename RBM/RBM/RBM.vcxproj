@@ -150,9 +150,7 @@
     <ClInclude Include="GeneralizedSparseRBM\GeneralizedSparseRBMParamator.h" />
     <ClInclude Include="GeneralizedSparseRBM\GeneralizedSparseRBMSampler.h" />
     <ClInclude Include="GeneralizedSparseRBM\GeneralizedSparseRBMTrainer.h" />
-    <ClInclude Include="RBM.h" />
     <ClInclude Include="RBMBase.h" />
-    <ClInclude Include="RBM.h" />
     <ClInclude Include="RBMCore.h" />
     <ClInclude Include="RBMMath.h" />
     <ClInclude Include="RBMNode.h" />
