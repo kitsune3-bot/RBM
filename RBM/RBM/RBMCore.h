@@ -1,5 +1,8 @@
 #pragma once
 
+#include "Sampler.h"
+#include "Trainer.h"
+
 #include "RBM/RBM.h"
 #include "RBM/RBMNode.h"
 #include "RBM/RBMParamator.h"
