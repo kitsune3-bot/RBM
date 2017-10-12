@@ -144,6 +144,9 @@
     <ClInclude Include="RBMParamatorBase.h">
       <Filter>ヘッダー ファイル\RBMBase</Filter>
     </ClInclude>
+    <ClInclude Include="Optimizer.h">
+      <Filter>ヘッダー ファイル\Common</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="RBMMath.cpp">
