@@ -90,151 +90,166 @@
     <ClInclude Include="RBMTrainerBase.h">
       <Filter>ヘッダー ファイル\RBMBase</Filter>
     </ClInclude>
-    <ClInclude Include="GeneralizedRBMNode.h">
-      <Filter>ヘッダー ファイル\GeneralizedRBM</Filter>
-    </ClInclude>
-    <ClInclude Include="GeneralizedRBMParamator.h">
-      <Filter>ヘッダー ファイル\GeneralizedRBM</Filter>
-    </ClInclude>
-    <ClInclude Include="GeneralizedRBMSampler.h">
-      <Filter>ヘッダー ファイル\GeneralizedRBM</Filter>
-    </ClInclude>
-    <ClInclude Include="GeneralizedRBMTrainer.h">
-      <Filter>ヘッダー ファイル\GeneralizedRBM</Filter>
-    </ClInclude>
-    <ClInclude Include="GBRBM.h">
-      <Filter>ヘッダー ファイル\GBRBM</Filter>
-    </ClInclude>
-    <ClInclude Include="GBRBMNode.h">
-      <Filter>ヘッダー ファイル\GBRBM</Filter>
-    </ClInclude>
-    <ClInclude Include="GBRBMParamator.h">
-      <Filter>ヘッダー ファイル\GBRBM</Filter>
-    </ClInclude>
-    <ClInclude Include="GBRBMSampler.h">
-      <Filter>ヘッダー ファイル\GBRBM</Filter>
-    </ClInclude>
-    <ClInclude Include="GBRBMTrainer.h">
-      <Filter>ヘッダー ファイル\GBRBM</Filter>
-    </ClInclude>
-    <ClInclude Include="GeneralizedGRBM.h">
-      <Filter>ヘッダー ファイル\GeneralizedGRBM</Filter>
-    </ClInclude>
-    <ClInclude Include="GeneralizedGRBMNode.h">
-      <Filter>ヘッダー ファイル\GeneralizedGRBM</Filter>
-    </ClInclude>
-    <ClInclude Include="GeneralizedGRBMParamator.h">
-      <Filter>ヘッダー ファイル\GeneralizedGRBM</Filter>
-    </ClInclude>
-    <ClInclude Include="GeneralizedGRBMSampler.h">
-      <Filter>ヘッダー ファイル\GeneralizedGRBM</Filter>
-    </ClInclude>
-    <ClInclude Include="GeneralizedGRBMTrainer.h">
-      <Filter>ヘッダー ファイル\GeneralizedGRBM</Filter>
-    </ClInclude>
-    <ClInclude Include="GeneralizedRBM.h">
-      <Filter>ヘッダー ファイル\GeneralizedRBM</Filter>
-    </ClInclude>
     <ClInclude Include="StateCounter.h">
       <Filter>ヘッダー ファイル\Common</Filter>
     </ClInclude>
     <ClInclude Include="rbmutil.h">
       <Filter>ヘッダー ファイル\Common</Filter>
     </ClInclude>
-    <ClInclude Include="GeneralizedSparseRBM.h">
+    <ClInclude Include="RBM.h">
+      <Filter>ソース ファイル\Common</Filter>
+    </ClInclude>
+    <ClInclude Include="RBM.h">
+      <Filter>ヘッダー ファイル</Filter>
+    </ClInclude>
+    <ClInclude Include="RBM\RBM.h">
+      <Filter>ヘッダー ファイル\RBM</Filter>
+    </ClInclude>
+    <ClInclude Include="RBMCore.h">
+      <Filter>ヘッダー ファイル\Common</Filter>
+    </ClInclude>
+    <ClInclude Include="Trainer.h">
+      <Filter>ヘッダー ファイル\Common</Filter>
+    </ClInclude>
+    <ClInclude Include="GBRBM\GBRBM.h">
+      <Filter>ヘッダー ファイル\GBRBM</Filter>
+    </ClInclude>
+    <ClInclude Include="GBRBM\GBRBMNode.h">
+      <Filter>ヘッダー ファイル\GBRBM</Filter>
+    </ClInclude>
+    <ClInclude Include="GBRBM\GBRBMParamator.h">
+      <Filter>ヘッダー ファイル\GBRBM</Filter>
+    </ClInclude>
+    <ClInclude Include="GBRBM\GBRBMSampler.h">
+      <Filter>ヘッダー ファイル\GBRBM</Filter>
+    </ClInclude>
+    <ClInclude Include="GBRBM\GBRBMTrainer.h">
+      <Filter>ヘッダー ファイル\GBRBM</Filter>
+    </ClInclude>
+    <ClInclude Include="GeneralizedGRBM\GeneralizedGRBM.h">
+      <Filter>ヘッダー ファイル\GeneralizedGRBM</Filter>
+    </ClInclude>
+    <ClInclude Include="GeneralizedGRBM\GeneralizedGRBMNode.h">
+      <Filter>ヘッダー ファイル\GeneralizedGRBM</Filter>
+    </ClInclude>
+    <ClInclude Include="GeneralizedGRBM\GeneralizedGRBMParamator.h">
+      <Filter>ヘッダー ファイル\GeneralizedGRBM</Filter>
+    </ClInclude>
+    <ClInclude Include="GeneralizedGRBM\GeneralizedGRBMSampler.h">
+      <Filter>ヘッダー ファイル\GeneralizedGRBM</Filter>
+    </ClInclude>
+    <ClInclude Include="GeneralizedGRBM\GeneralizedGRBMTrainer.h">
+      <Filter>ヘッダー ファイル\GeneralizedGRBM</Filter>
+    </ClInclude>
+    <ClInclude Include="GeneralizedRBM\GeneralizedRBM.h">
+      <Filter>ヘッダー ファイル\GeneralizedRBM</Filter>
+    </ClInclude>
+    <ClInclude Include="GeneralizedRBM\GeneralizedRBMNode.h">
+      <Filter>ヘッダー ファイル\GeneralizedRBM</Filter>
+    </ClInclude>
+    <ClInclude Include="GeneralizedRBM\GeneralizedRBMParamator.h">
+      <Filter>ヘッダー ファイル\GeneralizedRBM</Filter>
+    </ClInclude>
+    <ClInclude Include="GeneralizedRBM\GeneralizedRBMSampler.h">
+      <Filter>ヘッダー ファイル\GeneralizedRBM</Filter>
+    </ClInclude>
+    <ClInclude Include="GeneralizedRBM\GeneralizedRBMTrainer.h">
+      <Filter>ヘッダー ファイル\GeneralizedRBM</Filter>
+    </ClInclude>
+    <ClInclude Include="GeneralizedSparseRBM\GeneralizedSparseRBM.h">
       <Filter>ヘッダー ファイル\GeneralizedSparseRBM</Filter>
     </ClInclude>
-    <ClInclude Include="GeneralizedSparseRBMNode.h">
+    <ClInclude Include="GeneralizedSparseRBM\GeneralizedSparseRBMNode.h">
       <Filter>ヘッダー ファイル\GeneralizedSparseRBM</Filter>
     </ClInclude>
-    <ClInclude Include="GeneralizedSparseRBMParamator.h">
+    <ClInclude Include="GeneralizedSparseRBM\GeneralizedSparseRBMParamator.h">
       <Filter>ヘッダー ファイル\GeneralizedSparseRBM</Filter>
     </ClInclude>
-    <ClInclude Include="GeneralizedSparseRBMSampler.h">
+    <ClInclude Include="GeneralizedSparseRBM\GeneralizedSparseRBMSampler.h">
       <Filter>ヘッダー ファイル\GeneralizedSparseRBM</Filter>
     </ClInclude>
-    <ClInclude Include="GeneralizedSparseRBMTrainer.h">
+    <ClInclude Include="GeneralizedSparseRBM\GeneralizedSparseRBMTrainer.h">
       <Filter>ヘッダー ファイル\GeneralizedSparseRBM</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="RBM.cpp">
-      <Filter>ソース ファイル\RBM</Filter>
-    </ClCompile>
-    <ClCompile Include="RBMNode.cpp">
-      <Filter>ソース ファイル\RBM</Filter>
-    </ClCompile>
-    <ClCompile Include="RBMParamator.cpp">
-      <Filter>ソース ファイル\RBM</Filter>
-    </ClCompile>
-    <ClCompile Include="RBMSampler.cpp">
-      <Filter>ソース ファイル\RBM</Filter>
-    </ClCompile>
-    <ClCompile Include="RBMTrainer.cpp">
-      <Filter>ソース ファイル\RBM</Filter>
-    </ClCompile>
     <ClCompile Include="RBMMath.cpp">
       <Filter>ソース ファイル\Common</Filter>
     </ClCompile>
-    <ClCompile Include="GeneralizedRBM.cpp">
-      <Filter>ソース ファイル\GeneralizedRBM</Filter>
-    </ClCompile>
-    <ClCompile Include="GeneralizedRBMNode.cpp">
-      <Filter>ソース ファイル\GeneralizedRBM</Filter>
-    </ClCompile>
-    <ClCompile Include="GeneralizedRBMParamator.cpp">
-      <Filter>ソース ファイル\GeneralizedRBM</Filter>
-    </ClCompile>
-    <ClCompile Include="GeneralizedRBMSampler.cpp">
-      <Filter>ソース ファイル\GeneralizedRBM</Filter>
-    </ClCompile>
-    <ClCompile Include="GeneralizedRBMTrainer.cpp">
-      <Filter>ソース ファイル\GeneralizedRBM</Filter>
-    </ClCompile>
-    <ClCompile Include="GBRBM.cpp">
+    <ClCompile Include="GBRBM\GBRBM.cpp">
       <Filter>ソース ファイル\GBRBM</Filter>
     </ClCompile>
-    <ClCompile Include="GBRBMNode.cpp">
+    <ClCompile Include="GBRBM\GBRBMNode.cpp">
       <Filter>ソース ファイル\GBRBM</Filter>
     </ClCompile>
-    <ClCompile Include="GBRBMParamator.cpp">
+    <ClCompile Include="GBRBM\GBRBMParamator.cpp">
       <Filter>ソース ファイル\GBRBM</Filter>
     </ClCompile>
-    <ClCompile Include="GBRBMSampler.cpp">
+    <ClCompile Include="GBRBM\GBRBMSampler.cpp">
       <Filter>ソース ファイル\GBRBM</Filter>
     </ClCompile>
-    <ClCompile Include="GBRBMTrainer.cpp">
+    <ClCompile Include="GBRBM\GBRBMTrainer.cpp">
       <Filter>ソース ファイル\GBRBM</Filter>
     </ClCompile>
-    <ClCompile Include="GeneralizedGRBM.cpp">
+    <ClCompile Include="GeneralizedGRBM\GeneralizedGRBM.cpp">
       <Filter>ソース ファイル\GeneralizedGRBM</Filter>
     </ClCompile>
-    <ClCompile Include="GeneralizedGRBMNode.cpp">
+    <ClCompile Include="GeneralizedGRBM\GeneralizedGRBMNode.cpp">
       <Filter>ソース ファイル\GeneralizedGRBM</Filter>
     </ClCompile>
-    <ClCompile Include="GeneralizedGRBMParamator.cpp">
+    <ClCompile Include="GeneralizedGRBM\GeneralizedGRBMParamator.cpp">
       <Filter>ソース ファイル\GeneralizedGRBM</Filter>
     </ClCompile>
-    <ClCompile Include="GeneralizedGRBMSampler.cpp">
+    <ClCompile Include="GeneralizedGRBM\GeneralizedGRBMSampler.cpp">
       <Filter>ソース ファイル\GeneralizedGRBM</Filter>
     </ClCompile>
-    <ClCompile Include="GeneralizedGRBMTrainer.cpp">
+    <ClCompile Include="GeneralizedGRBM\GeneralizedGRBMTrainer.cpp">
       <Filter>ソース ファイル\GeneralizedGRBM</Filter>
     </ClCompile>
-    <ClCompile Include="GeneralizedSparseRBM.cpp">
+    <ClCompile Include="GeneralizedRBM\GeneralizedRBM.cpp">
+      <Filter>ソース ファイル\GeneralizedRBM</Filter>
+    </ClCompile>
+    <ClCompile Include="GeneralizedRBM\GeneralizedRBMNode.cpp">
+      <Filter>ソース ファイル\GeneralizedRBM</Filter>
+    </ClCompile>
+    <ClCompile Include="GeneralizedRBM\GeneralizedRBMParamator.cpp">
+      <Filter>ソース ファイル\GeneralizedRBM</Filter>
+    </ClCompile>
+    <ClCompile Include="GeneralizedRBM\GeneralizedRBMSampler.cpp">
+      <Filter>ソース ファイル\GeneralizedRBM</Filter>
+    </ClCompile>
+    <ClCompile Include="GeneralizedRBM\GeneralizedRBMTrainer.cpp">
+      <Filter>ソース ファイル\GeneralizedRBM</Filter>
+    </ClCompile>
+    <ClCompile Include="GeneralizedSparseRBM\GeneralizedSparseRBM.cpp">
       <Filter>ソース ファイル\GeneralizedSparseRBM</Filter>
     </ClCompile>
-    <ClCompile Include="GeneralizedSparseRBMNode.cpp">
+    <ClCompile Include="GeneralizedSparseRBM\GeneralizedSparseRBMNode.cpp">
       <Filter>ソース ファイル\GeneralizedSparseRBM</Filter>
     </ClCompile>
-    <ClCompile Include="GeneralizedSparseRBMParamator.cpp">
+    <ClCompile Include="GeneralizedSparseRBM\GeneralizedSparseRBMParamator.cpp">
       <Filter>ソース ファイル\GeneralizedSparseRBM</Filter>
     </ClCompile>
-    <ClCompile Include="GeneralizedSparseRBMSampler.cpp">
+    <ClCompile Include="GeneralizedSparseRBM\GeneralizedSparseRBMSampler.cpp">
       <Filter>ソース ファイル\GeneralizedSparseRBM</Filter>
     </ClCompile>
-    <ClCompile Include="GeneralizedSparseRBMTrainer.cpp">
+    <ClCompile Include="GeneralizedSparseRBM\GeneralizedSparseRBMTrainer.cpp">
       <Filter>ソース ファイル\GeneralizedSparseRBM</Filter>
+    </ClCompile>
+    <ClCompile Include="RBM\RBM.cpp">
+      <Filter>ソース ファイル\RBM</Filter>
+    </ClCompile>
+    <ClCompile Include="RBM\RBMNode.cpp">
+      <Filter>ソース ファイル\RBM</Filter>
+    </ClCompile>
+    <ClCompile Include="RBM\RBMParamator.cpp">
+      <Filter>ソース ファイル\RBM</Filter>
+    </ClCompile>
+    <ClCompile Include="RBM\RBMSampler.cpp">
+      <Filter>ソース ファイル\RBM</Filter>
+    </ClCompile>
+    <ClCompile Include="RBM\RBMTrainer.cpp">
+      <Filter>ソース ファイル\RBM</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

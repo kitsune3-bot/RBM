@@ -1,6 +1,6 @@
 ﻿#pragma once
 #include <limits>
-#include "RBMBase.h"
+#include "../RBMBase.h"
 #include "GeneralizedGRBMParamator.h"
 #include "GeneralizedGRBMNode.h"
 

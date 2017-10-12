@@ -1,5 +1,5 @@
 ﻿#pragma once
-#include "RBMNodeBase.h"
+#include "../RBMNodeBase.h"
 #include "Eigen/Core"
 #include <vector>
 

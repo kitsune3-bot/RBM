@@ -1,6 +1,6 @@
 ﻿#include "GeneralizedSparseRBM.h"
-#include "RBMMath.h"
-#include "StateCounter.h"
+#include "../RBMMath.h"
+#include "../StateCounter.h"
 #include <cmath>
 
 
