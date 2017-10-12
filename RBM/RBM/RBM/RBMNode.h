@@ -2,6 +2,8 @@
 #include "../RBMNodeBase.h"
 #include "Eigen/Core"
 #include <vector>
+#include <numeric>
+
 
 class RBMNode : RBMNodeBase{
 private:
@@ -12,9 +14,9 @@ public:
     Eigen::VectorXd h;
 
 public:
-    RBMNode();
+    RBMNode() = default;
     RBMNode(size_t v_size, size_t h_size);
-    ~RBMNode();
+    ~RBMNode() = default;
 
     // 可視変数の総数を返す
     inline size_t getVisibleSize();
@@ -81,4 +83,28 @@ void RBMNode::setVisibleData(ARRAY & data) {
 	for (int i = 0; i < vSize; i++) {
 		v[i] = data[i];
 	}
+}
+
+
+
+
+inline RBMNode::RBMNode(size_t v_size, size_t h_size) {
+	vSize = v_size;
+	hSize = h_size;
+	v.setConstant(v_size, 0.0);
+	h.setConstant(h_size, 0.0);
+}
+
+inline std::vector<int> RBMNode::getVnodeIndexSet() {
+	std::vector<int> set(vSize);
+	std::iota(set.begin(), set.end(), 0);
+
+	return set;
+}
+
+inline std::vector<int> RBMNode::getHnodeIndexSet() {
+	std::vector<int> set(hSize);
+	std::iota(set.begin(), set.end(), 0);
+
+	return set;
 }

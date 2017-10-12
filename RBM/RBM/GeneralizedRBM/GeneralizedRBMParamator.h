@@ -15,9 +15,9 @@ public:
 
 
 public:
-    GeneralizedRBMParamator();
+    GeneralizedRBMParamator() = default;
     GeneralizedRBMParamator(size_t vsize, size_t hsize);
-    ~GeneralizedRBMParamator();
+    ~GeneralizedRBMParamator() = default;
 
     // 可視変数の総数を返す
     inline size_t getVisibleSize();

@@ -6,6 +6,7 @@
 #include <numeric>
 #include <random>
 
+class GeneralizedRBM;
 
 template<>
 class Sampler<GeneralizedRBM> {
@@ -41,7 +42,7 @@ public:
 
 
 
-double Sampler<GeneralizedRBM>::gibbsSamplingVisible(GeneralizedRBM & rbm, int vindex) {
+inline double Sampler<GeneralizedRBM>::gibbsSamplingVisible(GeneralizedRBM & rbm, int vindex) {
 	std::random_device rd;
 	std::mt19937 mt(rd());
 	std::uniform_real_distribution<double> dist(0.0, 1.0);
@@ -51,7 +52,7 @@ double Sampler<GeneralizedRBM>::gibbsSamplingVisible(GeneralizedRBM & rbm, int v
 	return value;
 }
 
-double Sampler<GeneralizedRBM>::gibbsSamplingHidden(GeneralizedRBM & rbm, int hindex) {
+inline double Sampler<GeneralizedRBM>::gibbsSamplingHidden(GeneralizedRBM & rbm, int hindex) {
 	// 離散型
 	auto sample_discrete = [&] {
 		std::vector<double> probs(rbm.getHiddenValueSetSize());
@@ -93,7 +94,7 @@ double Sampler<GeneralizedRBM>::gibbsSamplingHidden(GeneralizedRBM & rbm, int hi
 	return value;
 }
 
-Eigen::VectorXd & Sampler<GeneralizedRBM>::blockedGibbsSamplingVisible(GeneralizedRBM & rbm) {
+inline Eigen::VectorXd & Sampler<GeneralizedRBM>::blockedGibbsSamplingVisible(GeneralizedRBM & rbm) {
 	auto vect = rbm.nodes.v;
 
 	for (int i = 0; i < rbm.getVisibleSize(); i++) {
@@ -103,7 +104,7 @@ Eigen::VectorXd & Sampler<GeneralizedRBM>::blockedGibbsSamplingVisible(Generaliz
 	return vect;
 }
 
-Eigen::VectorXd & Sampler<GeneralizedRBM>::blockedGibbsSamplingHidden(GeneralizedRBM & rbm) {
+inline Eigen::VectorXd & Sampler<GeneralizedRBM>::blockedGibbsSamplingHidden(GeneralizedRBM & rbm) {
 	auto vect = rbm.nodes.h;
 
 	for (int j = 0; j < rbm.getHiddenSize(); j++) {
@@ -113,19 +114,19 @@ Eigen::VectorXd & Sampler<GeneralizedRBM>::blockedGibbsSamplingHidden(Generalize
 	return vect;
 }
 
-double Sampler<GeneralizedRBM>::updateByGibbsSamplingVisible(GeneralizedRBM & rbm, int vindex) {
+inline double Sampler<GeneralizedRBM>::updateByGibbsSamplingVisible(GeneralizedRBM & rbm, int vindex) {
 	auto value = gibbsSamplingVisible(rbm, vindex);
 	rbm.nodes.v(vindex) = value;
 	return value;
 }
 
-double Sampler<GeneralizedRBM>::updateByGibbsSamplingHidden(GeneralizedRBM & rbm, int hindex) {
+inline double Sampler<GeneralizedRBM>::updateByGibbsSamplingHidden(GeneralizedRBM & rbm, int hindex) {
 	auto value = gibbsSamplingHidden(rbm, hindex);
 	rbm.nodes.h(hindex) = value;
 	return value;
 }
 
-Eigen::VectorXd & Sampler<GeneralizedRBM>::updateByBlockedGibbsSamplingVisible(GeneralizedRBM & rbm) {
+inline Eigen::VectorXd & Sampler<GeneralizedRBM>::updateByBlockedGibbsSamplingVisible(GeneralizedRBM & rbm) {
 
 	for (int i = 0; i < rbm.getVisibleSize(); i++) {
 		updateByGibbsSamplingVisible(rbm, i);
@@ -134,7 +135,7 @@ Eigen::VectorXd & Sampler<GeneralizedRBM>::updateByBlockedGibbsSamplingVisible(G
 	return rbm.nodes.v;
 }
 
-Eigen::VectorXd & Sampler<GeneralizedRBM>::updateByBlockedGibbsSamplingHidden(GeneralizedRBM & rbm) {
+inline Eigen::VectorXd & Sampler<GeneralizedRBM>::updateByBlockedGibbsSamplingHidden(GeneralizedRBM & rbm) {
 	for (int j = 0; j < rbm.getHiddenSize(); j++) {
 		updateByGibbsSamplingHidden(rbm, j);
 	}

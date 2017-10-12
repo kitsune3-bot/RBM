@@ -2,15 +2,17 @@
 #include <iostream>
 #include <cmath>
 #include "StateCounter.h"
+#include "Sampler.h"
 
 namespace rbmutil{
 
 	// generate data from rbm
 	template <class T, class STL>
 	STL data_gen(T & rbm, int update_count) {
+		Sampler<T> sampler;
 		for (int c = 0; c < update_count; c++) {
-			rbm.sampler.updateByBlockedGibbsSamplingVisible(rbm);
-			rbm.sampler.updateByBlockedGibbsSamplingHidden(rbm);
+			sampler.updateByBlockedGibbsSamplingVisible(rbm);
+			sampler.updateByBlockedGibbsSamplingHidden(rbm);
 		}
 
 		std::vector<double> dat(rbm.getVisibleSize());

@@ -4,6 +4,8 @@
 #include <sstream>
 #include "rbmutil.h"
 #include "RBMCore.h"
+#include "Trainer.h"
+#include "Sampler.h"
 #include "SQLiteCpp/SQLiteCpp.h"
 #include "sqlite3.h"
 
@@ -211,8 +213,8 @@ void write_error_info(SQLite::Database & db, RBMGEN & rbm_gen, RBMTRAIN & rbm_tr
 }
 
 // 実行ルーチン
-template<class RBM, class DATASET>
-void run(SQLite::Database & db, OPTION & option, int try_count, RBM & rbm_gen, DATASET & dataset) {
+template<class RBM_T, class DATASET>
+void run(SQLite::Database & db, OPTION & option, int try_count, RBM_T & rbm_gen, DATASET & dataset) {
 	auto rbm_exact = GeneralizedRBM(option.vSize, option.hSize + option.appendH);
 	rbm_exact.params.initParamsRandom(-0.01, 0.01);
 	rbm_exact.setHiddenDiveSize(option.divSize);
@@ -220,7 +222,7 @@ void run(SQLite::Database & db, OPTION & option, int try_count, RBM & rbm_gen, D
 	rbm_exact.setHiddenMax(1.0);
 	rbm_exact.setRealHiddenValue(option.realFlag);
 
-	auto rbm_trainer_exact = GeneralizedRBMTrainer(rbm_exact);
+	auto rbm_trainer_exact = Trainer<GeneralizedRBM>(rbm_exact);
 	rbm_trainer_exact.epoch = option.epoch;
 	rbm_trainer_exact.cdk = option.cdk;
 	rbm_trainer_exact.batchSize = option.batchsize;
@@ -234,7 +236,7 @@ void run(SQLite::Database & db, OPTION & option, int try_count, RBM & rbm_gen, D
 	rbm_cd.setHiddenMax(1.0);
 	rbm_cd.setRealHiddenValue(option.realFlag);
 
-	auto rbm_trainer_cd = GeneralizedRBMTrainer(rbm_cd);
+	auto rbm_trainer_cd = Trainer<GeneralizedRBM>(rbm_cd);
 	rbm_trainer_cd.epoch = option.epoch;
 	rbm_trainer_cd.cdk = option.cdk;
 	rbm_trainer_cd.batchSize = option.batchsize;
@@ -311,7 +313,7 @@ void run_sparse(SQLite::Database & db, OPTION & option, int try_count, SRBM & rb
 	rbm_exact.setHiddenMax(1.0);
 	rbm_exact.setRealHiddenValue(option.realFlag);
 
-	auto rbm_trainer_exact = GeneralizedSparseRBMTrainer(rbm_exact);
+	auto rbm_trainer_exact = Trainer<GeneralizedSparseRBM>(rbm_exact);
 	rbm_trainer_exact.epoch = option.epoch;
 	rbm_trainer_exact.cdk = option.cdk;
 	rbm_trainer_exact.batchSize = option.batchsize;
@@ -326,7 +328,7 @@ void run_sparse(SQLite::Database & db, OPTION & option, int try_count, SRBM & rb
 	rbm_cd.setHiddenMax(1.0);
 	rbm_cd.setRealHiddenValue(option.realFlag);
 
-	auto rbm_trainer_cd = GeneralizedSparseRBMTrainer(rbm_cd);
+	auto rbm_trainer_cd = Trainer<GeneralizedSparseRBM>(rbm_cd);
 	rbm_trainer_cd.epoch = option.epoch;
 	rbm_trainer_cd.cdk = option.cdk;
 	rbm_trainer_cd.batchSize = option.batchsize;

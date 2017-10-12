@@ -2,6 +2,8 @@
 #include "../RBMNodeBase.h"
 #include "Eigen/Core"
 #include <vector>
+#include <numeric>
+
 
 class GBRBMNode : RBMNodeBase {
 private:
@@ -12,9 +14,9 @@ public:
     Eigen::VectorXd h;
 
 public:
-    GBRBMNode();
+    GBRBMNode() = default;
     GBRBMNode(size_t v_size, size_t h_size);
-    ~GBRBMNode();
+    ~GBRBMNode() = default;
 
     // 可視変数の総数を返す
     inline size_t getVisibleSize();
@@ -71,3 +73,25 @@ inline double GBRBMNode::getHiddenUnit(int hindex) {
     return h(hindex);
 }
 
+
+
+inline GBRBMNode::GBRBMNode(size_t v_size, size_t h_size) {
+	vSize = v_size;
+	hSize = h_size;
+	v.setConstant(v_size, 0.0);
+	h.setConstant(h_size, 0.0);
+}
+
+inline std::vector<int> GBRBMNode::getVnodeIndexSet() {
+	std::vector<int> set(vSize);
+	std::iota(set.begin(), set.end(), 0);
+
+	return set;
+}
+
+inline std::vector<int> GBRBMNode::getHnodeIndexSet() {
+	std::vector<int> set(hSize);
+	std::iota(set.begin(), set.end(), 0);
+
+	return set;
+}

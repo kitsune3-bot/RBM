@@ -108,58 +108,58 @@ public:
 	void trainFromTrainInfo(RBM & rbm, std::string json);
 };
 
-Trainer<RBM>::Trainer(RBM & rbm) {
+inline Trainer<RBM>::Trainer(RBM & rbm) {
 	initMomentum(rbm);
 	initGradient(rbm);
 	initDataMean(rbm);
 	initRBMExpected(rbm);
 }
 
-void Trainer<RBM>::initMomentum(RBM & rbm) {
+inline void Trainer<RBM>::initMomentum(RBM & rbm) {
 	momentum.vBias.setConstant(rbm.getVisibleSize(), 0.0);
 	momentum.hBias.setConstant(rbm.getHiddenSize(), 0.0);
 	momentum.weight.setConstant(rbm.getVisibleSize(), rbm.getHiddenSize(), 0.0);
 }
 
-void Trainer<RBM>::initMomentum() {
+inline void Trainer<RBM>::initMomentum() {
 	momentum.vBias.setConstant(0.0);
 	momentum.hBias.setConstant(0.0);
 	momentum.weight.setConstant(0.0);
 }
 
-void Trainer<RBM>::initGradient(RBM & rbm) {
+inline void Trainer<RBM>::initGradient(RBM & rbm) {
 	gradient.vBias.setConstant(rbm.getVisibleSize(), 0.0);
 	gradient.hBias.setConstant(rbm.getHiddenSize(), 0.0);
 	gradient.weight.setConstant(rbm.getVisibleSize(), rbm.getHiddenSize(), 0.0);
 }
 
-void Trainer<RBM>::initGradient() {
+inline void Trainer<RBM>::initGradient() {
 	gradient.vBias.setConstant(0.0);
 	gradient.hBias.setConstant(0.0);
 	gradient.weight.setConstant(0.0);
 }
 
-void Trainer<RBM>::initDataMean(RBM & rbm) {
+inline void Trainer<RBM>::initDataMean(RBM & rbm) {
 	dataMean.visible.setConstant(rbm.getVisibleSize(), 0.0);
 	dataMean.hidden.setConstant(rbm.getHiddenSize(), 0.0);
 }
 
-void Trainer<RBM>::initDataMean() {
+inline void Trainer<RBM>::initDataMean() {
 	dataMean.visible.setConstant(0.0);
 	dataMean.hidden.setConstant(0.0);
 }
 
-void Trainer<RBM>::initRBMExpected(RBM & rbm) {
+inline void Trainer<RBM>::initRBMExpected(RBM & rbm) {
 	sampleMean.visible.setConstant(rbm.getVisibleSize(), 0.0);
 	sampleMean.hidden.setConstant(rbm.getHiddenSize(), 0.0);
 }
 
-void Trainer<RBM>::initRBMExpected() {
+inline void Trainer<RBM>::initRBMExpected() {
 	sampleMean.visible.setConstant(0.0);
 	sampleMean.hidden.setConstant(0.0);
 }
 
-void Trainer<RBM>::train(RBM & rbm, std::vector<std::vector<double>> & dataset) {
+inline void Trainer<RBM>::train(RBM & rbm, std::vector<std::vector<double>> & dataset) {
 	for (int e = 0; e < epoch; e++) {
 		trainOnce(rbm, dataset);
 	}
@@ -167,7 +167,7 @@ void Trainer<RBM>::train(RBM & rbm, std::vector<std::vector<double>> & dataset) 
 
 
 // 1回だけ学習
-void Trainer<RBM>::trainOnce(RBM & rbm, std::vector<std::vector<double>> & dataset) {
+inline void Trainer<RBM>::trainOnce(RBM & rbm, std::vector<std::vector<double>> & dataset) {
 
 	// データインデックス集合
 	std::vector<int> data_indexes(dataset.size());
@@ -197,7 +197,7 @@ void Trainer<RBM>::trainOnce(RBM & rbm, std::vector<std::vector<double>> & datas
 	_trainCount++;
 }
 
-void Trainer<RBM>::calcContrastiveDivergence(RBM & rbm, std::vector<std::vector<double>> & dataset, std::vector<int> & data_indexes) {
+inline void Trainer<RBM>::calcContrastiveDivergence(RBM & rbm, std::vector<std::vector<double>> & dataset, std::vector<int> & data_indexes) {
 	// データ平均の計算
 	calcDataMean(rbm, dataset, data_indexes);
 
@@ -208,7 +208,7 @@ void Trainer<RBM>::calcContrastiveDivergence(RBM & rbm, std::vector<std::vector<
 	calcGradient(rbm, data_indexes);
 }
 
-void Trainer<RBM>::calcDataMean(RBM & rbm, std::vector<std::vector<double>> & dataset, std::vector<int> & data_indexes) {
+inline void Trainer<RBM>::calcDataMean(RBM & rbm, std::vector<std::vector<double>> & dataset, std::vector<int> & data_indexes) {
 	// 0埋め初期化
 	initDataMean();
 
@@ -228,7 +228,7 @@ void Trainer<RBM>::calcDataMean(RBM & rbm, std::vector<std::vector<double>> & da
 	dataMean.hidden /= static_cast<double>(data_indexes.size());
 }
 
-void Trainer<RBM>::calcRBMExpectedCD(RBM & rbm, std::vector<std::vector<double>> & dataset, std::vector<int> & data_indexes) {
+inline void Trainer<RBM>::calcRBMExpectedCD(RBM & rbm, std::vector<std::vector<double>> & dataset, std::vector<int> & data_indexes) {
 	// 0埋め初期化
 	initRBMExpected();
 
@@ -260,7 +260,7 @@ void Trainer<RBM>::calcRBMExpectedCD(RBM & rbm, std::vector<std::vector<double>>
 }
 
 // 勾配の計算
-void Trainer<RBM>::calcGradient(RBM & rbm, std::vector<int> & data_indexes) {
+inline void Trainer<RBM>::calcGradient(RBM & rbm, std::vector<int> & data_indexes) {
 	// 勾配ベクトルリセット
 	initGradient();
 
@@ -277,7 +277,7 @@ void Trainer<RBM>::calcGradient(RBM & rbm, std::vector<int> & data_indexes) {
 	}
 }
 
-void Trainer<RBM>::updateMomentum(RBM & rbm) {
+inline void Trainer<RBM>::updateMomentum(RBM & rbm) {
 	for (int i = 0; i < rbm.getVisibleSize(); i++) {
 		momentum.vBias(i) = momentumRate * momentum.vBias(i) + learningRate * gradient.vBias(i);
 
@@ -292,7 +292,7 @@ void Trainer<RBM>::updateMomentum(RBM & rbm) {
 }
 
 // パラメータの更新
-void Trainer<RBM>::updateParams(RBM & rbm) {
+inline void Trainer<RBM>::updateParams(RBM & rbm) {
 	for (int i = 0; i < rbm.getVisibleSize(); i++) {
 		rbm.params.b(i) += momentum.vBias(i);
 
@@ -307,7 +307,7 @@ void Trainer<RBM>::updateParams(RBM & rbm) {
 }
 
 // 学習情報出力(JSON)
-std::string Trainer<RBM>::trainInfoJson(RBM & rbm) {
+inline std::string Trainer<RBM>::trainInfoJson(RBM & rbm) {
 	auto js = nlohmann::json();
 	js["rbm"] = nlohmann::json::parse(rbm.params.serialize());
 	js["trainCount"] = _trainCount;
@@ -318,7 +318,7 @@ std::string Trainer<RBM>::trainInfoJson(RBM & rbm) {
 	return js.dump();
 }
 
-void Trainer<RBM>::trainFromTrainInfo(RBM & rbm, std::string json) {
+inline void Trainer<RBM>::trainFromTrainInfo(RBM & rbm, std::string json) {
 	auto js = nlohmann::json::parse(json);
 	rbm.params.deserialize(js["rbm"].dump());
 	_trainCount = js["trainCount"];

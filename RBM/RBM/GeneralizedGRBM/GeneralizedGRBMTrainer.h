@@ -52,7 +52,7 @@ public:
 public:
     Trainer() = default;
     Trainer(GeneralizedGRBM & rbm);
-    ~Trainer();
+    ~Trainer() = default;
 
     // モーメンタムベクトル初期化
     void initMomentum(RBMBase & rbm) { initMomentum(reinterpret_cast<GeneralizedGRBM &>(rbm)); }
@@ -123,66 +123,66 @@ public:
 	void trainFromTrainInfo(GeneralizedGRBM & rbm, std::string json);
 };
 
-Trainer<GeneralizedGRBM>::Trainer(GeneralizedGRBM & rbm) {
+inline Trainer<GeneralizedGRBM>::Trainer(GeneralizedGRBM & rbm) {
 	initMomentum(rbm);
 	initGradient(rbm);
 	initDataMean(rbm);
 	initRBMExpected(rbm);
 }
 
-void Trainer<GeneralizedGRBM>::initMomentum(GeneralizedGRBM & rbm) {
+inline void Trainer<GeneralizedGRBM>::initMomentum(GeneralizedGRBM & rbm) {
 	momentum.vBias.setConstant(rbm.getVisibleSize(), 0.0);
 	momentum.vLambda.setConstant(rbm.getVisibleSize(), 0.0);
 	momentum.hBias.setConstant(rbm.getHiddenSize(), 0.0);
 	momentum.weight.setConstant(rbm.getVisibleSize(), rbm.getHiddenSize(), 0.0);
 }
 
-void Trainer<GeneralizedGRBM>::initMomentum() {
+inline void Trainer<GeneralizedGRBM>::initMomentum() {
 	momentum.vBias.setConstant(0.0);
 	momentum.vLambda.setConstant(0.0);
 	momentum.hBias.setConstant(0.0);
 	momentum.weight.setConstant(0.0);
 }
 
-void Trainer<GeneralizedGRBM>::initGradient(GeneralizedGRBM & rbm) {
+inline void Trainer<GeneralizedGRBM>::initGradient(GeneralizedGRBM & rbm) {
 	gradient.vBias.setConstant(rbm.getVisibleSize(), 0.0);
 	gradient.vLambda.setConstant(rbm.getVisibleSize(), 0.0);
 	gradient.hBias.setConstant(rbm.getHiddenSize(), 0.0);
 	gradient.weight.setConstant(rbm.getVisibleSize(), rbm.getHiddenSize(), 0.0);
 }
 
-void Trainer<GeneralizedGRBM>::initGradient() {
+inline void Trainer<GeneralizedGRBM>::initGradient() {
 	gradient.vBias.setConstant(0.0);
 	gradient.vLambda.setConstant(0.0);
 	gradient.hBias.setConstant(0.0);
 	gradient.weight.setConstant(0.0);
 }
 
-void Trainer<GeneralizedGRBM>::initDataMean(GeneralizedGRBM & rbm) {
+inline void Trainer<GeneralizedGRBM>::initDataMean(GeneralizedGRBM & rbm) {
 	dataMean.visible.setConstant(rbm.getVisibleSize(), 0.0);
 	dataMean.visible2.setConstant(rbm.getVisibleSize(), 0.0);  // Gaussian Unit
 	dataMean.hidden.setConstant(rbm.getHiddenSize(), 0.0);
 }
 
-void Trainer<GeneralizedGRBM>::initDataMean() {
+inline void Trainer<GeneralizedGRBM>::initDataMean() {
 	dataMean.visible.setConstant(0.0);
 	dataMean.visible2.setConstant(0.0);  // Gaussian Unit
 	dataMean.hidden.setConstant(0.0);
 }
 
-void Trainer<GeneralizedGRBM>::initRBMExpected(GeneralizedGRBM & rbm) {
+inline void Trainer<GeneralizedGRBM>::initRBMExpected(GeneralizedGRBM & rbm) {
 	sampleMean.visible.setConstant(rbm.getVisibleSize(), 0.0);
 	sampleMean.visible2.setConstant(rbm.getVisibleSize(), 0.0);  // Gaussian Unit
 	sampleMean.hidden.setConstant(rbm.getHiddenSize(), 0.0);
 }
 
-void Trainer<GeneralizedGRBM>::initRBMExpected() {
+inline void Trainer<GeneralizedGRBM>::initRBMExpected() {
 	sampleMean.visible.setConstant(0.0);
 	sampleMean.visible2.setConstant(0.0);  // Gaussian Unit
 	sampleMean.hidden.setConstant(0.0);
 }
 
-void Trainer<GeneralizedGRBM>::train(GeneralizedGRBM & rbm, std::vector<std::vector<double>> & dataset) {
+inline void Trainer<GeneralizedGRBM>::train(GeneralizedGRBM & rbm, std::vector<std::vector<double>> & dataset) {
 	for (int e = 0; e < epoch; e++) {
 		trainOnce(rbm, dataset);
 	}
@@ -190,7 +190,7 @@ void Trainer<GeneralizedGRBM>::train(GeneralizedGRBM & rbm, std::vector<std::vec
 
 
 // 1回だけ学習
-void Trainer<GeneralizedGRBM>::trainOnce(GeneralizedGRBM & rbm, std::vector<std::vector<double>> & dataset) {
+inline void Trainer<GeneralizedGRBM>::trainOnce(GeneralizedGRBM & rbm, std::vector<std::vector<double>> & dataset) {
 
 	// データインデックス集合
 	std::vector<int> data_indexes(dataset.size());
@@ -220,7 +220,7 @@ void Trainer<GeneralizedGRBM>::trainOnce(GeneralizedGRBM & rbm, std::vector<std:
 	_trainCount++;
 }
 
-void Trainer<GeneralizedGRBM>::calcContrastiveDivergence(GeneralizedGRBM & rbm, std::vector<std::vector<double>> & dataset, std::vector<int> & data_indexes) {
+inline void Trainer<GeneralizedGRBM>::calcContrastiveDivergence(GeneralizedGRBM & rbm, std::vector<std::vector<double>> & dataset, std::vector<int> & data_indexes) {
 	// データ平均の計算
 	calcDataMean(rbm, dataset, data_indexes);
 
@@ -231,7 +231,7 @@ void Trainer<GeneralizedGRBM>::calcContrastiveDivergence(GeneralizedGRBM & rbm, 
 	calcGradient(rbm, data_indexes);
 }
 
-void Trainer<GeneralizedGRBM>::calcDataMean(GeneralizedGRBM & rbm, std::vector<std::vector<double>> & dataset, std::vector<int> & data_indexes) {
+inline void Trainer<GeneralizedGRBM>::calcDataMean(GeneralizedGRBM & rbm, std::vector<std::vector<double>> & dataset, std::vector<int> & data_indexes) {
 	// 0埋め初期化
 	initDataMean();
 
@@ -255,7 +255,7 @@ void Trainer<GeneralizedGRBM>::calcDataMean(GeneralizedGRBM & rbm, std::vector<s
 	dataMean.hidden /= static_cast<double>(data_indexes.size());
 }
 
-void Trainer<GeneralizedGRBM>::calcRBMExpectedCD(GeneralizedGRBM & rbm, std::vector<std::vector<double>> & dataset, std::vector<int> & data_indexes) {
+inline void Trainer<GeneralizedGRBM>::calcRBMExpectedCD(GeneralizedGRBM & rbm, std::vector<std::vector<double>> & dataset, std::vector<int> & data_indexes) {
 	// 0埋め初期化
 	initRBMExpected();
 
@@ -292,7 +292,7 @@ void Trainer<GeneralizedGRBM>::calcRBMExpectedCD(GeneralizedGRBM & rbm, std::vec
 }
 
 // 勾配の計算
-void Trainer<GeneralizedGRBM>::calcGradient(GeneralizedGRBM & rbm, std::vector<int> & data_indexes) {
+inline void Trainer<GeneralizedGRBM>::calcGradient(GeneralizedGRBM & rbm, std::vector<int> & data_indexes) {
 	// 勾配ベクトルリセット
 	initGradient();
 
@@ -310,7 +310,7 @@ void Trainer<GeneralizedGRBM>::calcGradient(GeneralizedGRBM & rbm, std::vector<i
 	}
 }
 
-void Trainer<GeneralizedGRBM>::updateMomentum(GeneralizedGRBM & rbm) {
+inline void Trainer<GeneralizedGRBM>::updateMomentum(GeneralizedGRBM & rbm) {
 	for (int i = 0; i < rbm.getVisibleSize(); i++) {
 		momentum.vBias(i) = momentumRate * momentum.vBias(i) + learningRate * gradient.vBias(i);
 		//momentum.vLambda(i) = momentumRate * momentum.vLambda(i) + learningRate * gradient.vLambda(i);  // 非負制約満たすこと
@@ -326,7 +326,7 @@ void Trainer<GeneralizedGRBM>::updateMomentum(GeneralizedGRBM & rbm) {
 }
 
 // パラメータの更新
-void Trainer<GeneralizedGRBM>::updateParams(GeneralizedGRBM & rbm) {
+inline void Trainer<GeneralizedGRBM>::updateParams(GeneralizedGRBM & rbm) {
 	for (int i = 0; i < rbm.getVisibleSize(); i++) {
 		rbm.params.b(i) += momentum.vBias(i);
 		//rbm.params.lambda(i) += momentum.vLambda(i);  // 非負制約を満たすこと
@@ -342,7 +342,7 @@ void Trainer<GeneralizedGRBM>::updateParams(GeneralizedGRBM & rbm) {
 }
 
 // 学習情報出力(JSON)
-std::string Trainer<GeneralizedGRBM>::trainInfoJson(GeneralizedGRBM & rbm) {
+inline std::string Trainer<GeneralizedGRBM>::trainInfoJson(GeneralizedGRBM & rbm) {
 	auto js = nlohmann::json();
 	js["rbm"] = nlohmann::json::parse(rbm.params.serialize());
 	js["trainCount"] = _trainCount;
@@ -355,7 +355,7 @@ std::string Trainer<GeneralizedGRBM>::trainInfoJson(GeneralizedGRBM & rbm) {
 	return js.dump();
 }
 
-void Trainer<GeneralizedGRBM>::trainFromTrainInfo(GeneralizedGRBM & rbm, std::string json) {
+inline void Trainer<GeneralizedGRBM>::trainFromTrainInfo(GeneralizedGRBM & rbm, std::string json) {
 	auto js = nlohmann::json::parse(json);
 	rbm.params.deserialize(js["rbm"].dump());
 	_trainCount = js["trainCount"];
