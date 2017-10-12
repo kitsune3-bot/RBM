@@ -1,43 +1,114 @@
 ﻿#pragma once
-#include "../RBMSamplerBase.h"
+#include "../Sampler.h"
+#include "RBM.h"
+#include <random>
 
 class RBM;
 
-class RBMSampler : RBMSamplerBase{
+template<>
+class Sampler<RBM> {
 public:
-    RBMSampler();
-    ~RBMSampler();
+	Sampler() = default;
+	~Sampler() = default;
 
-    // 可視変数一つをギブスサンプリング
-    double gibbsSamplingVisible(RBMBase & rbm, int vindex) { return gibbsSamplingVisible(reinterpret_cast<RBM &>(rbm), vindex); };
-    double gibbsSamplingVisible(RBM & rbm, int vindex);
+	// 可視変数一つをギブスサンプリング
+	double gibbsSamplingVisible(RBM & rbm, int vindex);
 
-    // 隠れ変数一つをギブスサンプリング
-    double gibbsSamplingHidden(RBMBase & rbm, int hindex) { return gibbsSamplingHidden(reinterpret_cast<RBM &>(rbm), hindex); }
-    double gibbsSamplingHidden(RBM & rbm, int hindex);
+	// 隠れ変数一つをギブスサンプリング
+	double gibbsSamplingHidden(RBM & rbm, int hindex);
 
-    // 可視層すべてをギブスサンプリング
-    Eigen::VectorXd & blockedGibbsSamplingVisible(RBMBase & rbm) { return blockedGibbsSamplingVisible(reinterpret_cast<RBM &>(rbm)); };
-    Eigen::VectorXd & blockedGibbsSamplingVisible(RBM & rbm);
+	// 可視層すべてをギブスサンプリング
+	Eigen::VectorXd & blockedGibbsSamplingVisible(RBM & rbm);
 
-    // 隠れ層すべてをギブスサンプリング
-    Eigen::VectorXd & blockedGibbsSamplingHidden(RBMBase & rbm) { return blockedGibbsSamplingHidden(reinterpret_cast<RBM &>(rbm)); };
-    Eigen::VectorXd & blockedGibbsSamplingHidden(RBM & rbm);
+	// 隠れ層すべてをギブスサンプリング
+	Eigen::VectorXd & blockedGibbsSamplingHidden(RBM & rbm);
 
-    // 可視変数一つをギブスサンプリングで更新
-    double updateByGibbsSamplingVisible(RBMBase & rbm, int vindex) { return updateByGibbsSamplingVisible(reinterpret_cast<RBM &>(rbm), vindex); };
-    double updateByGibbsSamplingVisible(RBM & rbm, int vindex);
+	// 可視変数一つをギブスサンプリングで更新
+	double updateByGibbsSamplingVisible(RBM & rbm, int vindex);
 
-    // 隠れ変数一つをギブスサンプリングで更新
-    double updateByGibbsSamplingHidden(RBMBase & rbm, int hindex) { return updateByGibbsSamplingHidden(reinterpret_cast<RBM &>(rbm), hindex); };
-    double updateByGibbsSamplingHidden(RBM & rbm, int hindex);
+	// 隠れ変数一つをギブスサンプリングで更新
+	double updateByGibbsSamplingHidden(RBM & rbm, int hindex);
 
-    // 可視層すべてをギブスサンプリングで更新
-    Eigen::VectorXd & updateByBlockedGibbsSamplingVisible(RBMBase & rbm) { return updateByBlockedGibbsSamplingVisible(reinterpret_cast<RBM &>(rbm)); };
-    Eigen::VectorXd & updateByBlockedGibbsSamplingVisible(RBM & rbm);
+	// 可視層すべてをギブスサンプリングで更新
+	Eigen::VectorXd & updateByBlockedGibbsSamplingVisible(RBM & rbm);
 
-    // 隠れ層すべてをギブスサンプリングで更新
-    Eigen::VectorXd & updateByBlockedGibbsSamplingHidden(RBMBase & rbm) { return updateByBlockedGibbsSamplingHidden(reinterpret_cast<RBM &>(rbm)); };
-    Eigen::VectorXd & updateByBlockedGibbsSamplingHidden(RBM & rbm);
+	// 隠れ層すべてをギブスサンプリングで更新
+	Eigen::VectorXd & updateByBlockedGibbsSamplingHidden(RBM & rbm);
 };
 
+
+
+double Sampler<RBM>::gibbsSamplingVisible(RBM &rbm, int vindex) {
+	std::random_device rd;
+	std::mt19937 mt(rd());
+	std::uniform_real_distribution<double> dist(0.0, 1.0);
+
+	double value = rbm.condProbVis(vindex, 0.0) < dist(mt) ? 0.0 : 1.0;
+	return value;
+}
+
+double Sampler<RBM>::gibbsSamplingHidden(RBM &rbm, int hindex) {
+	std::random_device rd;
+	std::mt19937 mt(rd());
+	std::uniform_real_distribution<double> dist(0.0, 1.0);
+
+	double value = rbm.condProbHid(hindex, 0.0) < dist(mt) ? 0.0 : 1.0;
+	return value;
+}
+
+Eigen::VectorXd & Sampler<RBM>::blockedGibbsSamplingVisible(RBM &rbm) {
+	auto vect = rbm.nodes.v;
+
+	for (int i = 0; i < rbm.getVisibleSize(); i++) {
+		vect(i) = gibbsSamplingVisible(rbm, i);
+	}
+
+	return vect;
+}
+
+Eigen::VectorXd & Sampler<RBM>::blockedGibbsSamplingHidden(RBM &rbm) {
+	auto vect = rbm.nodes.h;
+
+	for (int j = 0; j < rbm.getHiddenSize(); j++) {
+		vect(j) = gibbsSamplingHidden(rbm, j);
+	}
+
+	return vect;
+}
+
+double Sampler<RBM>::updateByGibbsSamplingVisible(RBM &rbm, int vindex) {
+	std::random_device rd;
+	std::mt19937 mt(rd());
+	std::uniform_real_distribution<double> dist(0.0, 1.0);
+
+	double value = rbm.condProbVis(vindex, 0.0) < dist(mt) ? 0.0 : 1.0;
+	rbm.nodes.v(vindex) = value;
+	return value;
+}
+
+double Sampler<RBM>::updateByGibbsSamplingHidden(RBM &rbm, int hindex) {
+	std::random_device rd;
+	std::mt19937 mt(rd());
+	std::uniform_real_distribution<double> dist(0.0, 1.0);
+
+	double value = rbm.condProbHid(hindex, 0.0) < dist(mt) ? 0.0 : 1.0;
+	rbm.nodes.h(hindex) = value;
+	return value;
+}
+
+Eigen::VectorXd & Sampler<RBM>::updateByBlockedGibbsSamplingVisible(RBM &rbm) {
+
+	for (int i = 0; i < rbm.getVisibleSize(); i++) {
+		updateByGibbsSamplingVisible(rbm, i);
+	}
+
+	return rbm.nodes.v;
+}
+
+Eigen::VectorXd & Sampler<RBM>::updateByBlockedGibbsSamplingHidden(RBM &rbm) {
+	for (int j = 0; j < rbm.getHiddenSize(); j++) {
+		updateByGibbsSamplingHidden(rbm, j);
+	}
+
+	return rbm.nodes.h;
+}

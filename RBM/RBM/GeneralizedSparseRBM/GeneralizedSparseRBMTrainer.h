@@ -1,11 +1,13 @@
 ﻿#pragma once
-#include "../RBMTrainerBase.h"
 #include "Eigen/Core"
+#include "../Trainer.h"
+#include "GeneralizedSparseRBM.h"
+#include "GeneralizedSparseRBMSampler.h"
 #include <vector>
 
-class GeneralizedSparseRBM;
 
-class GeneralizedSparseRBMTrainer : RBMTrainerBase {
+template<>
+class Trainer<GeneralizedSparseRBM>{
 	struct Momentum {
 		Eigen::VectorXd vBias;
 		Eigen::VectorXd hBias;
@@ -50,41 +52,35 @@ public:
 	double momentumRate = 0.9;
 
 public:
-	GeneralizedSparseRBMTrainer();
-	GeneralizedSparseRBMTrainer(RBMBase & rbm) { GeneralizedSparseRBMTrainer(reinterpret_cast<GeneralizedSparseRBM &>(rbm)); }
-	GeneralizedSparseRBMTrainer(GeneralizedSparseRBM & rbm);
-	~GeneralizedSparseRBMTrainer();
+	Trainer() = default;
+	Trainer(GeneralizedSparseRBM & rbm);
+	~Trainer() = default;
 
 	// モーメンタムベクトル初期化
-	void initMomentum(RBMBase & rbm) { initMomentum(reinterpret_cast<GeneralizedSparseRBM &>(rbm)); }
 	void initMomentum(GeneralizedSparseRBM & rbm);
 
 	// 確保済みのモーメンタムベクトルを0初期化
 	void initMomentum();
 
 	// 勾配ベクトル初期化
-	void initGradient(RBMBase & rbm) { initGradient(reinterpret_cast<GeneralizedSparseRBM &>(rbm)); }
 	void initGradient(GeneralizedSparseRBM & rbm);
 
 	// 確保済みの勾配ベクトルを0初期化
 	void initGradient();
 
 	// データ平均ベクトルを初期化
-	void initDataMean(RBMBase & rbm) { initDataMean(reinterpret_cast<GeneralizedSparseRBM &>(rbm)); }
 	void initDataMean(GeneralizedSparseRBM & rbm);
 
 	// 確保済みデータ平均ベクトルを初期化
 	void initDataMean();
 
 	// サンプル平均ベクトルを初期化
-	void initRBMExpected(RBMBase & rbm) { initRBMExpected(reinterpret_cast<GeneralizedSparseRBM &>(rbm)); }
 	void initRBMExpected(GeneralizedSparseRBM & rbm);
 
 	// 確保済みサンプル平均ベクトルを初期化
 	void initRBMExpected();
 
 	// 学習
-	void train(RBMBase & rbm, std::vector<std::vector<double>> & dataset) { train(reinterpret_cast<GeneralizedSparseRBM &>(rbm), dataset); }
 	void train(GeneralizedSparseRBM & rbm, std::vector<std::vector<double>> & dataset);
 
 	void trainCD(GeneralizedSparseRBM & rbm, std::vector<std::vector<double>> & dataset);
@@ -92,7 +88,6 @@ public:
 
 
 	// 1回だけ学習
-	void trainOnce(RBMBase & rbm, std::vector<std::vector<double>> & dataset) { trainOnce(reinterpret_cast<GeneralizedSparseRBM &>(rbm), dataset); }
 	void trainOnce(GeneralizedSparseRBM & rbm, std::vector<std::vector<double>> & dataset);
 
 	void trainOnceCD(GeneralizedSparseRBM & rbm, std::vector<std::vector<double>> & dataset);
@@ -100,47 +95,422 @@ public:
 
 
 	// CD計算
-	void calcContrastiveDivergence(RBMBase & rbm, std::vector<std::vector<double>> & dataset, std::vector<int> & data_indexes) { calcContrastiveDivergence(reinterpret_cast<GeneralizedSparseRBM &>(rbm), dataset, data_indexes); }
 	void calcContrastiveDivergence(GeneralizedSparseRBM & rbm, std::vector<std::vector<double>> & dataset, std::vector<int> & data_indexes);
 
 	// CD計算
-	void calcExact(RBMBase & rbm, std::vector<std::vector<double>> & dataset, std::vector<int> & data_indexes) { calcExact(reinterpret_cast<GeneralizedSparseRBM &>(rbm), dataset, data_indexes); }
 	void calcExact(GeneralizedSparseRBM & rbm, std::vector<std::vector<double>> & dataset, std::vector<int> & data_indexes);
 
 	// データ平均の計算
-	void calcDataMean(RBMBase & rbm, std::vector<std::vector<double>> & dataset, std::vector<int> & data_indexes) { calcDataMean(reinterpret_cast<GeneralizedSparseRBM &>(rbm), dataset, data_indexes); }
 	void calcDataMean(GeneralizedSparseRBM & rbm, std::vector<std::vector<double>> & dataset, std::vector<int> & data_indexes);
 
 	// サンプル平均の計算
-	void calcRBMExpectedCD(RBMBase & rbm, std::vector<std::vector<double>> & dataset, std::vector<int> & data_indexes) { calcRBMExpectedCD(reinterpret_cast<GeneralizedSparseRBM &>(rbm), dataset, data_indexes); }
 	void calcRBMExpectedCD(GeneralizedSparseRBM & rbm, std::vector<std::vector<double>> & dataset, std::vector<int> & data_indexes);
 
 	// サンプル平均の計算
-	void calcRBMExpectedExact(RBMBase & rbm, std::vector<std::vector<double>> & dataset, std::vector<int> & data_indexes) { calcRBMExpectedExact(reinterpret_cast<GeneralizedSparseRBM &>(rbm), dataset, data_indexes); }
 	void calcRBMExpectedExact(GeneralizedSparseRBM & rbm, std::vector<std::vector<double>> & dataset, std::vector<int> & data_indexes);
 
 
 	// 勾配の計算
-	void calcGradient(RBMBase & rbm, std::vector<int> & data_indexes) { calcGradient(reinterpret_cast<GeneralizedSparseRBM &>(rbm), data_indexes); }
 	void calcGradient(GeneralizedSparseRBM & rbm, std::vector<int> & data_indexes);
 
 	// モーメンタム更新
-	void updateMomentum(RBMBase & rbm) { updateMomentum(reinterpret_cast<GeneralizedSparseRBM &>(rbm)); }
 	void updateMomentum(GeneralizedSparseRBM & rbm);
 
 	// 勾配更新
-	void updateParams(RBMBase & rbm) { updateParams(reinterpret_cast<GeneralizedSparseRBM &>(rbm)); }
 	void updateParams(GeneralizedSparseRBM & rbm);
 
 	// 対数尤度関数
 	double logLikeliHood(GeneralizedSparseRBM & rbm, std::vector<std::vector<double>> & dataset);
 
 	// 学習情報出力(JSON)
-	std::string trainInfoJson(RBMBase & rbm) { trainInfoJson(reinterpret_cast<GeneralizedSparseRBM &>(rbm)); };
 	std::string trainInfoJson(GeneralizedSparseRBM & rbm);
 
 	// 学習情報から学習(JSON)
-	void trainFromTrainInfo(RBMBase & rbm, std::string json) { trainFromTrainInfo(reinterpret_cast<GeneralizedSparseRBM &>(rbm), json); };
 	void trainFromTrainInfo(GeneralizedSparseRBM & rbm, std::string json);
 };
 
+Trainer<GeneralizedSparseRBM>::Trainer(GeneralizedSparseRBM & rbm) {
+	initMomentum(rbm);
+	initGradient(rbm);
+	initDataMean(rbm);
+	initRBMExpected(rbm);
+}
+
+void Trainer<GeneralizedSparseRBM>::initMomentum(GeneralizedSparseRBM & rbm) {
+	momentum.vBias.setConstant(rbm.getVisibleSize(), 0.0);
+	momentum.hBias.setConstant(rbm.getHiddenSize(), 0.0);
+	momentum.weight.setConstant(rbm.getVisibleSize(), rbm.getHiddenSize(), 0.0);
+	momentum.hSparse.setConstant(rbm.getHiddenSize(), 0.0);
+}
+
+void Trainer<GeneralizedSparseRBM>::initMomentum() {
+	momentum.vBias.setConstant(0.0);
+	momentum.hBias.setConstant(0.0);
+	momentum.weight.setConstant(0.0);
+	momentum.hSparse.setConstant(0.0);
+}
+
+void Trainer<GeneralizedSparseRBM>::initGradient(GeneralizedSparseRBM & rbm) {
+	gradient.vBias.setConstant(rbm.getVisibleSize(), 0.0);
+	gradient.hBias.setConstant(rbm.getHiddenSize(), 0.0);
+	gradient.hSparse.setConstant(rbm.getHiddenSize(), 0.0);
+	gradient.weight.setConstant(rbm.getVisibleSize(), rbm.getHiddenSize(), 0.0);
+}
+
+void Trainer<GeneralizedSparseRBM>::initGradient() {
+	gradient.vBias.setConstant(0.0);
+	gradient.hBias.setConstant(0.0);
+	gradient.hSparse.setConstant(0.0);
+	gradient.weight.setConstant(0.0);
+}
+
+void Trainer<GeneralizedSparseRBM>::initDataMean(GeneralizedSparseRBM & rbm) {
+	dataMean.vBias.setConstant(rbm.getVisibleSize(), 0.0);
+	dataMean.hBias.setConstant(rbm.getHiddenSize(), 0.0);
+	dataMean.weight.setConstant(rbm.getVisibleSize(), rbm.getHiddenSize(), 0.0);
+	dataMean.hSparse.setConstant(rbm.getHiddenSize(), 0.0);
+}
+
+void Trainer<GeneralizedSparseRBM>::initDataMean() {
+	dataMean.vBias.setConstant(0.0);
+	dataMean.hBias.setConstant(0.0);
+	dataMean.weight.setConstant(0.0);
+	dataMean.hSparse.setConstant(0.0);
+}
+
+void Trainer<GeneralizedSparseRBM>::initRBMExpected(GeneralizedSparseRBM & rbm) {
+	rbmexpected.vBias.setConstant(rbm.getVisibleSize(), 0.0);
+	rbmexpected.hBias.setConstant(rbm.getHiddenSize(), 0.0);
+	rbmexpected.weight.setConstant(rbm.getVisibleSize(), rbm.getHiddenSize(), 0.0);
+	rbmexpected.hSparse.setConstant(rbm.getHiddenSize(), 0.0);
+}
+
+void Trainer<GeneralizedSparseRBM>::initRBMExpected() {
+	rbmexpected.vBias.setConstant(0.0);
+	rbmexpected.hBias.setConstant(0.0);
+	rbmexpected.weight.setConstant(0.0);
+	rbmexpected.hSparse.setConstant(0.0);
+}
+
+void Trainer<GeneralizedSparseRBM>::train(GeneralizedSparseRBM & rbm, std::vector<std::vector<double>> & dataset) {
+	for (int e = 0; e < epoch; e++) {
+		trainOnce(rbm, dataset);
+	}
+}
+
+void Trainer<GeneralizedSparseRBM>::trainCD(GeneralizedSparseRBM & rbm, std::vector<std::vector<double>> & dataset) {
+	for (int e = 0; e < epoch; e++) {
+		trainOnceCD(rbm, dataset);
+	}
+}
+
+void Trainer<GeneralizedSparseRBM>::trainExact(GeneralizedSparseRBM & rbm, std::vector<std::vector<double>> & dataset) {
+	for (int e = 0; e < epoch; e++) {
+		trainOnceExact(rbm, dataset);
+	}
+}
+
+
+// FIXME: CDとExactをフラグで切り分けられるように
+// 1回だけ学習
+void Trainer<GeneralizedSparseRBM>::trainOnce(GeneralizedSparseRBM & rbm, std::vector<std::vector<double>> & dataset) {
+	// 勾配初期化
+	initGradient();
+
+	// データインデックス集合
+	std::vector<int> data_indexes(dataset.size());
+
+	// ミニバッチ学習のためにデータインデックスをシャッフルする
+	std::iota(data_indexes.begin(), data_indexes.end(), 0);
+	std::shuffle(data_indexes.begin(), data_indexes.end(), std::mt19937());
+
+	// ミニバッチ
+	// バッチサイズの確認
+	int batch_size = this->batchSize < dataset.size() ? dataset.size() : this->batchSize;
+
+	// ミニバッチ学習に使うデータのインデックス集合
+	std::vector<int> minibatch_indexes(batch_size);
+	std::copy(data_indexes.begin(), data_indexes.begin() + batch_size, minibatch_indexes.begin());
+
+	// Contrastive Divergence
+	calcContrastiveDivergence(rbm, dataset, minibatch_indexes);
+
+	// モーメンタムの更新
+	updateMomentum(rbm);
+
+	// 勾配の更新
+	updateParams(rbm);
+
+	// Trainer情報更新
+	_trainCount++;
+}
+
+void Trainer<GeneralizedSparseRBM>::trainOnceCD(GeneralizedSparseRBM & rbm, std::vector<std::vector<double>> & dataset) {
+	// 勾配初期化
+	initGradient();
+
+	// データインデックス集合
+	std::vector<int> data_indexes(dataset.size());
+
+	// ミニバッチ学習のためにデータインデックスをシャッフルする
+	std::iota(data_indexes.begin(), data_indexes.end(), 0);
+	std::shuffle(data_indexes.begin(), data_indexes.end(), std::mt19937());
+
+	// ミニバッチ
+	// バッチサイズの確認
+	int batch_size = this->batchSize < dataset.size() ? dataset.size() : this->batchSize;
+
+	// ミニバッチ学習に使うデータのインデックス集合
+	std::vector<int> minibatch_indexes(batch_size);
+	std::copy(data_indexes.begin(), data_indexes.begin() + batch_size, minibatch_indexes.begin());
+
+	// Contrastive Divergence
+	calcContrastiveDivergence(rbm, dataset, minibatch_indexes);
+
+	// モーメンタムの更新
+	updateMomentum(rbm);
+
+	// 勾配の更新
+	updateParams(rbm);
+
+	// Trainer情報更新
+	_trainCount++;
+}
+
+void Trainer<GeneralizedSparseRBM>::trainOnceExact(GeneralizedSparseRBM & rbm, std::vector<std::vector<double>> & dataset) {
+	// 勾配初期化
+	initGradient();
+
+	// データインデックス集合
+	std::vector<int> data_indexes(dataset.size());
+
+	// ミニバッチ学習のためにデータインデックスをシャッフルする
+	std::iota(data_indexes.begin(), data_indexes.end(), 0);
+	std::shuffle(data_indexes.begin(), data_indexes.end(), std::mt19937());
+
+	// ミニバッチ
+	// バッチサイズの確認
+	int batch_size = this->batchSize < dataset.size() ? dataset.size() : this->batchSize;
+
+	// ミニバッチ学習に使うデータのインデックス集合
+	std::vector<int> minibatch_indexes(batch_size);
+	std::copy(data_indexes.begin(), data_indexes.begin() + batch_size, minibatch_indexes.begin());
+
+	// Contrastive Divergence
+	calcExact(rbm, dataset, minibatch_indexes);
+
+	// モーメンタムの更新
+	updateMomentum(rbm);
+
+	// 勾配の更新
+	updateParams(rbm);
+
+	// Trainer情報更新
+	_trainCount++;
+}
+
+
+void Trainer<GeneralizedSparseRBM>::calcContrastiveDivergence(GeneralizedSparseRBM & rbm, std::vector<std::vector<double>> & dataset, std::vector<int> & data_indexes) {
+	// データ平均の計算
+	calcDataMean(rbm, dataset, data_indexes);
+
+	// サンプル平均の計算(CD)
+	calcRBMExpectedCD(rbm, dataset, data_indexes);
+
+	// 勾配計算
+	calcGradient(rbm, data_indexes);
+}
+
+void Trainer<GeneralizedSparseRBM>::calcExact(GeneralizedSparseRBM & rbm, std::vector<std::vector<double>> & dataset, std::vector<int> & data_indexes) {
+	// データ平均の計算
+	calcDataMean(rbm, dataset, data_indexes);
+
+	// サンプル平均の計算(CD)
+	calcRBMExpectedExact(rbm, dataset, data_indexes);
+
+	// 勾配計算
+	calcGradient(rbm, data_indexes);
+}
+
+
+void Trainer<GeneralizedSparseRBM>::calcDataMean(GeneralizedSparseRBM & rbm, std::vector<std::vector<double>> & dataset, std::vector<int> & data_indexes) {
+	// 0埋め初期化
+	initDataMean();
+
+	for (auto & n : data_indexes) {
+		auto & data = dataset[n];
+		Eigen::VectorXd vect = Eigen::Map<Eigen::VectorXd>(data.data(), data.size());
+		rbm.nodes.v = vect;
+
+		for (int i = 0; i < rbm.getVisibleSize(); i++) {
+			dataMean.vBias(i) += vect(i);
+
+			for (int j = 0; j < rbm.getHiddenSize(); j++) {
+				dataMean.weight(i, j) += vect(i) * rbm.actHidJ(j);
+			}
+		}
+
+		for (int j = 0; j < rbm.getHiddenSize(); j++) {
+			dataMean.hBias(j) += rbm.actHidJ(j);
+			dataMean.hSparse(j) += rbm.actHidSparseJ(j);
+		}
+	}
+
+	dataMean.vBias /= static_cast<double>(data_indexes.size());
+	dataMean.hBias /= static_cast<double>(data_indexes.size());
+	dataMean.weight /= static_cast<double>(data_indexes.size());
+	dataMean.hSparse /= static_cast<double>(data_indexes.size());
+}
+
+void Trainer<GeneralizedSparseRBM>::calcRBMExpectedCD(GeneralizedSparseRBM & rbm, std::vector<std::vector<double>> & dataset, std::vector<int> & data_indexes) {
+	// 0埋め初期化
+	initRBMExpected();
+
+	for (auto & n : data_indexes) {
+		auto & data = dataset[n];
+		Eigen::VectorXd vect = Eigen::Map<Eigen::VectorXd>(data.data(), data.size());
+
+		// GeneralizedSparseRBMの初期値設定
+		rbm.nodes.v = vect;
+
+		for (int j = 0; j < rbm.getHiddenSize(); j++) {
+			rbm.nodes.h(j) = rbm.actHidJ(j);
+		}
+
+		// CD-K
+		Sampler<GeneralizedSparseRBM> sampler;
+		for (int k = 0; k < cdk; k++) {
+			sampler.updateByBlockedGibbsSamplingVisible(rbm);
+			sampler.updateByBlockedGibbsSamplingHidden(rbm);
+		}
+
+		// 結果を格納
+		rbmexpected.vBias += rbm.nodes.v;
+		rbmexpected.hBias += rbm.nodes.h;
+
+		for (int j = 0; j < rbm.getHiddenSize(); j++) {
+			rbmexpected.hSparse(j) += abs(rbm.nodes.h(j));
+		}
+
+		for (int i = 0; i < rbm.getVisibleSize(); i++) {
+			for (int j = 0; j < rbm.getHiddenSize(); j++) {
+				rbmexpected.weight(i, j) += rbm.nodes.v(i) * rbm.nodes.h(j);
+			}
+		}
+	}
+
+	rbmexpected.vBias /= static_cast<double>(data_indexes.size());
+	rbmexpected.hBias /= static_cast<double>(data_indexes.size());
+	rbmexpected.weight /= static_cast<double>(data_indexes.size());
+	rbmexpected.hSparse /= static_cast<double>(data_indexes.size());
+}
+
+void Trainer<GeneralizedSparseRBM>::calcRBMExpectedExact(GeneralizedSparseRBM & rbm, std::vector<std::vector<double>> & dataset, std::vector<int> & data_indexes) {
+	// 0埋め初期化
+	initRBMExpected();
+
+	// FIXME: 分配関数の計算がネックになる。 規格化定数使いまわしで高速化可能
+	for (int i = 0; i < rbm.getVisibleSize(); i++) {
+		rbmexpected.vBias(i) = rbm.expectedValueVis(i);
+
+		for (int j = 0; j < rbm.getHiddenSize(); j++) {
+			rbmexpected.weight(i, j) = rbm.expectedValueVisHid(i, j);
+		}
+	}
+
+	// FIXME: 分配関数の計算がネックになる。 規格化定数使いまわしで高速化可能
+	for (int j = 0; j < rbm.getHiddenSize(); j++) {
+		rbmexpected.hBias(j) = rbm.expectedValueHid(j);
+		rbmexpected.hSparse(j) = rbm.expectedValueAbsHid(j);
+	}
+}
+
+
+// 勾配の計算
+void Trainer<GeneralizedSparseRBM>::calcGradient(GeneralizedSparseRBM & rbm, std::vector<int> & data_indexes) {
+	// 勾配ベクトルリセット
+	initGradient();
+
+	for (int i = 0; i < rbm.getVisibleSize(); i++) {
+		gradient.vBias(i) = dataMean.vBias(i) - rbmexpected.vBias(i);
+
+		for (int j = 0; j < rbm.getHiddenSize(); j++) {
+			gradient.weight(i, j) = dataMean.weight(i, j) - rbmexpected.weight(i, j);
+		}
+	}
+
+	for (int j = 0; j < rbm.getHiddenSize(); j++) {
+		gradient.hBias(j) = dataMean.hBias(j) - rbmexpected.hBias(j);
+		gradient.hSparse(j) = dataMean.hSparse(j) - rbmexpected.hSparse(j);
+	}
+}
+
+void Trainer<GeneralizedSparseRBM>::updateMomentum(GeneralizedSparseRBM & rbm) {
+	for (int i = 0; i < rbm.getVisibleSize(); i++) {
+		momentum.vBias(i) = momentumRate * momentum.vBias(i) + learningRate * gradient.vBias(i);
+
+		for (int j = 0; j < rbm.getHiddenSize(); j++) {
+			momentum.weight(i, j) = momentumRate * momentum.weight(i, j) + learningRate * gradient.weight(i, j);
+		}
+	}
+
+	for (int j = 0; j < rbm.getHiddenSize(); j++) {
+		momentum.hBias(j) = momentumRate * momentum.hBias(j) + learningRate * gradient.hBias(j);
+		momentum.hSparse(j) = momentumRate * momentum.hSparse(j) + learningRate * gradient.hSparse(j);
+	}
+}
+
+// パラメータの更新
+void Trainer<GeneralizedSparseRBM>::updateParams(GeneralizedSparseRBM & rbm) {
+	for (int i = 0; i < rbm.getVisibleSize(); i++) {
+		rbm.params.b(i) += momentum.vBias(i);
+
+		for (int j = 0; j < rbm.getHiddenSize(); j++) {
+			rbm.params.w(i, j) += momentum.weight(i, j);
+		}
+	}
+
+	for (int j = 0; j < rbm.getHiddenSize(); j++) {
+		rbm.params.c(j) += momentum.hBias(j);
+		rbm.params.sparse(j) += momentum.hSparse(j);
+	}
+}
+
+
+// 対数尤度関数
+double Trainer<GeneralizedSparseRBM>::logLikeliHood(GeneralizedSparseRBM & rbm, std::vector<std::vector<double>> & dataset) {
+	double value = 0.0;
+
+	for (auto & data : dataset) {
+		// FIXME: 分配関数使いまわしで高速化可能
+		auto prob = rbm.probVis(data);
+		value += log(prob);
+	}
+
+	return value;
+}
+
+// 学習情報出力(JSON)
+std::string Trainer<GeneralizedSparseRBM>::trainInfoJson(GeneralizedSparseRBM & rbm) {
+	auto js = nlohmann::json();
+	js["rbm"] = nlohmann::json::parse(rbm.params.serialize());
+	js["trainCount"] = _trainCount;
+	js["learningRate"] = learningRate;
+	js["momentumRate"] = momentumRate;
+	js["cdk"] = cdk;
+	js["divSize"] = rbm.getHiddenDivSize();
+	js["realFlag"] = rbm.isRealHiddenValue();
+
+	return js.dump();
+}
+
+void Trainer<GeneralizedSparseRBM>::trainFromTrainInfo(GeneralizedSparseRBM & rbm, std::string json) {
+	auto js = nlohmann::json::parse(json);
+	rbm.params.deserialize(js["rbm"].dump());
+	_trainCount = js["trainCount"];
+	learningRate = js["learningRate"];
+	momentumRate = js["momentumRate"];
+	cdk = js["cdk"];
+	rbm.setHiddenDiveSize(js["divSize"]);
+	rbm.setRealHiddenValue(js["realFlag"]);
+}

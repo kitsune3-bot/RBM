@@ -103,5 +103,5 @@ public:
     void setHiddenDiveSize(size_t div_size);
 
 	// 隠れ変数を連続値にするか離散値にするか
-	void setRealHiddenValue(bool flag);
+	//void setRealHiddenValue(bool flag);
 };

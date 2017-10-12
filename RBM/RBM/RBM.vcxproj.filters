@@ -57,21 +57,6 @@
     </Filter>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="RBM.h">
-      <Filter>ヘッダー ファイル\RBM</Filter>
-    </ClInclude>
-    <ClInclude Include="RBMNode.h">
-      <Filter>ヘッダー ファイル\RBM</Filter>
-    </ClInclude>
-    <ClInclude Include="RBMParamator.h">
-      <Filter>ヘッダー ファイル\RBM</Filter>
-    </ClInclude>
-    <ClInclude Include="RBMSampler.h">
-      <Filter>ヘッダー ファイル\RBM</Filter>
-    </ClInclude>
-    <ClInclude Include="RBMTrainer.h">
-      <Filter>ヘッダー ファイル\RBM</Filter>
-    </ClInclude>
     <ClInclude Include="RBMMath.h">
       <Filter>ヘッダー ファイル\Common</Filter>
     </ClInclude>
@@ -101,9 +86,6 @@
     </ClInclude>
     <ClInclude Include="RBM.h">
       <Filter>ヘッダー ファイル</Filter>
-    </ClInclude>
-    <ClInclude Include="RBM\RBM.h">
-      <Filter>ヘッダー ファイル\RBM</Filter>
     </ClInclude>
     <ClInclude Include="RBMCore.h">
       <Filter>ヘッダー ファイル\Common</Filter>
@@ -171,14 +153,23 @@
     <ClInclude Include="GeneralizedSparseRBM\GeneralizedSparseRBMTrainer.h">
       <Filter>ヘッダー ファイル\GeneralizedSparseRBM</Filter>
     </ClInclude>
-    <ClInclude Include="GeneralizedRBM\GeneralizedRBMTrainerDmy.h">
-      <Filter>ヘッダー ファイル\GeneralizedRBM</Filter>
-    </ClInclude>
     <ClInclude Include="Sampler.h">
       <Filter>ヘッダー ファイル\Common</Filter>
     </ClInclude>
-    <ClInclude Include="GeneralizedRBM\GeneralizedRBMSamplerDmy.h">
-      <Filter>ヘッダー ファイル\GeneralizedRBM</Filter>
+    <ClInclude Include="RBM\RBM.h">
+      <Filter>ヘッダー ファイル\RBM</Filter>
+    </ClInclude>
+    <ClInclude Include="RBM\RBMNode.h">
+      <Filter>ヘッダー ファイル\RBM</Filter>
+    </ClInclude>
+    <ClInclude Include="RBM\RBMParamator.h">
+      <Filter>ヘッダー ファイル\RBM</Filter>
+    </ClInclude>
+    <ClInclude Include="RBM\RBMSampler.h">
+      <Filter>ヘッダー ファイル\RBM</Filter>
+    </ClInclude>
+    <ClInclude Include="RBM\RBMTrainer.h">
+      <Filter>ヘッダー ファイル\RBM</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

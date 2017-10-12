@@ -1,7 +1,6 @@
 #include <iostream>
 #include "RBMCore.h"
 #include "Trainer.h"
-#include "GeneralizedRBM/GeneralizedRBMTrainerDmy.h"
 #include "rbmutil.h"
 
 int main(int argc, char **argv) {
@@ -74,7 +73,7 @@ int main(int argc, char **argv) {
 		}
 	};
 
-	auto sampler = GeneralizedRBMSampler();
+	auto sampler = Sampler<GeneralizedRBM>();
 	for (int i = 0; i < dataset.size(); i++) {
 		set_data(rbm, test_dataset[i]);
 		set_data(rbm_cd, test_dataset[i]);

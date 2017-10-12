@@ -2,7 +2,6 @@
 #include "../RBMBase.h"
 #include "GeneralizedSparseRBMNode.h"
 #include "GeneralizedSparseRBMParamator.h"
-#include "GeneralizedSparseRBMSampler.h"
 #include <vector>
 
 
@@ -21,7 +20,6 @@ protected:
 public:
 	GeneralizedSparseRBMParamator params;
 	GeneralizedSparseRBMNode nodes;
-	GeneralizedSparseRBMSampler sampler;
 
 public:
 	GeneralizedSparseRBM();
