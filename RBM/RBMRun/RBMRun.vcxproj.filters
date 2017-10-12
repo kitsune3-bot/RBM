@@ -13,14 +13,8 @@
       <UniqueIdentifier>{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}</UniqueIdentifier>
       <Extensions>rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx;tiff;tif;png;wav;mfcribbon-ms</Extensions>
     </Filter>
-    <Filter Include="ソース ファイル\libs">
-      <UniqueIdentifier>{927260e9-8621-4406-ae96-4317a88faca6}</UniqueIdentifier>
-    </Filter>
     <Filter Include="ヘッダー ファイル\libs">
       <UniqueIdentifier>{c9125ca8-5914-48e4-9732-af68a23ad89d}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="ソース ファイル\crbmlibs">
-      <UniqueIdentifier>{5f51bd6f-57e5-4321-a500-babf3a9e4534}</UniqueIdentifier>
     </Filter>
     <Filter Include="ヘッダー ファイル\crbmlibs">
       <UniqueIdentifier>{349bde3d-4471-4e2c-af27-7eb428c57b8e}</UniqueIdentifier>
@@ -158,104 +152,8 @@
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="..\RBM\GeneralizedRBM.cpp">
-      <Filter>ソース ファイル\libs</Filter>
-    </ClCompile>
-    <ClCompile Include="..\RBM\GeneralizedRBMNode.cpp">
-      <Filter>ソース ファイル\libs</Filter>
-    </ClCompile>
-    <ClCompile Include="..\RBM\GeneralizedRBMParamator.cpp">
-      <Filter>ソース ファイル\libs</Filter>
-    </ClCompile>
-    <ClCompile Include="..\RBM\GeneralizedRBMSampler.cpp">
-      <Filter>ソース ファイル\libs</Filter>
-    </ClCompile>
-    <ClCompile Include="..\RBM\GeneralizedRBMTrainer.cpp">
-      <Filter>ソース ファイル\libs</Filter>
-    </ClCompile>
-    <ClCompile Include="..\RBM\RBM.cpp">
-      <Filter>ソース ファイル\libs</Filter>
-    </ClCompile>
-    <ClCompile Include="..\RBM\RBMMath.cpp">
-      <Filter>ソース ファイル\libs</Filter>
-    </ClCompile>
-    <ClCompile Include="..\RBM\RBMNode.cpp">
-      <Filter>ソース ファイル\libs</Filter>
-    </ClCompile>
-    <ClCompile Include="..\RBM\RBMParamator.cpp">
-      <Filter>ソース ファイル\libs</Filter>
-    </ClCompile>
-    <ClCompile Include="..\RBM\RBMSampler.cpp">
-      <Filter>ソース ファイル\libs</Filter>
-    </ClCompile>
-    <ClCompile Include="..\RBM\RBMTrainer.cpp">
-      <Filter>ソース ファイル\libs</Filter>
-    </ClCompile>
     <ClCompile Include="Source.cpp">
       <Filter>ソース ファイル</Filter>
-    </ClCompile>
-    <ClCompile Include="..\RBM\GBRBM.cpp">
-      <Filter>ソース ファイル\libs</Filter>
-    </ClCompile>
-    <ClCompile Include="..\RBM\GBRBMNode.cpp">
-      <Filter>ソース ファイル\libs</Filter>
-    </ClCompile>
-    <ClCompile Include="..\RBM\GBRBMParamator.cpp">
-      <Filter>ソース ファイル\libs</Filter>
-    </ClCompile>
-    <ClCompile Include="..\RBM\GBRBMSampler.cpp">
-      <Filter>ソース ファイル\libs</Filter>
-    </ClCompile>
-    <ClCompile Include="..\RBM\GBRBMTrainer.cpp">
-      <Filter>ソース ファイル\libs</Filter>
-    </ClCompile>
-    <ClCompile Include="..\RBM\GeneralizedGRBM.cpp">
-      <Filter>ソース ファイル\libs</Filter>
-    </ClCompile>
-    <ClCompile Include="..\RBM\GeneralizedGRBMNode.cpp">
-      <Filter>ソース ファイル\libs</Filter>
-    </ClCompile>
-    <ClCompile Include="..\RBM\GeneralizedGRBMParamator.cpp">
-      <Filter>ソース ファイル\libs</Filter>
-    </ClCompile>
-    <ClCompile Include="..\RBM\GeneralizedGRBMSampler.cpp">
-      <Filter>ソース ファイル\libs</Filter>
-    </ClCompile>
-    <ClCompile Include="..\RBM\GeneralizedGRBMTrainer.cpp">
-      <Filter>ソース ファイル\libs</Filter>
-    </ClCompile>
-    <ClCompile Include="..\ConditionalRBM\ConditionalGRBM.cpp">
-      <Filter>ソース ファイル\crbmlibs</Filter>
-    </ClCompile>
-    <ClCompile Include="..\ConditionalRBM\ConditionalGRBMNode.cpp">
-      <Filter>ソース ファイル\crbmlibs</Filter>
-    </ClCompile>
-    <ClCompile Include="..\ConditionalRBM\ConditionalGRBMParamator.cpp">
-      <Filter>ソース ファイル\crbmlibs</Filter>
-    </ClCompile>
-    <ClCompile Include="..\ConditionalRBM\ConditionalGRBMSampler.cpp">
-      <Filter>ソース ファイル\crbmlibs</Filter>
-    </ClCompile>
-    <ClCompile Include="..\ConditionalRBM\ConditionalGRBMTrainer.cpp">
-      <Filter>ソース ファイル\crbmlibs</Filter>
-    </ClCompile>
-    <ClCompile Include="..\ConditionalRBM\ConditionalRBM.cpp">
-      <Filter>ソース ファイル\crbmlibs</Filter>
-    </ClCompile>
-    <ClCompile Include="..\ConditionalRBM\ConditionalRBMMath.cpp">
-      <Filter>ソース ファイル\crbmlibs</Filter>
-    </ClCompile>
-    <ClCompile Include="..\ConditionalRBM\ConditionalRBMNode.cpp">
-      <Filter>ソース ファイル\crbmlibs</Filter>
-    </ClCompile>
-    <ClCompile Include="..\ConditionalRBM\ConditionalRBMParamator.cpp">
-      <Filter>ソース ファイル\crbmlibs</Filter>
-    </ClCompile>
-    <ClCompile Include="..\ConditionalRBM\ConditionalRBMSampler.cpp">
-      <Filter>ソース ファイル\crbmlibs</Filter>
-    </ClCompile>
-    <ClCompile Include="..\ConditionalRBM\ConditionalRBMTrainer.cpp">
-      <Filter>ソース ファイル\crbmlibs</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

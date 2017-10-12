@@ -1,5 +1,7 @@
 #include <iostream>
 #include "RBMCore.h"
+#include "Trainer.h"
+#include "GeneralizedRBM/GeneralizedRBMTrainerDmy.h"
 #include "rbmutil.h"
 
 int main(int argc, char **argv) {
@@ -21,7 +23,6 @@ int main(int argc, char **argv) {
 	auto batch_size = 1;
 	auto epoch = 10;
 
-
 	auto rbm = GeneralizedRBM(vsize, hsize);
 	rbm.setHiddenMax(1.0);
 	rbm.setHiddenMin(-1.0);
@@ -35,20 +36,37 @@ int main(int argc, char **argv) {
 	rbm.setRealHiddenValue(true);
 
 
-	auto trainer = GeneralizedRBMTrainer(rbm);
+	auto trainer = Trainer<GeneralizedRBM>(rbm);
 	trainer.learningRate = learning_rate;
 	trainer.cdk = cdk;
 	trainer.batchSize = batch_size;
 	trainer.epoch = epoch;
 	trainer.trainExact(rbm, dataset);
 
-	auto trainer_cd = GeneralizedRBMTrainer(rbm);
+	auto trainer_cd = Trainer<GeneralizedRBM>(rbm);
 	trainer_cd.learningRate = learning_rate;
 	trainer_cd.cdk = cdk;
 	trainer_cd.batchSize = batch_size;
 	trainer_cd.epoch = epoch;
 	trainer_cd.trainExact(rbm, dataset);
 	trainer_cd.trainCD(rbm_cd, dataset);
+
+
+
+	//auto trainer = GeneralizedRBMTrainer(rbm);
+	//trainer.learningRate = learning_rate;
+	//trainer.cdk = cdk;
+	//trainer.batchSize = batch_size;
+	//trainer.epoch = epoch;
+	//trainer.trainExact(rbm, dataset);
+
+	//auto trainer_cd = GeneralizedRBMTrainer(rbm);
+	//trainer_cd.learningRate = learning_rate;
+	//trainer_cd.cdk = cdk;
+	//trainer_cd.batchSize = batch_size;
+	//trainer_cd.epoch = epoch;
+	//trainer_cd.trainExact(rbm, dataset);
+	//trainer_cd.trainCD(rbm_cd, dataset);
 
 	auto set_data = [](auto & rbm, auto & data) {
 		for (int i = 0; i < rbm.getVisibleSize(); i++) {

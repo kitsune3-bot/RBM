@@ -144,7 +144,9 @@
     <ClInclude Include="GeneralizedRBM\GeneralizedRBMNode.h" />
     <ClInclude Include="GeneralizedRBM\GeneralizedRBMParamator.h" />
     <ClInclude Include="GeneralizedRBM\GeneralizedRBMSampler.h" />
+    <ClInclude Include="GeneralizedRBM\GeneralizedRBMSamplerDmy.h" />
     <ClInclude Include="GeneralizedRBM\GeneralizedRBMTrainer.h" />
+    <ClInclude Include="GeneralizedRBM\GeneralizedRBMTrainerDmy.h" />
     <ClInclude Include="GeneralizedSparseRBM\GeneralizedSparseRBM.h" />
     <ClInclude Include="GeneralizedSparseRBM\GeneralizedSparseRBMNode.h" />
     <ClInclude Include="GeneralizedSparseRBM\GeneralizedSparseRBMParamator.h" />
@@ -163,6 +165,7 @@
     <ClInclude Include="RBMTrainerBase.h" />
     <ClInclude Include="rbmutil.h" />
     <ClInclude Include="RBM\RBM.h" />
+    <ClInclude Include="Sampler.h" />
     <ClInclude Include="StateCounter.h" />
     <ClInclude Include="Trainer.h" />
   </ItemGroup>

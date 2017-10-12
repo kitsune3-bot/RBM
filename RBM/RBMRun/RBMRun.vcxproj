@@ -210,39 +210,12 @@
     <ClInclude Include="Train.h" />
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="..\ConditionalRBM\ConditionalGRBM.cpp" />
-    <ClCompile Include="..\ConditionalRBM\ConditionalGRBMNode.cpp" />
-    <ClCompile Include="..\ConditionalRBM\ConditionalGRBMParamator.cpp" />
-    <ClCompile Include="..\ConditionalRBM\ConditionalGRBMSampler.cpp" />
-    <ClCompile Include="..\ConditionalRBM\ConditionalGRBMTrainer.cpp" />
-    <ClCompile Include="..\ConditionalRBM\ConditionalRBM.cpp" />
-    <ClCompile Include="..\ConditionalRBM\ConditionalRBMMath.cpp" />
-    <ClCompile Include="..\ConditionalRBM\ConditionalRBMNode.cpp" />
-    <ClCompile Include="..\ConditionalRBM\ConditionalRBMParamator.cpp" />
-    <ClCompile Include="..\ConditionalRBM\ConditionalRBMSampler.cpp" />
-    <ClCompile Include="..\ConditionalRBM\ConditionalRBMTrainer.cpp" />
-    <ClCompile Include="..\RBM\GBRBM.cpp" />
-    <ClCompile Include="..\RBM\GBRBMNode.cpp" />
-    <ClCompile Include="..\RBM\GBRBMParamator.cpp" />
-    <ClCompile Include="..\RBM\GBRBMSampler.cpp" />
-    <ClCompile Include="..\RBM\GBRBMTrainer.cpp" />
-    <ClCompile Include="..\RBM\GeneralizedGRBM.cpp" />
-    <ClCompile Include="..\RBM\GeneralizedGRBMNode.cpp" />
-    <ClCompile Include="..\RBM\GeneralizedGRBMParamator.cpp" />
-    <ClCompile Include="..\RBM\GeneralizedGRBMSampler.cpp" />
-    <ClCompile Include="..\RBM\GeneralizedGRBMTrainer.cpp" />
-    <ClCompile Include="..\RBM\GeneralizedRBM.cpp" />
-    <ClCompile Include="..\RBM\GeneralizedRBMNode.cpp" />
-    <ClCompile Include="..\RBM\GeneralizedRBMParamator.cpp" />
-    <ClCompile Include="..\RBM\GeneralizedRBMSampler.cpp" />
-    <ClCompile Include="..\RBM\GeneralizedRBMTrainer.cpp" />
-    <ClCompile Include="..\RBM\RBM.cpp" />
-    <ClCompile Include="..\RBM\RBMMath.cpp" />
-    <ClCompile Include="..\RBM\RBMNode.cpp" />
-    <ClCompile Include="..\RBM\RBMParamator.cpp" />
-    <ClCompile Include="..\RBM\RBMSampler.cpp" />
-    <ClCompile Include="..\RBM\RBMTrainer.cpp" />
     <ClCompile Include="Source.cpp" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\RBM\RBM.vcxproj">
+      <Project>{c54a46f8-7924-49a3-97c2-c059f6fa92a1}</Project>
+    </ProjectReference>
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

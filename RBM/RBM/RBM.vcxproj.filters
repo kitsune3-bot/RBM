@@ -171,6 +171,15 @@
     <ClInclude Include="GeneralizedSparseRBM\GeneralizedSparseRBMTrainer.h">
       <Filter>ヘッダー ファイル\GeneralizedSparseRBM</Filter>
     </ClInclude>
+    <ClInclude Include="GeneralizedRBM\GeneralizedRBMTrainerDmy.h">
+      <Filter>ヘッダー ファイル\GeneralizedRBM</Filter>
+    </ClInclude>
+    <ClInclude Include="Sampler.h">
+      <Filter>ヘッダー ファイル\Common</Filter>
+    </ClInclude>
+    <ClInclude Include="GeneralizedRBM\GeneralizedRBMSamplerDmy.h">
+      <Filter>ヘッダー ファイル\GeneralizedRBM</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="RBMMath.cpp">
