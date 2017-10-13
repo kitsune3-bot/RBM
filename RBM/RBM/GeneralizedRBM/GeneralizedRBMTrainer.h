@@ -80,13 +80,11 @@ public:
 	void trainCD(GeneralizedRBM & rbm, std::vector<std::vector<double>> & dataset);
 	void trainExact(GeneralizedRBM & rbm, std::vector<std::vector<double>> & dataset);
 
-
 	// 1回だけ学習
 	void trainOnce(GeneralizedRBM & rbm, std::vector<std::vector<double>> & dataset);
 
 	void trainOnceCD(GeneralizedRBM & rbm, std::vector<std::vector<double>> & dataset);
 	void trainOnceExact(GeneralizedRBM & rbm, std::vector<std::vector<double>> & dataset);
-
 
 	// CD計算
 	void calcContrastiveDivergence(GeneralizedRBM & rbm, std::vector<std::vector<double>> & dataset, std::vector<int> & data_indexes);
@@ -196,7 +194,6 @@ inline void Trainer<GeneralizedRBM>::trainExact(GeneralizedRBM & rbm, std::vecto
 	}
 }
 
-
 // FIXME: CDとExactをフラグで切り分けられるように
 // 1回だけ学習
 inline void Trainer<GeneralizedRBM>::trainOnce(GeneralizedRBM & rbm, std::vector<std::vector<double>> & dataset) {
@@ -294,7 +291,6 @@ inline void Trainer<GeneralizedRBM>::trainOnceExact(GeneralizedRBM & rbm, std::v
 	// Trainer情報更新
 	_trainCount++;
 }
-
 
 inline void Trainer<GeneralizedRBM>::calcContrastiveDivergence(GeneralizedRBM & rbm, std::vector<std::vector<double>> & dataset, std::vector<int> & data_indexes) {
 	// データ平均の計算

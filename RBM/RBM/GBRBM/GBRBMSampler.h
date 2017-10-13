@@ -33,7 +33,6 @@ public:
     Eigen::VectorXd & updateByBlockedGibbsSamplingHidden(GBRBM & rbm);
 };
 
-
 inline double Sampler<GBRBM>::gibbsSamplingVisible(GBRBM &rbm, int vindex) {
 	std::random_device rd;
 	std::mt19937 mt(rd());

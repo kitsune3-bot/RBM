@@ -46,62 +46,10 @@ public:
 	void setVisibleData(ARRAY & data);
 };
 
-// 可視変数の総数を返す
-inline size_t GeneralizedSparseRBMNode::getVisibleSize() {
-	return vSize;
-}
-
-// 隠れ変数の総数を返す
-inline size_t GeneralizedSparseRBMNode::getHiddenSize() {
-	return hSize;
-}
-
-// 可視層の全てを返す
-inline Eigen::VectorXd GeneralizedSparseRBMNode::getVisibleLayer() {
-	return v;
-}
-
-// 隠れ層の全てを返す
-inline Eigen::VectorXd GeneralizedSparseRBMNode::getHiddenLayer() {
-	return h;
-}
-
-// 可視変数の値を返す
-inline double GeneralizedSparseRBMNode::getVisibleUnit(int vindex) {
-	return v(vindex);
-}
-
-// 隠れ変数の値を返す
-inline double GeneralizedSparseRBMNode::getHiddenUnit(int hindex) {
-	return h(hindex);
-}
-
 // 可視変数に値をセット
 template<typename ARRAY>
 void GeneralizedSparseRBMNode::setVisibleData(ARRAY & data) {
 	for (int i = 0; i < vSize; i++) {
 		v[i] = data[i];
 	}
-}
-
-
-inline GeneralizedSparseRBMNode::GeneralizedSparseRBMNode(size_t v_size, size_t h_size) {
-	vSize = v_size;
-	hSize = h_size;
-	v.setConstant(v_size, 0.0);
-	h.setConstant(h_size, 0.0);
-}
-
-inline std::vector<int> GeneralizedSparseRBMNode::getVnodeIndexSet() {
-	std::vector<int> set(vSize);
-	std::iota(set.begin(), set.end(), 0);
-
-	return set;
-}
-
-inline std::vector<int> GeneralizedSparseRBMNode::getHnodeIndexSet() {
-	std::vector<int> set(hSize);
-	std::iota(set.begin(), set.end(), 0);
-
-	return set;
 }

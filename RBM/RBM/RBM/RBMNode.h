@@ -47,64 +47,10 @@ public:
 	void setVisibleData(ARRAY & data);
 };
 
-// 可視変数の総数を返す
-inline size_t RBMNode::getVisibleSize() {
-    return vSize;
-}
-
-// 隠れ変数の総数を返す
-inline size_t RBMNode::getHiddenSize() {
-    return hSize;
-}
-
-// 可視層の全てを返す
-inline Eigen::VectorXd RBMNode::getVisibleLayer() {
-    return v;
-}
-
-// 隠れ層の全てを返す
-inline Eigen::VectorXd RBMNode::getHiddenLayer() {
-    return h;
-}
-
-// 可視変数の値を返す
-inline double RBMNode::getVisibleUnit(int vindex) {
-    return v(vindex);
-}
-
-// 隠れ変数の値を返す
-inline double RBMNode::getHiddenUnit(int hindex) {
-    return h(hindex);
-}
-
 // 可視変数に値をセット
 template<typename ARRAY>
 void RBMNode::setVisibleData(ARRAY & data) {
 	for (int i = 0; i < vSize; i++) {
 		v[i] = data[i];
 	}
-}
-
-
-
-
-inline RBMNode::RBMNode(size_t v_size, size_t h_size) {
-	vSize = v_size;
-	hSize = h_size;
-	v.setConstant(v_size, 0.0);
-	h.setConstant(h_size, 0.0);
-}
-
-inline std::vector<int> RBMNode::getVnodeIndexSet() {
-	std::vector<int> set(vSize);
-	std::iota(set.begin(), set.end(), 0);
-
-	return set;
-}
-
-inline std::vector<int> RBMNode::getHnodeIndexSet() {
-	std::vector<int> set(hSize);
-	std::iota(set.begin(), set.end(), 0);
-
-	return set;
 }

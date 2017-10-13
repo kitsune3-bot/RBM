@@ -3,8 +3,6 @@
 #include "RBM.h"
 #include <random>
 
-class RBM;
-
 template<>
 class Sampler<RBM> {
 public:
@@ -35,7 +33,6 @@ public:
 	// 隠れ層すべてをギブスサンプリングで更新
 	Eigen::VectorXd & updateByBlockedGibbsSamplingHidden(RBM & rbm);
 };
-
 
 
 inline double Sampler<RBM>::gibbsSamplingVisible(RBM &rbm, int vindex) {

@@ -4,3 +4,4 @@ template <class RBMBase>
 class Sampler {
 
 };
+

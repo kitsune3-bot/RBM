@@ -167,7 +167,30 @@
     <ClInclude Include="Trainer.h" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="GBRBM\GBRBM.cpp" />
+    <ClCompile Include="GBRBM\GBRBMNode.cpp" />
+    <ClCompile Include="GBRBM\GBRBMParamator.cpp" />
+    <ClCompile Include="GeneralizedGRBM\GeneralizedGRBM.cpp" />
+    <ClCompile Include="GeneralizedGRBM\GeneralizedGRBMNode.cpp" />
+    <ClCompile Include="GeneralizedGRBM\GeneralizedGRBMParamator.cpp" />
+    <ClCompile Include="GeneralizedGRBM\GeneralizedGRBMSampler.cpp" />
+    <ClCompile Include="GeneralizedGRBM\GeneralizedGRBMTrainer.cpp" />
+    <ClCompile Include="GeneralizedRBM\GeneralizedRBM.cpp" />
+    <ClCompile Include="GeneralizedRBM\GeneralizedRBMNode.cpp" />
+    <ClCompile Include="GeneralizedRBM\GeneralizedRBMParamator.cpp" />
+    <ClCompile Include="GeneralizedRBM\GeneralizedRBMSampler.cpp" />
+    <ClCompile Include="GeneralizedRBM\GeneralizedRBMTrainer.cpp" />
+    <ClCompile Include="GeneralizedSparseRBM\GeneralizedSparseRBM.cpp" />
+    <ClCompile Include="GeneralizedSparseRBM\GeneralizedSparseRBMNode.cpp" />
+    <ClCompile Include="GeneralizedSparseRBM\GeneralizedSparseRBMParamator.cpp" />
+    <ClCompile Include="GeneralizedSparseRBM\GeneralizedSparseRBMSampler.cpp" />
+    <ClCompile Include="GeneralizedSparseRBM\GeneralizedSparseRBMTrainer.cpp" />
     <ClCompile Include="RBMMath.cpp" />
+    <ClCompile Include="RBM\RBM.cpp" />
+    <ClCompile Include="RBM\RBMNode.cpp" />
+    <ClCompile Include="RBM\RBMParamator.cpp" />
+    <ClCompile Include="RBM\RBMSampler.cpp" />
+    <ClCompile Include="RBM\RBMTrainer.cpp" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
