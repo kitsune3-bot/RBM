@@ -363,18 +363,18 @@ void Trainer<GeneralizedRBM>::calcRBMExpectedExact(GeneralizedRBM & rbm, std::ve
 	// 0埋め初期化
 	initRBMExpected();
 
-	// FIXME: 分配関数の計算がネックになる。 規格化定数使いまわしで高速化可能
+	auto z = rbm.getNormalConstant();
+
 	for (int i = 0; i < rbm.getVisibleSize(); i++) {
-		rbmexpected.vBias(i) = rbm.expectedValueVis(i);
+		rbmexpected.vBias(i) = rbm.expectedValueVis(i, z);
 
 		for (int j = 0; j < rbm.getHiddenSize(); j++) {
-			rbmexpected.weight(i, j) = rbm.expectedValueVisHid(i, j);
+			rbmexpected.weight(i, j) = rbm.expectedValueVisHid(i, j, z);
 		}
 	}
 
-	// FIXME: 分配関数の計算がネックになる。 規格化定数使いまわしで高速化可能
 	for (int j = 0; j < rbm.getHiddenSize(); j++) {
-		rbmexpected.hBias(j) = rbm.expectedValueHid(j);
+		rbmexpected.hBias(j) = rbm.expectedValueHid(j, z);
 	}
 }
 
@@ -418,9 +418,10 @@ void Trainer<GeneralizedRBM>::updateParams(GeneralizedRBM & rbm) {
 double Trainer<GeneralizedRBM>::logLikeliHood(GeneralizedRBM & rbm, std::vector<std::vector<double>> & dataset) {
 	double value = 0.0;
 
+	auto z = rbm.getNormalConstant();
+
 	for (auto & data : dataset) {
-		// FIXME: 分配関数使いまわしで高速化可能
-		auto prob = rbm.probVis(data);
+		auto prob = rbm.probVis(data, z);
 		value += log(prob);
 	}
 

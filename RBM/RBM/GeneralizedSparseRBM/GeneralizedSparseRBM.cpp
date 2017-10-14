@@ -193,6 +193,13 @@ double GeneralizedSparseRBM::sumExpMu(int hindex) {
 double GeneralizedSparseRBM::probVis(std::vector<double> & data) {
 	// 分配関数
 	double z = getNormalConstant();
+	return probVis(data, z);
+}
+
+// 可視変数の確率(隠れ変数周辺化済み)
+double GeneralizedSparseRBM::probVis(std::vector<double> & data, double normalize_constant) {
+	// 分配関数
+	auto &  z = normalize_constant;
 
 	for (int i = 0; i < getVisibleSize(); i++) {
 		this->nodes.v(i) = data[i];
@@ -315,17 +322,21 @@ void GeneralizedSparseRBM::setRealHiddenValue(bool flag) {
 }
 
 
-
 // 可視変数の期待値, E[v_i]
 double GeneralizedSparseRBM::expectedValueVis(int vindex) {
+	auto z = getNormalConstant();
+	return expectedValueVis(vindex, z);
+}
+
+// 可視変数の期待値, E[v_i]
+double GeneralizedSparseRBM::expectedValueVis(int vindex, double normalize_constant) {
 	// TODO: とりあえず可視変数は{0, 1}のボルツマンマシンなので則値代入してます
 	StateCounter<std::vector<int>> sc(std::vector<int>(vSize, 2));  // 可視変数Vの状態カウンター
 	int v_state_map[] = { 0, 1 };  // 可視変数の状態->値変換写像
 
-	volatile auto z = getNormalConstant();  // 分配関数
+	auto & z = normalize_constant;  // 分配関数
 
-
-											// 隠れ変数h_jの値の総和計算
+	// 隠れ変数h_jの値の総和計算
 	auto sum_h_j = [&](int j) {
 		auto mu_j = mu(j);
 
@@ -391,13 +402,18 @@ double GeneralizedSparseRBM::expectedValueVis(int vindex) {
 	return value;
 }
 
-
 // 隠れ変数の期待値, E[h_j]
 double GeneralizedSparseRBM::expectedValueHid(int hindex) {
+	auto z = getNormalConstant();
+	return expectedValueHid(hindex, z);
+}
+
+// 隠れ変数の期待値, E[h_j]
+double GeneralizedSparseRBM::expectedValueHid(int hindex, double normalize_constant) {
 	StateCounter<std::vector<int>> sc(std::vector<int>(vSize, 2));  // 可視変数Vの状態カウンター
 	int v_state_map[] = { 0, 1 };  // 可視変数の状態->値変換写像
 
-	auto z = getNormalConstant();  // 分配関数
+	auto & z = normalize_constant;  // 分配関数
 
 								   // bとvの内積
 	auto b_dot_v = [&]() {
@@ -498,13 +514,18 @@ double GeneralizedSparseRBM::expectedValueHid(int hindex) {
 	return value;
 }
 
-
 // 可視変数と隠れ変数の期待値, E[v_i h_j]
 double GeneralizedSparseRBM::expectedValueVisHid(int vindex, int hindex) {
+	auto z = getNormalConstant();
+	return expectedValueVisHid(vindex, hindex, z);
+}
+
+// 可視変数と隠れ変数の期待値, E[v_i h_j]
+double GeneralizedSparseRBM::expectedValueVisHid(int vindex, int hindex, double normalize_constant) {
 	StateCounter<std::vector<int>> sc(std::vector<int>(vSize, 2));  // 可視変数Vの状態カウンター
 	int v_state_map[] = { 0, 1 };  // 可視変数の状態->値変換写像
 
-	auto z = getNormalConstant();  // 分配関数
+	auto & z = normalize_constant;  // 分配関数
 
 								   // bとvの内積
 	auto b_dot_v = [&]() {
@@ -607,10 +628,16 @@ double GeneralizedSparseRBM::expectedValueVisHid(int vindex, int hindex) {
 
 // 隠れ変数の期待値, E[|h_j|]
 double GeneralizedSparseRBM::expectedValueAbsHid(int hindex) {
+	auto z = getNormalConstant();
+	return expectedValueAbsHid(hindex, z);
+}
+
+// 隠れ変数の期待値, E[|h_j|]
+double GeneralizedSparseRBM::expectedValueAbsHid(int hindex, double normalize_constant) {
 	StateCounter<std::vector<int>> sc(std::vector<int>(vSize, 2));  // 可視変数Vの状態カウンター
 	int v_state_map[] = { 0, 1 };  // 可視変数の状態->値変換写像
 
-	auto z = getNormalConstant();  // 分配関数
+	auto & z = normalize_constant;  // 分配関数
 
 								   // bとvの内積
 	auto b_dot_v = [&]() {

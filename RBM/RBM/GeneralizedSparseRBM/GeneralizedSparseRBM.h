@@ -62,6 +62,9 @@ public:
 	// 可視変数の確率(隠れ変数周辺化済み)
 	double probVis(std::vector<double> & data);
 
+	// 可視変数の確率(隠れ変数周辺化済み, 分配関数使いまわし)
+	double probVis(std::vector<double> & data, double normalize_constant);
+
 	// 隠れ変数を条件で与えた可視変数の条件付き確率, P(v_i | h)
 	double condProbVis(int vindex, double value);
 
@@ -71,11 +74,20 @@ public:
 	// 可視変数の期待値, E[v_i]
 	double expectedValueVis(int vindex);
 
+	// 可視変数の期待値, E[v_i](分配関数使いまわし)
+	double expectedValueVis(int vindex, double normalize_constant);
+
 	// 隠れ変数の期待値, E[h_j]
 	double expectedValueHid(int hindex);
 
+	// 隠れ変数の期待値, E[h_j](分配関数使いまわし)
+	double expectedValueHid(int hindex, double normalize_constant);
+
 	// 可視変数の期待値, E[v_i h_j]
 	double expectedValueVisHid(int vindex, int hindex);
+
+	// 可視変数の期待値, E[v_i h_j](分配関数使いまわし)
+	double expectedValueVisHid(int vindex, int hindex, double normalize_constant);
 
 	//
 	//appendix methods
@@ -110,6 +122,9 @@ public:
 
 	// 隠れ変数の期待値, E[ abs(h_j)]
 	double expectedValueAbsHid(int hindex);
+
+	// 隠れ変数の期待値, E[ abs(h_j)](分配関数使いまわし)
+	double expectedValueAbsHid(int hindex, double normalize_constant);
 
 	// 隠れ変数の(Abs)した活性化関数的なもの
 	double actHidSparseJ(int hindex);
