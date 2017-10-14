@@ -6,8 +6,6 @@
 #include <numeric>
 #include <random>
 
-class GeneralizedRBM;
-
 template<>
 class Sampler<GeneralizedRBM> {
 public:

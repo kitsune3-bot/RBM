@@ -159,6 +159,9 @@
     <ClInclude Include="Optimizer.h">
       <Filter>ヘッダー ファイル\Common</Filter>
     </ClInclude>
+    <ClInclude Include="GeneralizedRBM\GeneralizedRBMOptimizer.h">
+      <Filter>ヘッダー ファイル\GeneralizedRBM</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="RBMMath.cpp">

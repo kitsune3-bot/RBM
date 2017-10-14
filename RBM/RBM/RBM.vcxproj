@@ -142,6 +142,7 @@
     <ClInclude Include="GeneralizedGRBM\GeneralizedGRBMTrainer.h" />
     <ClInclude Include="GeneralizedRBM\GeneralizedRBM.h" />
     <ClInclude Include="GeneralizedRBM\GeneralizedRBMNode.h" />
+    <ClInclude Include="GeneralizedRBM\GeneralizedRBMOptimizer.h" />
     <ClInclude Include="GeneralizedRBM\GeneralizedRBMParamator.h" />
     <ClInclude Include="GeneralizedRBM\GeneralizedRBMSampler.h" />
     <ClInclude Include="GeneralizedRBM\GeneralizedRBMTrainer.h" />

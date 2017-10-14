@@ -227,7 +227,6 @@ void run(SQLite::Database & db, OPTION & option, int try_count, RBM_T & rbm_gen,
 	rbm_trainer_exact.cdk = option.cdk;
 	rbm_trainer_exact.batchSize = option.batchsize;
 	rbm_trainer_exact.learningRate = option.learningRate;
-	rbm_trainer_exact.momentumRate = option.momentumRate;
 
 	auto rbm_cd = GeneralizedRBM(option.vSize, option.hSize + option.appendH);
 	rbm_cd.params.initParamsRandom(-0.01, 0.01);
@@ -241,7 +240,6 @@ void run(SQLite::Database & db, OPTION & option, int try_count, RBM_T & rbm_gen,
 	rbm_trainer_cd.cdk = option.cdk;
 	rbm_trainer_cd.batchSize = option.batchsize;
 	rbm_trainer_cd.learningRate = option.learningRate;
-	rbm_trainer_cd.momentumRate = option.momentumRate;
 
 	//std::cout << "[Exact]" << std::endl;
 	//rbmutil::print_params(rbm_exact);
