@@ -392,9 +392,9 @@ double GeneralizedRBM::expectedValueVis(int vindex, double normalize_constant) {
 }
 
 // 隠れ変数の期待値, E[h_j]
-double GeneralizedRBM::expectedValueHid(int hindex, double normalize_constant) {
+double GeneralizedRBM::expectedValueHid(int hindex) {
 	auto z = getNormalConstant();  // 分配関数
-	return expectedValueHid(hindex, normalize_constant);
+	return expectedValueHid(hindex, z);
 }
 
 // 隠れ変数の期待値, E[h_j]
