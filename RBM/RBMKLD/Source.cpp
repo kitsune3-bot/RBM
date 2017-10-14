@@ -13,7 +13,7 @@ typedef struct {
 	int vSize = 5;
 	int hSize = 10;
 	int appendH = 0;
-	int datasize = 25;
+	int datasize = 100;
 	int epoch = 1000;
 	int cdk = 1;
 	int batchsize = datasize;
@@ -399,8 +399,8 @@ int main(void) {
 	option.vSize = 5;
 	option.hSize = 10;
 	option.appendH = append_h;
-	option.datasize = 25;
-	option.epoch = 1000;
+	option.datasize = 500;
+	option.epoch = 5000;
 	option.cdk = 1;
 	option.batchsize = option.datasize;
 	option.learningRate = 0.1;

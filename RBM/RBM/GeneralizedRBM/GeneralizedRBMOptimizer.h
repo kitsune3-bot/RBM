@@ -18,7 +18,16 @@ class Optimizer<GeneralizedRBM> {
 protected:
 	int _OptimizeModeFlag;
 	int _iteration = 1;
+	// momentum
+	double _learningRate = 0.1;
 	double _momentumRate = 0.9;
+
+	// adam
+	double _alpha = 0.001;
+	double _beta1 = 0.9;
+	double _beta2 = 0.999;
+	double _epsilonAdam = 1E-08;
+
 	Moment moment1st;
 	Moment moment2nd;
 
@@ -72,12 +81,19 @@ public:
 	double getNewParamVBias(double gradient, int vindex);
 	double getNewParamHBias(double gradient, int hindex);
 	double getNewParamWeight(double gradient, int vindex, int hindex);
+	// next timestep
+	void updateOptimizer();
 };
 
 inline Optimizer<GeneralizedRBM>::Optimizer(GeneralizedRBM & rbm, int mode_flag) {
 	this->_OptimizeModeFlag = mode_flag;
 	this->init(rbm);
 }
+
+inline void Optimizer<GeneralizedRBM>::updateOptimizer() {
+	this->_iteration++;
+}
+
 
 inline void Optimizer<GeneralizedRBM>::init(GeneralizedRBM & rbm) {
 	// TODO: switch文とフラグ管理は嫌だ…
@@ -87,7 +103,7 @@ inline void Optimizer<GeneralizedRBM>::init(GeneralizedRBM & rbm) {
 		break;
 
 	case momentum:
-		_initAdam(rbm);
+		_initMomentum(rbm);
 		break;
 
 	//case adaGrad:
@@ -116,7 +132,7 @@ inline double Optimizer<GeneralizedRBM>::getNewParamVBias(double gradient, int v
 		break;
 
 	case momentum:
-		return _getNewParamVBiasAdam(gradient, vindex);
+		return _getNewParamVBiasMomentum(gradient, vindex);
 		break;
 
 		//case adaGrad:
@@ -145,7 +161,7 @@ inline double Optimizer<GeneralizedRBM>::getNewParamHBias(double gradient, int h
 		break;
 
 	case momentum:
-		return _getNewParamHBiasAdam(gradient, hindex);
+		return _getNewParamHBiasMomentum(gradient, hindex);
 		break;
 
 		//case adaGrad:
@@ -174,7 +190,7 @@ inline double Optimizer<GeneralizedRBM>::getNewParamWeight(double gradient, int 
 		break;
 
 	case momentum:
-		return _getNewParamWeightAdam(gradient, vindex, hindex);
+		return _getNewParamWeightMomentum(gradient, vindex, hindex);
 		break;
 
 		//case adaGrad:
@@ -221,17 +237,17 @@ inline void Optimizer<GeneralizedRBM>::_initMomentum(GeneralizedRBM & rbm) {
 }
 
 inline double Optimizer<GeneralizedRBM>::_getNewParamVBiasMomentum(double gradient, int vindex) {
-	auto new_gradient = this->moment1st.vBias(vindex) = this->moment1st.vBias(vindex) * _momentumRate + gradient;
+	auto new_gradient = this->moment1st.vBias(vindex) = this->moment1st.vBias(vindex) * _momentumRate + _learningRate * gradient;
 	return new_gradient;
 }
 
 inline double Optimizer<GeneralizedRBM>::_getNewParamHBiasMomentum(double gradient, int hindex) {
-	auto new_gradient = this->moment1st.hBias(hindex) = this->moment1st.hBias(hindex) * _momentumRate + gradient;
+	auto new_gradient = this->moment1st.hBias(hindex) = this->moment1st.hBias(hindex) * _momentumRate + _learningRate * gradient;
 	return new_gradient;
 }
 
 inline double Optimizer<GeneralizedRBM>::_getNewParamWeightMomentum(double gradient, int vindex, int hindex) {
-	auto new_gradient = this->moment1st.weight(vindex, hindex) = this->moment1st.weight(vindex, hindex) * _momentumRate + gradient;
+	auto new_gradient = this->moment1st.weight(vindex, hindex) = this->moment1st.weight(vindex, hindex) * _momentumRate + _learningRate * gradient;
 	return new_gradient;
 }
 
@@ -245,20 +261,42 @@ inline void Optimizer<GeneralizedRBM>::_initAdam(GeneralizedRBM & rbm) {
 	this->moment1st.vBias.setConstant(rbm.getVisibleSize(), 0.0);
 	this->moment1st.hBias.setConstant(rbm.getHiddenSize(), 0.0);
 	this->moment1st.weight.setConstant(rbm.getVisibleSize(), rbm.getHiddenSize(), 0.0);
+
+	this->moment2nd.vBias.setConstant(rbm.getVisibleSize(), 0.0);
+	this->moment2nd.hBias.setConstant(rbm.getHiddenSize(), 0.0);
+	this->moment2nd.weight.setConstant(rbm.getVisibleSize(), rbm.getHiddenSize(), 0.0);
 }
 
 inline double Optimizer<GeneralizedRBM>::_getNewParamVBiasAdam(double gradient, int vindex) {
-	auto new_gradient = this->moment1st.vBias(vindex) = this->moment1st.vBias(vindex) * _momentumRate + gradient;
+	this->moment1st.vBias(vindex) = this->_beta1 * this->moment1st.vBias(vindex) + (1 - _beta1) * gradient;  // m
+	this->moment2nd.vBias(vindex) = this->_beta2 * this->moment2nd.vBias(vindex) + (1 - _beta2) * gradient * gradient;  // v
+
+	auto m = this->moment1st.vBias(vindex) / (1 - pow(this->_beta1, this->_iteration));
+	auto v = this->moment2nd.vBias(vindex) / (1 - pow(this->_beta2, this->_iteration));
+
+	auto new_gradient = this->_alpha * m / (sqrt(v) + _epsilonAdam);
 	return new_gradient;
 }
 
 inline double Optimizer<GeneralizedRBM>::_getNewParamHBiasAdam(double gradient, int hindex) {
-	auto new_gradient = this->moment1st.hBias(hindex) = this->moment1st.hBias(hindex) * _momentumRate + gradient;
+	this->moment1st.hBias(hindex) = this->_beta1 * this->moment1st.hBias(hindex) + (1 - _beta1) * gradient;  // m
+	this->moment2nd.hBias(hindex) = this->_beta2 * this->moment2nd.hBias(hindex) + (1 - _beta2) * gradient * gradient;  // v
+
+	auto m = this->moment1st.hBias(hindex) / (1 - pow(this->_beta1, this->_iteration));
+	auto v = this->moment2nd.hBias(hindex) / (1 - pow(this->_beta2, this->_iteration));
+
+	auto new_gradient = this->_alpha * m / (sqrt(v) + _epsilonAdam);
 	return new_gradient;
 }
 
 inline double Optimizer<GeneralizedRBM>::_getNewParamWeightAdam(double gradient, int vindex, int hindex) {
-	auto new_gradient = this->moment1st.weight(vindex, hindex) = this->moment1st.weight(vindex, hindex) * _momentumRate + gradient;
+	this->moment1st.weight(vindex, hindex) = this->_beta1 * this->moment1st.weight(vindex, hindex) + (1 - _beta1) * gradient;  // m
+	this->moment2nd.weight(vindex, hindex) = this->_beta2 * this->moment2nd.weight(vindex, hindex) + (1 - _beta2) * gradient * gradient;  // v
+
+	auto m = this->moment1st.weight(vindex, hindex) / (1 - pow(this->_beta1, this->_iteration));
+	auto v = this->moment2nd.weight(vindex, hindex) / (1 - pow(this->_beta2, this->_iteration));
+
+	auto new_gradient = this->_alpha * m / (sqrt(v) + _epsilonAdam);
 	return new_gradient;
 }
 

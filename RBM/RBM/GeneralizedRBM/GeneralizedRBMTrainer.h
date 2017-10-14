@@ -110,7 +110,7 @@ public:
 };
 
 Trainer<GeneralizedRBM>::Trainer(GeneralizedRBM & rbm) {
-	this->optimizer = Optimizer<GeneralizedRBM>(rbm, Optimizer<GeneralizedRBM>::momentum);
+	this->optimizer = Optimizer<GeneralizedRBM>(rbm, Optimizer<GeneralizedRBM>::adam);
 	initGradient(rbm);
 	initDataMean(rbm);
 	initRBMExpected(rbm);
@@ -200,6 +200,7 @@ void Trainer<GeneralizedRBM>::trainOnce(GeneralizedRBM & rbm, std::vector<std::v
 	updateParams(rbm);
 
 	// オプティマイザの更新
+	optimizer.updateOptimizer();
 
 	// Trainer情報更新
 	_trainCount++;
@@ -231,6 +232,7 @@ void Trainer<GeneralizedRBM>::trainOnceCD(GeneralizedRBM & rbm, std::vector<std:
 	updateParams(rbm);
 
 	// オプティマイザの更新
+	optimizer.updateOptimizer();
 
 	// Trainer情報更新
 	_trainCount++;
@@ -262,6 +264,7 @@ void Trainer<GeneralizedRBM>::trainOnceExact(GeneralizedRBM & rbm, std::vector<s
 	updateParams(rbm);
 
 	// オプティマイザの更新
+	optimizer.updateOptimizer();
 
 	// Trainer情報更新
 	_trainCount++;
@@ -398,15 +401,15 @@ void Trainer<GeneralizedRBM>::calcGradient(GeneralizedRBM & rbm, std::vector<int
 // パラメータの更新
 void Trainer<GeneralizedRBM>::updateParams(GeneralizedRBM & rbm) {
 	for (int i = 0; i < rbm.getVisibleSize(); i++) {
-		rbm.params.b(i) += optimizer.getNewParamVBias( learningRate * gradient.vBias(i), i);
+		rbm.params.b(i) += optimizer.getNewParamVBias( gradient.vBias(i), i);
 
 		for (int j = 0; j < rbm.getHiddenSize(); j++) {
-			rbm.params.w(i, j) += optimizer.getNewParamWeight(learningRate * gradient.weight(i, j), i, j);
+			rbm.params.w(i, j) += optimizer.getNewParamWeight(gradient.weight(i, j), i, j);
 		}
 	}
 
 	for (int j = 0; j < rbm.getHiddenSize(); j++) {
-		rbm.params.c(j) += optimizer.getNewParamHBias(learningRate * gradient.hBias(j), j);
+		rbm.params.c(j) += optimizer.getNewParamHBias(gradient.hBias(j), j);
 	}
 }
 

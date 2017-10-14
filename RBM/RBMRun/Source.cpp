@@ -19,8 +19,8 @@ int main(int argc, char **argv) {
 	size_t hsize = 10;
 	auto learning_rate = 0.1;
 	auto cdk = 3;
-	auto batch_size = 1;
-	auto epoch = 10;
+	auto batch_size = 3;
+	auto epoch = 1000;
 
 	auto rbm = GeneralizedRBM(vsize, hsize);
 	rbm.setHiddenMax(1.0);
