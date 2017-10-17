@@ -222,7 +222,7 @@ void run(SQLite::Database & db, OPTION & option, int try_count, RBM_T & rbm_gen,
 	rbm_exact.setHiddenMax(1.0);
 	rbm_exact.setRealHiddenValue(option.realFlag);
 
-	auto rbm_trainer_exact = Trainer<GeneralizedRBM, OptimizerType::Default>(rbm_exact);
+	auto rbm_trainer_exact = Trainer<GeneralizedRBM, OptimizerType::Adam>(rbm_exact);
 	rbm_trainer_exact.epoch = option.epoch;
 	rbm_trainer_exact.cdk = option.cdk;
 	rbm_trainer_exact.batchSize = option.batchsize;
@@ -235,7 +235,7 @@ void run(SQLite::Database & db, OPTION & option, int try_count, RBM_T & rbm_gen,
 	rbm_cd.setHiddenMax(1.0);
 	rbm_cd.setRealHiddenValue(option.realFlag);
 
-	auto rbm_trainer_cd = Trainer<GeneralizedRBM, OptimizerType::Default>(rbm_cd);
+	auto rbm_trainer_cd = Trainer<GeneralizedRBM, OptimizerType::Adam>(rbm_cd);
 	rbm_trainer_cd.epoch = option.epoch;
 	rbm_trainer_cd.cdk = option.cdk;
 	rbm_trainer_cd.batchSize = option.batchsize;
@@ -311,7 +311,7 @@ void run_sparse(SQLite::Database & db, OPTION & option, int try_count, SRBM & rb
 	rbm_exact.setHiddenMax(1.0);
 	rbm_exact.setRealHiddenValue(option.realFlag);
 
-	auto rbm_trainer_exact = Trainer<GeneralizedSparseRBM, OptimizerType::Default>(rbm_exact);
+	auto rbm_trainer_exact = Trainer<GeneralizedSparseRBM, OptimizerType::Adam>(rbm_exact);
 	rbm_trainer_exact.epoch = option.epoch;
 	rbm_trainer_exact.cdk = option.cdk;
 	rbm_trainer_exact.batchSize = option.batchsize;
@@ -326,7 +326,7 @@ void run_sparse(SQLite::Database & db, OPTION & option, int try_count, SRBM & rb
 	rbm_cd.setHiddenMax(1.0);
 	rbm_cd.setRealHiddenValue(option.realFlag);
 
-	auto rbm_trainer_cd = Trainer<GeneralizedSparseRBM, OptimizerType::Default>(rbm_cd);
+	auto rbm_trainer_cd = Trainer<GeneralizedSparseRBM, OptimizerType::Adam>(rbm_cd);
 	rbm_trainer_cd.epoch = option.epoch;
 	rbm_trainer_cd.cdk = option.cdk;
 	rbm_trainer_cd.batchSize = option.batchsize;

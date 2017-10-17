@@ -111,7 +111,7 @@ public:
 
 template<class OPTIMIZERTYPE>
 Trainer<GeneralizedRBM, OPTIMIZERTYPE>::Trainer(GeneralizedRBM & rbm) {
-	this->optimizer = Optimizer<GeneralizedRBM, OPTIMIZERTYPE>(rbm, Optimizer<GeneralizedRBM, OPTIMIZERTYPE>::adaDelta);
+	this->optimizer = Optimizer<GeneralizedRBM, OPTIMIZERTYPE>(rbm);
 	initGradient(rbm);
 	initDataMean(rbm);
 	initRBMExpected(rbm);
