@@ -6,8 +6,8 @@
 #include <vector>
 
 
-template<>
-class Trainer<GeneralizedSparseRBM>{
+template<class OPTIMIZERTYPE>
+class Trainer<GeneralizedSparseRBM, OPTIMIZERTYPE>{
 	struct Momentum {
 		Eigen::VectorXd vBias;
 		Eigen::VectorXd hBias;
@@ -129,82 +129,94 @@ public:
 	void trainFromTrainInfo(GeneralizedSparseRBM & rbm, std::string json);
 };
 
-inline Trainer<GeneralizedSparseRBM>::Trainer(GeneralizedSparseRBM & rbm) {
+template<class OPTIMIZERTYPE>
+inline Trainer<GeneralizedSparseRBM, OPTIMIZERTYPE>::Trainer(GeneralizedSparseRBM & rbm) {
 	initMomentum(rbm);
 	initGradient(rbm);
 	initDataMean(rbm);
 	initRBMExpected(rbm);
 }
 
-inline void Trainer<GeneralizedSparseRBM>::initMomentum(GeneralizedSparseRBM & rbm) {
+template<class OPTIMIZERTYPE>
+inline void Trainer<GeneralizedSparseRBM, OPTIMIZERTYPE>::initMomentum(GeneralizedSparseRBM & rbm) {
 	momentum.vBias.setConstant(rbm.getVisibleSize(), 0.0);
 	momentum.hBias.setConstant(rbm.getHiddenSize(), 0.0);
 	momentum.weight.setConstant(rbm.getVisibleSize(), rbm.getHiddenSize(), 0.0);
 	momentum.hSparse.setConstant(rbm.getHiddenSize(), 0.0);
 }
 
-inline void Trainer<GeneralizedSparseRBM>::initMomentum() {
+template<class OPTIMIZERTYPE>
+inline void Trainer<GeneralizedSparseRBM, OPTIMIZERTYPE>::initMomentum() {
 	momentum.vBias.setConstant(0.0);
 	momentum.hBias.setConstant(0.0);
 	momentum.weight.setConstant(0.0);
 	momentum.hSparse.setConstant(0.0);
 }
 
-inline void Trainer<GeneralizedSparseRBM>::initGradient(GeneralizedSparseRBM & rbm) {
+template<class OPTIMIZERTYPE>
+inline void Trainer<GeneralizedSparseRBM, OPTIMIZERTYPE>::initGradient(GeneralizedSparseRBM & rbm) {
 	gradient.vBias.setConstant(rbm.getVisibleSize(), 0.0);
 	gradient.hBias.setConstant(rbm.getHiddenSize(), 0.0);
 	gradient.hSparse.setConstant(rbm.getHiddenSize(), 0.0);
 	gradient.weight.setConstant(rbm.getVisibleSize(), rbm.getHiddenSize(), 0.0);
 }
 
-inline void Trainer<GeneralizedSparseRBM>::initGradient() {
+template<class OPTIMIZERTYPE>
+inline void Trainer<GeneralizedSparseRBM, OPTIMIZERTYPE>::initGradient() {
 	gradient.vBias.setConstant(0.0);
 	gradient.hBias.setConstant(0.0);
 	gradient.hSparse.setConstant(0.0);
 	gradient.weight.setConstant(0.0);
 }
 
-inline void Trainer<GeneralizedSparseRBM>::initDataMean(GeneralizedSparseRBM & rbm) {
+template<class OPTIMIZERTYPE>
+inline void Trainer<GeneralizedSparseRBM, OPTIMIZERTYPE>::initDataMean(GeneralizedSparseRBM & rbm) {
 	dataMean.vBias.setConstant(rbm.getVisibleSize(), 0.0);
 	dataMean.hBias.setConstant(rbm.getHiddenSize(), 0.0);
 	dataMean.weight.setConstant(rbm.getVisibleSize(), rbm.getHiddenSize(), 0.0);
 	dataMean.hSparse.setConstant(rbm.getHiddenSize(), 0.0);
 }
 
-inline void Trainer<GeneralizedSparseRBM>::initDataMean() {
+template<class OPTIMIZERTYPE>
+inline void Trainer<GeneralizedSparseRBM, OPTIMIZERTYPE>::initDataMean() {
 	dataMean.vBias.setConstant(0.0);
 	dataMean.hBias.setConstant(0.0);
 	dataMean.weight.setConstant(0.0);
 	dataMean.hSparse.setConstant(0.0);
 }
 
-inline void Trainer<GeneralizedSparseRBM>::initRBMExpected(GeneralizedSparseRBM & rbm) {
+template<class OPTIMIZERTYPE>
+inline void Trainer<GeneralizedSparseRBM, OPTIMIZERTYPE>::initRBMExpected(GeneralizedSparseRBM & rbm) {
 	rbmexpected.vBias.setConstant(rbm.getVisibleSize(), 0.0);
 	rbmexpected.hBias.setConstant(rbm.getHiddenSize(), 0.0);
 	rbmexpected.weight.setConstant(rbm.getVisibleSize(), rbm.getHiddenSize(), 0.0);
 	rbmexpected.hSparse.setConstant(rbm.getHiddenSize(), 0.0);
 }
 
-inline void Trainer<GeneralizedSparseRBM>::initRBMExpected() {
+template<class OPTIMIZERTYPE>
+inline void Trainer<GeneralizedSparseRBM, OPTIMIZERTYPE>::initRBMExpected() {
 	rbmexpected.vBias.setConstant(0.0);
 	rbmexpected.hBias.setConstant(0.0);
 	rbmexpected.weight.setConstant(0.0);
 	rbmexpected.hSparse.setConstant(0.0);
 }
 
-inline void Trainer<GeneralizedSparseRBM>::train(GeneralizedSparseRBM & rbm, std::vector<std::vector<double>> & dataset) {
+template<class OPTIMIZERTYPE>
+inline void Trainer<GeneralizedSparseRBM, OPTIMIZERTYPE>::train(GeneralizedSparseRBM & rbm, std::vector<std::vector<double>> & dataset) {
 	for (int e = 0; e < epoch; e++) {
 		trainOnce(rbm, dataset);
 	}
 }
 
-inline void Trainer<GeneralizedSparseRBM>::trainCD(GeneralizedSparseRBM & rbm, std::vector<std::vector<double>> & dataset) {
+template<class OPTIMIZERTYPE>
+inline void Trainer<GeneralizedSparseRBM, OPTIMIZERTYPE>::trainCD(GeneralizedSparseRBM & rbm, std::vector<std::vector<double>> & dataset) {
 	for (int e = 0; e < epoch; e++) {
 		trainOnceCD(rbm, dataset);
 	}
 }
 
-inline void Trainer<GeneralizedSparseRBM>::trainExact(GeneralizedSparseRBM & rbm, std::vector<std::vector<double>> & dataset) {
+template<class OPTIMIZERTYPE>
+inline void Trainer<GeneralizedSparseRBM, OPTIMIZERTYPE>::trainExact(GeneralizedSparseRBM & rbm, std::vector<std::vector<double>> & dataset) {
 	for (int e = 0; e < epoch; e++) {
 		trainOnceExact(rbm, dataset);
 	}
@@ -213,7 +225,8 @@ inline void Trainer<GeneralizedSparseRBM>::trainExact(GeneralizedSparseRBM & rbm
 
 // FIXME: CDとExactをフラグで切り分けられるように
 // 1回だけ学習
-inline void Trainer<GeneralizedSparseRBM>::trainOnce(GeneralizedSparseRBM & rbm, std::vector<std::vector<double>> & dataset) {
+template<class OPTIMIZERTYPE>
+inline void Trainer<GeneralizedSparseRBM, OPTIMIZERTYPE>::trainOnce(GeneralizedSparseRBM & rbm, std::vector<std::vector<double>> & dataset) {
 	// 勾配初期化
 	initGradient();
 
@@ -245,7 +258,8 @@ inline void Trainer<GeneralizedSparseRBM>::trainOnce(GeneralizedSparseRBM & rbm,
 	_trainCount++;
 }
 
-inline void Trainer<GeneralizedSparseRBM>::trainOnceCD(GeneralizedSparseRBM & rbm, std::vector<std::vector<double>> & dataset) {
+template<class OPTIMIZERTYPE>
+inline void Trainer<GeneralizedSparseRBM, OPTIMIZERTYPE>::trainOnceCD(GeneralizedSparseRBM & rbm, std::vector<std::vector<double>> & dataset) {
 	// 勾配初期化
 	initGradient();
 
@@ -277,7 +291,8 @@ inline void Trainer<GeneralizedSparseRBM>::trainOnceCD(GeneralizedSparseRBM & rb
 	_trainCount++;
 }
 
-inline void Trainer<GeneralizedSparseRBM>::trainOnceExact(GeneralizedSparseRBM & rbm, std::vector<std::vector<double>> & dataset) {
+template<class OPTIMIZERTYPE>
+inline void Trainer<GeneralizedSparseRBM, OPTIMIZERTYPE>::trainOnceExact(GeneralizedSparseRBM & rbm, std::vector<std::vector<double>> & dataset) {
 	// 勾配初期化
 	initGradient();
 
@@ -310,7 +325,8 @@ inline void Trainer<GeneralizedSparseRBM>::trainOnceExact(GeneralizedSparseRBM &
 }
 
 
-inline void Trainer<GeneralizedSparseRBM>::calcContrastiveDivergence(GeneralizedSparseRBM & rbm, std::vector<std::vector<double>> & dataset, std::vector<int> & data_indexes) {
+template<class OPTIMIZERTYPE>
+inline void Trainer<GeneralizedSparseRBM, OPTIMIZERTYPE>::calcContrastiveDivergence(GeneralizedSparseRBM & rbm, std::vector<std::vector<double>> & dataset, std::vector<int> & data_indexes) {
 	// データ平均の計算
 	calcDataMean(rbm, dataset, data_indexes);
 
@@ -321,7 +337,8 @@ inline void Trainer<GeneralizedSparseRBM>::calcContrastiveDivergence(Generalized
 	calcGradient(rbm, data_indexes);
 }
 
-inline void Trainer<GeneralizedSparseRBM>::calcExact(GeneralizedSparseRBM & rbm, std::vector<std::vector<double>> & dataset, std::vector<int> & data_indexes) {
+template<class OPTIMIZERTYPE>
+inline void Trainer<GeneralizedSparseRBM, OPTIMIZERTYPE>::calcExact(GeneralizedSparseRBM & rbm, std::vector<std::vector<double>> & dataset, std::vector<int> & data_indexes) {
 	// データ平均の計算
 	calcDataMean(rbm, dataset, data_indexes);
 
@@ -333,7 +350,8 @@ inline void Trainer<GeneralizedSparseRBM>::calcExact(GeneralizedSparseRBM & rbm,
 }
 
 
-inline void Trainer<GeneralizedSparseRBM>::calcDataMean(GeneralizedSparseRBM & rbm, std::vector<std::vector<double>> & dataset, std::vector<int> & data_indexes) {
+template<class OPTIMIZERTYPE>
+inline void Trainer<GeneralizedSparseRBM, OPTIMIZERTYPE>::calcDataMean(GeneralizedSparseRBM & rbm, std::vector<std::vector<double>> & dataset, std::vector<int> & data_indexes) {
 	// 0埋め初期化
 	initDataMean();
 
@@ -362,7 +380,8 @@ inline void Trainer<GeneralizedSparseRBM>::calcDataMean(GeneralizedSparseRBM & r
 	dataMean.hSparse /= static_cast<double>(data_indexes.size());
 }
 
-inline void Trainer<GeneralizedSparseRBM>::calcRBMExpectedCD(GeneralizedSparseRBM & rbm, std::vector<std::vector<double>> & dataset, std::vector<int> & data_indexes) {
+template<class OPTIMIZERTYPE>
+inline void Trainer<GeneralizedSparseRBM, OPTIMIZERTYPE>::calcRBMExpectedCD(GeneralizedSparseRBM & rbm, std::vector<std::vector<double>> & dataset, std::vector<int> & data_indexes) {
 	// 0埋め初期化
 	initRBMExpected();
 
@@ -378,7 +397,7 @@ inline void Trainer<GeneralizedSparseRBM>::calcRBMExpectedCD(GeneralizedSparseRB
 		}
 
 		// CD-K
-		Sampler<GeneralizedSparseRBM> sampler;
+		Sampler<GeneralizedSparseRBM, OPTIMIZERTYPE> sampler;
 		for (int k = 0; k < cdk; k++) {
 			sampler.updateByBlockedGibbsSamplingVisible(rbm);
 			sampler.updateByBlockedGibbsSamplingHidden(rbm);
@@ -405,7 +424,8 @@ inline void Trainer<GeneralizedSparseRBM>::calcRBMExpectedCD(GeneralizedSparseRB
 	rbmexpected.hSparse /= static_cast<double>(data_indexes.size());
 }
 
-inline void Trainer<GeneralizedSparseRBM>::calcRBMExpectedExact(GeneralizedSparseRBM & rbm, std::vector<std::vector<double>> & dataset, std::vector<int> & data_indexes) {
+template<class OPTIMIZERTYPE>
+inline void Trainer<GeneralizedSparseRBM, OPTIMIZERTYPE>::calcRBMExpectedExact(GeneralizedSparseRBM & rbm, std::vector<std::vector<double>> & dataset, std::vector<int> & data_indexes) {
 	// 0埋め初期化
 	initRBMExpected();
 
@@ -427,7 +447,8 @@ inline void Trainer<GeneralizedSparseRBM>::calcRBMExpectedExact(GeneralizedSpars
 
 
 // 勾配の計算
-inline void Trainer<GeneralizedSparseRBM>::calcGradient(GeneralizedSparseRBM & rbm, std::vector<int> & data_indexes) {
+template<class OPTIMIZERTYPE>
+inline void Trainer<GeneralizedSparseRBM, OPTIMIZERTYPE>::calcGradient(GeneralizedSparseRBM & rbm, std::vector<int> & data_indexes) {
 	// 勾配ベクトルリセット
 	initGradient();
 
@@ -445,7 +466,8 @@ inline void Trainer<GeneralizedSparseRBM>::calcGradient(GeneralizedSparseRBM & r
 	}
 }
 
-inline void Trainer<GeneralizedSparseRBM>::updateMomentum(GeneralizedSparseRBM & rbm) {
+template<class OPTIMIZERTYPE>
+inline void Trainer<GeneralizedSparseRBM, OPTIMIZERTYPE>::updateMomentum(GeneralizedSparseRBM & rbm) {
 	for (int i = 0; i < rbm.getVisibleSize(); i++) {
 		momentum.vBias(i) = momentumRate * momentum.vBias(i) + learningRate * gradient.vBias(i);
 
@@ -461,7 +483,8 @@ inline void Trainer<GeneralizedSparseRBM>::updateMomentum(GeneralizedSparseRBM &
 }
 
 // パラメータの更新
-inline void Trainer<GeneralizedSparseRBM>::updateParams(GeneralizedSparseRBM & rbm) {
+template<class OPTIMIZERTYPE>
+inline void Trainer<GeneralizedSparseRBM, OPTIMIZERTYPE>::updateParams(GeneralizedSparseRBM & rbm) {
 	for (int i = 0; i < rbm.getVisibleSize(); i++) {
 		rbm.params.b(i) += momentum.vBias(i);
 
@@ -478,7 +501,8 @@ inline void Trainer<GeneralizedSparseRBM>::updateParams(GeneralizedSparseRBM & r
 
 
 // 対数尤度関数
-inline double Trainer<GeneralizedSparseRBM>::logLikeliHood(GeneralizedSparseRBM & rbm, std::vector<std::vector<double>> & dataset) {
+template<class OPTIMIZERTYPE>
+inline double Trainer<GeneralizedSparseRBM, OPTIMIZERTYPE>::logLikeliHood(GeneralizedSparseRBM & rbm, std::vector<std::vector<double>> & dataset) {
 	double value = 0.0;
 
 	auto z = rbm.getNormalConstant();
@@ -492,7 +516,8 @@ inline double Trainer<GeneralizedSparseRBM>::logLikeliHood(GeneralizedSparseRBM 
 }
 
 // 学習情報出力(JSON)
-inline std::string Trainer<GeneralizedSparseRBM>::trainInfoJson(GeneralizedSparseRBM & rbm) {
+template<class OPTIMIZERTYPE>
+inline std::string Trainer<GeneralizedSparseRBM, OPTIMIZERTYPE>::trainInfoJson(GeneralizedSparseRBM & rbm) {
 	auto js = nlohmann::json();
 	js["rbm"] = nlohmann::json::parse(rbm.params.serialize());
 	js["trainCount"] = _trainCount;
@@ -505,7 +530,8 @@ inline std::string Trainer<GeneralizedSparseRBM>::trainInfoJson(GeneralizedSpars
 	return js.dump();
 }
 
-inline void Trainer<GeneralizedSparseRBM>::trainFromTrainInfo(GeneralizedSparseRBM & rbm, std::string json) {
+template<class OPTIMIZERTYPE>
+inline void Trainer<GeneralizedSparseRBM, OPTIMIZERTYPE>::trainFromTrainInfo(GeneralizedSparseRBM & rbm, std::string json) {
 	auto js = nlohmann::json::parse(json);
 	rbm.params.deserialize(js["rbm"].dump());
 	_trainCount = js["trainCount"];

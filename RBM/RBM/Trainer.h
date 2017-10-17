@@ -1,6 +1,6 @@
 #pragma once
 
-template <class RBMBase>
+template <class RBMBase, class OPTIMIZERTYPE>
 class Trainer {
 
 };

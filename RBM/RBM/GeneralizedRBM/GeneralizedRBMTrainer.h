@@ -5,8 +5,8 @@
 #include "GeneralizedRBMOptimizer.h"
 #include <vector>
 
-template<>
-class Trainer<GeneralizedRBM> {
+template<class OPTIMIZERTYPE>
+class Trainer<GeneralizedRBM, OPTIMIZERTYPE> {
 	struct Gradient {
 		Eigen::VectorXd vBias;
 		Eigen::VectorXd hBias;
@@ -29,7 +29,7 @@ private:
 	Gradient gradient;
 	DataMean dataMean;
 	RBMExpected rbmexpected;
-	Optimizer<GeneralizedRBM> optimizer;
+	Optimizer<GeneralizedRBM, OPTIMIZERTYPE> optimizer;
 	int _trainCount = 0;
 
 
@@ -109,63 +109,73 @@ public:
 	void trainFromTrainInfo(GeneralizedRBM & rbm, std::string json);
 };
 
-Trainer<GeneralizedRBM>::Trainer(GeneralizedRBM & rbm) {
-	this->optimizer = Optimizer<GeneralizedRBM>(rbm, Optimizer<GeneralizedRBM>::adaDelta);
+template<class OPTIMIZERTYPE>
+Trainer<GeneralizedRBM, OPTIMIZERTYPE>::Trainer(GeneralizedRBM & rbm) {
+	this->optimizer = Optimizer<GeneralizedRBM, OPTIMIZERTYPE>(rbm, Optimizer<GeneralizedRBM, OPTIMIZERTYPE>::adaDelta);
 	initGradient(rbm);
 	initDataMean(rbm);
 	initRBMExpected(rbm);
 }
 
 
-void Trainer<GeneralizedRBM>::initGradient(GeneralizedRBM & rbm) {
+template<class OPTIMIZERTYPE>
+void Trainer<GeneralizedRBM, OPTIMIZERTYPE>::initGradient(GeneralizedRBM & rbm) {
 	gradient.vBias.setConstant(rbm.getVisibleSize(), 0.0);
 	gradient.hBias.setConstant(rbm.getHiddenSize(), 0.0);
 	gradient.weight.setConstant(rbm.getVisibleSize(), rbm.getHiddenSize(), 0.0);
 }
 
-void Trainer<GeneralizedRBM>::initGradient() {
+template<class OPTIMIZERTYPE>
+void Trainer<GeneralizedRBM, OPTIMIZERTYPE>::initGradient() {
 	gradient.vBias.setConstant(0.0);
 	gradient.hBias.setConstant(0.0);
 	gradient.weight.setConstant(0.0);
 }
 
-void Trainer<GeneralizedRBM>::initDataMean(GeneralizedRBM & rbm) {
+template<class OPTIMIZERTYPE>
+void Trainer<GeneralizedRBM, OPTIMIZERTYPE>::initDataMean(GeneralizedRBM & rbm) {
 	dataMean.vBias.setConstant(rbm.getVisibleSize(), 0.0);
 	dataMean.hBias.setConstant(rbm.getHiddenSize(), 0.0);
 	dataMean.weight.setConstant(rbm.getVisibleSize(), rbm.getHiddenSize(), 0.0);
 }
 
-void Trainer<GeneralizedRBM>::initDataMean() {
+template<class OPTIMIZERTYPE>
+void Trainer<GeneralizedRBM, OPTIMIZERTYPE>::initDataMean() {
 	dataMean.vBias.setConstant(0.0);
 	dataMean.hBias.setConstant(0.0);
 	dataMean.weight.setConstant(0.0);
 }
 
-void Trainer<GeneralizedRBM>::initRBMExpected(GeneralizedRBM & rbm) {
+template<class OPTIMIZERTYPE>
+void Trainer<GeneralizedRBM, OPTIMIZERTYPE>::initRBMExpected(GeneralizedRBM & rbm) {
 	rbmexpected.vBias.setConstant(rbm.getVisibleSize(), 0.0);
 	rbmexpected.hBias.setConstant(rbm.getHiddenSize(), 0.0);
 	rbmexpected.weight.setConstant(rbm.getVisibleSize(), rbm.getHiddenSize(), 0.0);
 }
 
-void Trainer<GeneralizedRBM>::initRBMExpected() {
+template<class OPTIMIZERTYPE>
+void Trainer<GeneralizedRBM, OPTIMIZERTYPE>::initRBMExpected() {
 	rbmexpected.vBias.setConstant(0.0);
 	rbmexpected.hBias.setConstant(0.0);
 	rbmexpected.weight.setConstant(0.0);
 }
 
-void Trainer<GeneralizedRBM>::train(GeneralizedRBM & rbm, std::vector<std::vector<double>> & dataset) {
+template<class OPTIMIZERTYPE>
+void Trainer<GeneralizedRBM, OPTIMIZERTYPE>::train(GeneralizedRBM & rbm, std::vector<std::vector<double>> & dataset) {
 	for (int e = 0; e < epoch; e++) {
 		trainOnce(rbm, dataset);
 	}
 }
 
-void Trainer<GeneralizedRBM>::trainCD(GeneralizedRBM & rbm, std::vector<std::vector<double>> & dataset) {
+template<class OPTIMIZERTYPE>
+void Trainer<GeneralizedRBM, OPTIMIZERTYPE>::trainCD(GeneralizedRBM & rbm, std::vector<std::vector<double>> & dataset) {
 	for (int e = 0; e < epoch; e++) {
 		trainOnceCD(rbm, dataset);
 	}
 }
 
-void Trainer<GeneralizedRBM>::trainExact(GeneralizedRBM & rbm, std::vector<std::vector<double>> & dataset) {
+template<class OPTIMIZERTYPE>
+void Trainer<GeneralizedRBM, OPTIMIZERTYPE>::trainExact(GeneralizedRBM & rbm, std::vector<std::vector<double>> & dataset) {
 	for (int e = 0; e < epoch; e++) {
 		trainOnceExact(rbm, dataset);
 	}
@@ -174,7 +184,8 @@ void Trainer<GeneralizedRBM>::trainExact(GeneralizedRBM & rbm, std::vector<std::
 
 // FIXME: CDとExactをフラグで切り分けられるように
 // 1回だけ学習
-void Trainer<GeneralizedRBM>::trainOnce(GeneralizedRBM & rbm, std::vector<std::vector<double>> & dataset) {
+template<class OPTIMIZERTYPE>
+void Trainer<GeneralizedRBM, OPTIMIZERTYPE>::trainOnce(GeneralizedRBM & rbm, std::vector<std::vector<double>> & dataset) {
 	// 勾配初期化
 	initGradient();
 
@@ -206,7 +217,8 @@ void Trainer<GeneralizedRBM>::trainOnce(GeneralizedRBM & rbm, std::vector<std::v
 	_trainCount++;
 }
 
-void Trainer<GeneralizedRBM>::trainOnceCD(GeneralizedRBM & rbm, std::vector<std::vector<double>> & dataset) {
+template<class OPTIMIZERTYPE>
+void Trainer<GeneralizedRBM, OPTIMIZERTYPE>::trainOnceCD(GeneralizedRBM & rbm, std::vector<std::vector<double>> & dataset) {
 	// 勾配初期化
 	initGradient();
 
@@ -238,7 +250,8 @@ void Trainer<GeneralizedRBM>::trainOnceCD(GeneralizedRBM & rbm, std::vector<std:
 	_trainCount++;
 }
 
-void Trainer<GeneralizedRBM>::trainOnceExact(GeneralizedRBM & rbm, std::vector<std::vector<double>> & dataset) {
+template<class OPTIMIZERTYPE>
+void Trainer<GeneralizedRBM, OPTIMIZERTYPE>::trainOnceExact(GeneralizedRBM & rbm, std::vector<std::vector<double>> & dataset) {
 	// 勾配初期化
 	initGradient();
 
@@ -271,7 +284,8 @@ void Trainer<GeneralizedRBM>::trainOnceExact(GeneralizedRBM & rbm, std::vector<s
 }
 
 
-void Trainer<GeneralizedRBM>::calcContrastiveDivergence(GeneralizedRBM & rbm, std::vector<std::vector<double>> & dataset, std::vector<int> & data_indexes) {
+template<class OPTIMIZERTYPE>
+void Trainer<GeneralizedRBM, OPTIMIZERTYPE>::calcContrastiveDivergence(GeneralizedRBM & rbm, std::vector<std::vector<double>> & dataset, std::vector<int> & data_indexes) {
 	// データ平均の計算
 	calcDataMean(rbm, dataset, data_indexes);
 
@@ -282,7 +296,8 @@ void Trainer<GeneralizedRBM>::calcContrastiveDivergence(GeneralizedRBM & rbm, st
 	calcGradient(rbm, data_indexes);
 }
 
-void Trainer<GeneralizedRBM>::calcExact(GeneralizedRBM & rbm, std::vector<std::vector<double>> & dataset, std::vector<int> & data_indexes) {
+template<class OPTIMIZERTYPE>
+void Trainer<GeneralizedRBM, OPTIMIZERTYPE>::calcExact(GeneralizedRBM & rbm, std::vector<std::vector<double>> & dataset, std::vector<int> & data_indexes) {
 	// データ平均の計算
 	calcDataMean(rbm, dataset, data_indexes);
 
@@ -294,7 +309,8 @@ void Trainer<GeneralizedRBM>::calcExact(GeneralizedRBM & rbm, std::vector<std::v
 }
 
 
-void Trainer<GeneralizedRBM>::calcDataMean(GeneralizedRBM & rbm, std::vector<std::vector<double>> & dataset, std::vector<int> & data_indexes) {
+template<class OPTIMIZERTYPE>
+void Trainer<GeneralizedRBM, OPTIMIZERTYPE>::calcDataMean(GeneralizedRBM & rbm, std::vector<std::vector<double>> & dataset, std::vector<int> & data_indexes) {
 	// 0埋め初期化
 	initDataMean();
 
@@ -321,7 +337,8 @@ void Trainer<GeneralizedRBM>::calcDataMean(GeneralizedRBM & rbm, std::vector<std
 	dataMean.weight /= static_cast<double>(data_indexes.size());
 }
 
-void Trainer<GeneralizedRBM>::calcRBMExpectedCD(GeneralizedRBM & rbm, std::vector<std::vector<double>> & dataset, std::vector<int> & data_indexes) {
+template<class OPTIMIZERTYPE>
+void Trainer<GeneralizedRBM, OPTIMIZERTYPE>::calcRBMExpectedCD(GeneralizedRBM & rbm, std::vector<std::vector<double>> & dataset, std::vector<int> & data_indexes) {
 	// 0埋め初期化
 	initRBMExpected();
 
@@ -359,7 +376,8 @@ void Trainer<GeneralizedRBM>::calcRBMExpectedCD(GeneralizedRBM & rbm, std::vecto
 	rbmexpected.weight /= static_cast<double>(data_indexes.size());
 }
 
-void Trainer<GeneralizedRBM>::calcRBMExpectedExact(GeneralizedRBM & rbm, std::vector<std::vector<double>> & dataset, std::vector<int> & data_indexes) {
+template<class OPTIMIZERTYPE>
+void Trainer<GeneralizedRBM, OPTIMIZERTYPE>::calcRBMExpectedExact(GeneralizedRBM & rbm, std::vector<std::vector<double>> & dataset, std::vector<int> & data_indexes) {
 	// 0埋め初期化
 	initRBMExpected();
 
@@ -380,7 +398,8 @@ void Trainer<GeneralizedRBM>::calcRBMExpectedExact(GeneralizedRBM & rbm, std::ve
 
 
 // 勾配の計算
-void Trainer<GeneralizedRBM>::calcGradient(GeneralizedRBM & rbm, std::vector<int> & data_indexes) {
+template<class OPTIMIZERTYPE>
+void Trainer<GeneralizedRBM, OPTIMIZERTYPE>::calcGradient(GeneralizedRBM & rbm, std::vector<int> & data_indexes) {
 	// 勾配ベクトルリセット
 	initGradient();
 
@@ -399,7 +418,8 @@ void Trainer<GeneralizedRBM>::calcGradient(GeneralizedRBM & rbm, std::vector<int
 
 
 // パラメータの更新
-void Trainer<GeneralizedRBM>::updateParams(GeneralizedRBM & rbm) {
+template<class OPTIMIZERTYPE>
+void Trainer<GeneralizedRBM, OPTIMIZERTYPE>::updateParams(GeneralizedRBM & rbm) {
 	for (int i = 0; i < rbm.getVisibleSize(); i++) {
 		rbm.params.b(i) += optimizer.getNewParamVBias( gradient.vBias(i), i);
 
@@ -415,7 +435,8 @@ void Trainer<GeneralizedRBM>::updateParams(GeneralizedRBM & rbm) {
 
 
 // 対数尤度関数
-double Trainer<GeneralizedRBM>::logLikeliHood(GeneralizedRBM & rbm, std::vector<std::vector<double>> & dataset) {
+template<class OPTIMIZERTYPE>
+double Trainer<GeneralizedRBM, OPTIMIZERTYPE>::logLikeliHood(GeneralizedRBM & rbm, std::vector<std::vector<double>> & dataset) {
 	double value = 0.0;
 
 	auto z = rbm.getNormalConstant();
@@ -429,7 +450,8 @@ double Trainer<GeneralizedRBM>::logLikeliHood(GeneralizedRBM & rbm, std::vector<
 }
 
 // 学習情報出力(JSON)
-std::string Trainer<GeneralizedRBM>::trainInfoJson(GeneralizedRBM & rbm) {
+template<class OPTIMIZERTYPE>
+std::string Trainer<GeneralizedRBM, OPTIMIZERTYPE>::trainInfoJson(GeneralizedRBM & rbm) {
 	auto js = nlohmann::json();
 	js["rbm"] = nlohmann::json::parse(rbm.params.serialize());
 	js["trainCount"] = _trainCount;
@@ -441,7 +463,8 @@ std::string Trainer<GeneralizedRBM>::trainInfoJson(GeneralizedRBM & rbm) {
 	return js.dump();
 }
 
-void Trainer<GeneralizedRBM>::trainFromTrainInfo(GeneralizedRBM & rbm, std::string json) {
+template<class OPTIMIZERTYPE>
+void Trainer<GeneralizedRBM, OPTIMIZERTYPE>::trainFromTrainInfo(GeneralizedRBM & rbm, std::string json) {
 	auto js = nlohmann::json::parse(json);
 	rbm.params.deserialize(js["rbm"].dump());
 	_trainCount = js["trainCount"];

@@ -6,8 +6,8 @@
 #include <numeric>
 #include <random>
 
-template<>
-class Trainer<GeneralizedGRBM> {
+template<class OPTIMIZERTYPE>
+class Trainer<GeneralizedGRBM, OPTIMIZERTYPE> {
     struct Momentum {
         Eigen::VectorXd vBias;
         Eigen::VectorXd vLambda;
@@ -123,66 +123,76 @@ public:
 	void trainFromTrainInfo(GeneralizedGRBM & rbm, std::string json);
 };
 
-inline Trainer<GeneralizedGRBM>::Trainer(GeneralizedGRBM & rbm) {
+template<class OPTIMIZERTYPE>
+inline Trainer<GeneralizedGRBM, OPTIMIZERTYPE>::Trainer(GeneralizedGRBM & rbm) {
 	initMomentum(rbm);
 	initGradient(rbm);
 	initDataMean(rbm);
 	initRBMExpected(rbm);
 }
 
-inline void Trainer<GeneralizedGRBM>::initMomentum(GeneralizedGRBM & rbm) {
+template<class OPTIMIZERTYPE>
+inline void Trainer<GeneralizedGRBM, OPTIMIZERTYPE>::initMomentum(GeneralizedGRBM & rbm) {
 	momentum.vBias.setConstant(rbm.getVisibleSize(), 0.0);
 	momentum.vLambda.setConstant(rbm.getVisibleSize(), 0.0);
 	momentum.hBias.setConstant(rbm.getHiddenSize(), 0.0);
 	momentum.weight.setConstant(rbm.getVisibleSize(), rbm.getHiddenSize(), 0.0);
 }
 
-inline void Trainer<GeneralizedGRBM>::initMomentum() {
+template<class OPTIMIZERTYPE>
+inline void Trainer<GeneralizedGRBM, OPTIMIZERTYPE>::initMomentum() {
 	momentum.vBias.setConstant(0.0);
 	momentum.vLambda.setConstant(0.0);
 	momentum.hBias.setConstant(0.0);
 	momentum.weight.setConstant(0.0);
 }
 
-inline void Trainer<GeneralizedGRBM>::initGradient(GeneralizedGRBM & rbm) {
+template<class OPTIMIZERTYPE>
+inline void Trainer<GeneralizedGRBM, OPTIMIZERTYPE>::initGradient(GeneralizedGRBM & rbm) {
 	gradient.vBias.setConstant(rbm.getVisibleSize(), 0.0);
 	gradient.vLambda.setConstant(rbm.getVisibleSize(), 0.0);
 	gradient.hBias.setConstant(rbm.getHiddenSize(), 0.0);
 	gradient.weight.setConstant(rbm.getVisibleSize(), rbm.getHiddenSize(), 0.0);
 }
 
-inline void Trainer<GeneralizedGRBM>::initGradient() {
+template<class OPTIMIZERTYPE>
+inline void Trainer<GeneralizedGRBM, OPTIMIZERTYPE>::initGradient() {
 	gradient.vBias.setConstant(0.0);
 	gradient.vLambda.setConstant(0.0);
 	gradient.hBias.setConstant(0.0);
 	gradient.weight.setConstant(0.0);
 }
 
-inline void Trainer<GeneralizedGRBM>::initDataMean(GeneralizedGRBM & rbm) {
+template<class OPTIMIZERTYPE>
+inline void Trainer<GeneralizedGRBM, OPTIMIZERTYPE>::initDataMean(GeneralizedGRBM & rbm) {
 	dataMean.visible.setConstant(rbm.getVisibleSize(), 0.0);
 	dataMean.visible2.setConstant(rbm.getVisibleSize(), 0.0);  // Gaussian Unit
 	dataMean.hidden.setConstant(rbm.getHiddenSize(), 0.0);
 }
 
-inline void Trainer<GeneralizedGRBM>::initDataMean() {
+template<class OPTIMIZERTYPE>
+inline void Trainer<GeneralizedGRBM, OPTIMIZERTYPE>::initDataMean() {
 	dataMean.visible.setConstant(0.0);
 	dataMean.visible2.setConstant(0.0);  // Gaussian Unit
 	dataMean.hidden.setConstant(0.0);
 }
 
-inline void Trainer<GeneralizedGRBM>::initRBMExpected(GeneralizedGRBM & rbm) {
+template<class OPTIMIZERTYPE>
+inline void Trainer<GeneralizedGRBM, OPTIMIZERTYPE>::initRBMExpected(GeneralizedGRBM & rbm) {
 	sampleMean.visible.setConstant(rbm.getVisibleSize(), 0.0);
 	sampleMean.visible2.setConstant(rbm.getVisibleSize(), 0.0);  // Gaussian Unit
 	sampleMean.hidden.setConstant(rbm.getHiddenSize(), 0.0);
 }
 
-inline void Trainer<GeneralizedGRBM>::initRBMExpected() {
+template<class OPTIMIZERTYPE>
+inline void Trainer<GeneralizedGRBM, OPTIMIZERTYPE>::initRBMExpected() {
 	sampleMean.visible.setConstant(0.0);
 	sampleMean.visible2.setConstant(0.0);  // Gaussian Unit
 	sampleMean.hidden.setConstant(0.0);
 }
 
-inline void Trainer<GeneralizedGRBM>::train(GeneralizedGRBM & rbm, std::vector<std::vector<double>> & dataset) {
+template<class OPTIMIZERTYPE>
+inline void Trainer<GeneralizedGRBM, OPTIMIZERTYPE>::train(GeneralizedGRBM & rbm, std::vector<std::vector<double>> & dataset) {
 	for (int e = 0; e < epoch; e++) {
 		trainOnce(rbm, dataset);
 	}
@@ -190,7 +200,8 @@ inline void Trainer<GeneralizedGRBM>::train(GeneralizedGRBM & rbm, std::vector<s
 
 
 // 1回だけ学習
-inline void Trainer<GeneralizedGRBM>::trainOnce(GeneralizedGRBM & rbm, std::vector<std::vector<double>> & dataset) {
+template<class OPTIMIZERTYPE>
+inline void Trainer<GeneralizedGRBM, OPTIMIZERTYPE>::trainOnce(GeneralizedGRBM & rbm, std::vector<std::vector<double>> & dataset) {
 
 	// データインデックス集合
 	std::vector<int> data_indexes(dataset.size());
@@ -220,7 +231,8 @@ inline void Trainer<GeneralizedGRBM>::trainOnce(GeneralizedGRBM & rbm, std::vect
 	_trainCount++;
 }
 
-inline void Trainer<GeneralizedGRBM>::calcContrastiveDivergence(GeneralizedGRBM & rbm, std::vector<std::vector<double>> & dataset, std::vector<int> & data_indexes) {
+template<class OPTIMIZERTYPE>
+inline void Trainer<GeneralizedGRBM, OPTIMIZERTYPE>::calcContrastiveDivergence(GeneralizedGRBM & rbm, std::vector<std::vector<double>> & dataset, std::vector<int> & data_indexes) {
 	// データ平均の計算
 	calcDataMean(rbm, dataset, data_indexes);
 
@@ -231,7 +243,8 @@ inline void Trainer<GeneralizedGRBM>::calcContrastiveDivergence(GeneralizedGRBM 
 	calcGradient(rbm, data_indexes);
 }
 
-inline void Trainer<GeneralizedGRBM>::calcDataMean(GeneralizedGRBM & rbm, std::vector<std::vector<double>> & dataset, std::vector<int> & data_indexes) {
+template<class OPTIMIZERTYPE>
+inline void Trainer<GeneralizedGRBM, OPTIMIZERTYPE>::calcDataMean(GeneralizedGRBM & rbm, std::vector<std::vector<double>> & dataset, std::vector<int> & data_indexes) {
 	// 0埋め初期化
 	initDataMean();
 
@@ -255,7 +268,8 @@ inline void Trainer<GeneralizedGRBM>::calcDataMean(GeneralizedGRBM & rbm, std::v
 	dataMean.hidden /= static_cast<double>(data_indexes.size());
 }
 
-inline void Trainer<GeneralizedGRBM>::calcRBMExpectedCD(GeneralizedGRBM & rbm, std::vector<std::vector<double>> & dataset, std::vector<int> & data_indexes) {
+template<class OPTIMIZERTYPE>
+inline void Trainer<GeneralizedGRBM, OPTIMIZERTYPE>::calcRBMExpectedCD(GeneralizedGRBM & rbm, std::vector<std::vector<double>> & dataset, std::vector<int> & data_indexes) {
 	// 0埋め初期化
 	initRBMExpected();
 
@@ -271,7 +285,7 @@ inline void Trainer<GeneralizedGRBM>::calcRBMExpectedCD(GeneralizedGRBM & rbm, s
 		}
 
 		// CD-K
-		Sampler<GeneralizedGRBM> sampler;
+		Sampler<GeneralizedGRBM, OPTIMIZERTYPE> sampler;
 		for (int k = 0; k < cdk; k++) {
 			sampler.updateByBlockedGibbsSamplingVisible(rbm);
 			sampler.updateByBlockedGibbsSamplingHidden(rbm);
@@ -292,7 +306,8 @@ inline void Trainer<GeneralizedGRBM>::calcRBMExpectedCD(GeneralizedGRBM & rbm, s
 }
 
 // 勾配の計算
-inline void Trainer<GeneralizedGRBM>::calcGradient(GeneralizedGRBM & rbm, std::vector<int> & data_indexes) {
+template<class OPTIMIZERTYPE>
+inline void Trainer<GeneralizedGRBM, OPTIMIZERTYPE>::calcGradient(GeneralizedGRBM & rbm, std::vector<int> & data_indexes) {
 	// 勾配ベクトルリセット
 	initGradient();
 
@@ -310,7 +325,8 @@ inline void Trainer<GeneralizedGRBM>::calcGradient(GeneralizedGRBM & rbm, std::v
 	}
 }
 
-inline void Trainer<GeneralizedGRBM>::updateMomentum(GeneralizedGRBM & rbm) {
+template<class OPTIMIZERTYPE>
+inline void Trainer<GeneralizedGRBM, OPTIMIZERTYPE>::updateMomentum(GeneralizedGRBM & rbm) {
 	for (int i = 0; i < rbm.getVisibleSize(); i++) {
 		momentum.vBias(i) = momentumRate * momentum.vBias(i) + learningRate * gradient.vBias(i);
 		//momentum.vLambda(i) = momentumRate * momentum.vLambda(i) + learningRate * gradient.vLambda(i);  // 非負制約満たすこと
@@ -326,7 +342,8 @@ inline void Trainer<GeneralizedGRBM>::updateMomentum(GeneralizedGRBM & rbm) {
 }
 
 // パラメータの更新
-inline void Trainer<GeneralizedGRBM>::updateParams(GeneralizedGRBM & rbm) {
+template<class OPTIMIZERTYPE>
+inline void Trainer<GeneralizedGRBM, OPTIMIZERTYPE>::updateParams(GeneralizedGRBM & rbm) {
 	for (int i = 0; i < rbm.getVisibleSize(); i++) {
 		rbm.params.b(i) += momentum.vBias(i);
 		//rbm.params.lambda(i) += momentum.vLambda(i);  // 非負制約を満たすこと
@@ -342,7 +359,8 @@ inline void Trainer<GeneralizedGRBM>::updateParams(GeneralizedGRBM & rbm) {
 }
 
 // 学習情報出力(JSON)
-inline std::string Trainer<GeneralizedGRBM>::trainInfoJson(GeneralizedGRBM & rbm) {
+template<class OPTIMIZERTYPE>
+inline std::string Trainer<GeneralizedGRBM, OPTIMIZERTYPE>::trainInfoJson(GeneralizedGRBM & rbm) {
 	auto js = nlohmann::json();
 	js["rbm"] = nlohmann::json::parse(rbm.params.serialize());
 	js["trainCount"] = _trainCount;
@@ -355,7 +373,8 @@ inline std::string Trainer<GeneralizedGRBM>::trainInfoJson(GeneralizedGRBM & rbm
 	return js.dump();
 }
 
-inline void Trainer<GeneralizedGRBM>::trainFromTrainInfo(GeneralizedGRBM & rbm, std::string json) {
+template<class OPTIMIZERTYPE>
+inline void Trainer<GeneralizedGRBM, OPTIMIZERTYPE>::trainFromTrainInfo(GeneralizedGRBM & rbm, std::string json) {
 	auto js = nlohmann::json::parse(json);
 	rbm.params.deserialize(js["rbm"].dump());
 	_trainCount = js["trainCount"];

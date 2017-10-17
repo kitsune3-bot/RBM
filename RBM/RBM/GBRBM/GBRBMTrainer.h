@@ -5,8 +5,8 @@
 #include <numeric>
 #include <random>
 
-template<>
-class Trainer<GBRBM> {
+template<class OPTIMIZERTYPE>
+class Trainer<GBRBM, OPTIMIZERTYPE> {
     struct Momentum {
         Eigen::VectorXd vBias;
         Eigen::VectorXd vLambda;
@@ -109,66 +109,76 @@ public:
 
 };
 
-inline Trainer<GBRBM>::Trainer(GBRBM & rbm) {
+template<class OPTIMIZERTYPE>
+inline Trainer<GBRBM, OPTIMIZERTYPE>::Trainer(GBRBM & rbm) {
 	initMomentum(rbm);
 	initGradient(rbm);
 	initDataMean(rbm);
 	initRBMExpected(rbm);
 }
 
-inline void Trainer<GBRBM>::initMomentum(GBRBM & rbm) {
+template<class OPTIMIZERTYPE>
+inline void Trainer<GBRBM, OPTIMIZERTYPE>::initMomentum(GBRBM & rbm) {
 	momentum.vBias.setConstant(rbm.getVisibleSize(), 0.0);
 	momentum.vLambda.setConstant(rbm.getVisibleSize(), 0.0);
 	momentum.hBias.setConstant(rbm.getHiddenSize(), 0.0);
 	momentum.weight.setConstant(rbm.getVisibleSize(), rbm.getHiddenSize(), 0.0);
 }
 
-inline void Trainer<GBRBM>::initMomentum() {
+template<class OPTIMIZERTYPE>
+inline void Trainer<GBRBM, OPTIMIZERTYPE>::initMomentum() {
 	momentum.vBias.setConstant(0.0);
 	momentum.vLambda.setConstant(0.0);
 	momentum.hBias.setConstant(0.0);
 	momentum.weight.setConstant(0.0);
 }
 
-inline void Trainer<GBRBM>::initGradient(GBRBM & rbm) {
+template<class OPTIMIZERTYPE>
+inline void Trainer<GBRBM, OPTIMIZERTYPE>::initGradient(GBRBM & rbm) {
 	gradient.vBias.setConstant(rbm.getVisibleSize(), 0.0);
 	gradient.vLambda.setConstant(rbm.getVisibleSize(), 0.0);
 	gradient.hBias.setConstant(rbm.getHiddenSize(), 0.0);
 	gradient.weight.setConstant(rbm.getVisibleSize(), rbm.getHiddenSize(), 0.0);
 }
 
-inline void Trainer<GBRBM>::initGradient() {
+template<class OPTIMIZERTYPE>
+inline void Trainer<GBRBM, OPTIMIZERTYPE>::initGradient() {
 	gradient.vBias.setConstant(0.0);
 	gradient.vLambda.setConstant(0.0);
 	gradient.hBias.setConstant(0.0);
 	gradient.weight.setConstant(0.0);
 }
 
-inline void Trainer<GBRBM>::initDataMean(GBRBM & rbm) {
+template<class OPTIMIZERTYPE>
+inline void Trainer<GBRBM, OPTIMIZERTYPE>::initDataMean(GBRBM & rbm) {
 	dataMean.visible.setConstant(rbm.getVisibleSize(), 0.0);
 	dataMean.visible2.setConstant(rbm.getVisibleSize(), 0.0);  // Gaussian Unit
 	dataMean.hidden.setConstant(rbm.getHiddenSize(), 0.0);
 }
 
-inline void Trainer<GBRBM>::initDataMean() {
+template<class OPTIMIZERTYPE>
+inline void Trainer<GBRBM, OPTIMIZERTYPE>::initDataMean() {
 	dataMean.visible.setConstant(0.0);
 	dataMean.visible2.setConstant(0.0);  // Gaussian Unit
 	dataMean.hidden.setConstant(0.0);
 }
 
-inline void Trainer<GBRBM>::initRBMExpected(GBRBM & rbm) {
+template<class OPTIMIZERTYPE>
+inline void Trainer<GBRBM, OPTIMIZERTYPE>::initRBMExpected(GBRBM & rbm) {
 	sampleMean.visible.setConstant(rbm.getVisibleSize(), 0.0);
 	sampleMean.visible2.setConstant(rbm.getVisibleSize(), 0.0);  // Gaussian Unit
 	sampleMean.hidden.setConstant(rbm.getHiddenSize(), 0.0);
 }
 
-inline void Trainer<GBRBM>::initRBMExpected() {
+template<class OPTIMIZERTYPE>
+inline void Trainer<GBRBM, OPTIMIZERTYPE>::initRBMExpected() {
 	sampleMean.visible.setConstant(0.0);
 	sampleMean.visible2.setConstant(0.0);  // Gaussian Unit
 	sampleMean.hidden.setConstant(0.0);
 }
 
-inline void Trainer<GBRBM>::train(GBRBM & rbm, std::vector<std::vector<double>> & dataset) {
+template<class OPTIMIZERTYPE>
+inline void Trainer<GBRBM, OPTIMIZERTYPE>::train(GBRBM & rbm, std::vector<std::vector<double>> & dataset) {
 	for (int e = 0; e < epoch; e++) {
 		trainOnce(rbm, dataset);
 	}
@@ -176,7 +186,8 @@ inline void Trainer<GBRBM>::train(GBRBM & rbm, std::vector<std::vector<double>> 
 
 
 // 1回だけ学習
-inline void Trainer<GBRBM>::trainOnce(GBRBM & rbm, std::vector<std::vector<double>> & dataset) {
+template<class OPTIMIZERTYPE>
+inline void Trainer<GBRBM, OPTIMIZERTYPE>::trainOnce(GBRBM & rbm, std::vector<std::vector<double>> & dataset) {
 
 	// データインデックス集合
 	std::vector<int> data_indexes(dataset.size());
@@ -206,7 +217,8 @@ inline void Trainer<GBRBM>::trainOnce(GBRBM & rbm, std::vector<std::vector<doubl
 	_trainCount++;
 }
 
-inline void Trainer<GBRBM>::calcContrastiveDivergence(GBRBM & rbm, std::vector<std::vector<double>> & dataset, std::vector<int> & data_indexes) {
+template<class OPTIMIZERTYPE>
+inline void Trainer<GBRBM, OPTIMIZERTYPE>::calcContrastiveDivergence(GBRBM & rbm, std::vector<std::vector<double>> & dataset, std::vector<int> & data_indexes) {
 	// データ平均の計算
 	calcDataMean(rbm, dataset, data_indexes);
 
@@ -217,7 +229,8 @@ inline void Trainer<GBRBM>::calcContrastiveDivergence(GBRBM & rbm, std::vector<s
 	calcGradient(rbm, data_indexes);
 }
 
-inline void Trainer<GBRBM>::calcDataMean(GBRBM & rbm, std::vector<std::vector<double>> & dataset, std::vector<int> & data_indexes) {
+template<class OPTIMIZERTYPE>
+inline void Trainer<GBRBM, OPTIMIZERTYPE>::calcDataMean(GBRBM & rbm, std::vector<std::vector<double>> & dataset, std::vector<int> & data_indexes) {
 	// 0埋め初期化
 	initDataMean();
 
@@ -241,7 +254,8 @@ inline void Trainer<GBRBM>::calcDataMean(GBRBM & rbm, std::vector<std::vector<do
 	dataMean.hidden /= static_cast<double>(data_indexes.size());
 }
 
-inline void Trainer<GBRBM>::calcRBMExpectedCD(GBRBM & rbm, std::vector<std::vector<double>> & dataset, std::vector<int> & data_indexes) {
+template<class OPTIMIZERTYPE>
+inline void Trainer<GBRBM, OPTIMIZERTYPE>::calcRBMExpectedCD(GBRBM & rbm, std::vector<std::vector<double>> & dataset, std::vector<int> & data_indexes) {
 	// 0埋め初期化
 	initRBMExpected();
 
@@ -257,7 +271,7 @@ inline void Trainer<GBRBM>::calcRBMExpectedCD(GBRBM & rbm, std::vector<std::vect
 		}
 
 		// CD-K
-		Sampler<GBRBM> sampler;
+		Sampler<GBRBM, OPTIMIZERTYPE> sampler;
 		for (int k = 0; k < cdk; k++) {
 			sampler.updateByBlockedGibbsSamplingVisible(rbm);
 			sampler.updateByBlockedGibbsSamplingHidden(rbm);
@@ -278,7 +292,8 @@ inline void Trainer<GBRBM>::calcRBMExpectedCD(GBRBM & rbm, std::vector<std::vect
 }
 
 // 勾配の計算
-inline void Trainer<GBRBM>::calcGradient(GBRBM & rbm, std::vector<int> & data_indexes) {
+template<class OPTIMIZERTYPE>
+inline void Trainer<GBRBM, OPTIMIZERTYPE>::calcGradient(GBRBM & rbm, std::vector<int> & data_indexes) {
 	// 勾配ベクトルリセット
 	initGradient();
 
@@ -296,7 +311,8 @@ inline void Trainer<GBRBM>::calcGradient(GBRBM & rbm, std::vector<int> & data_in
 	}
 }
 
-inline void Trainer<GBRBM>::updateMomentum(GBRBM & rbm) {
+template<class OPTIMIZERTYPE>
+inline void Trainer<GBRBM, OPTIMIZERTYPE>::updateMomentum(GBRBM & rbm) {
 	for (int i = 0; i < rbm.getVisibleSize(); i++) {
 		momentum.vBias(i) = momentumRate * momentum.vBias(i) + learningRate * gradient.vBias(i);
 		//momentum.vLambda(i) = momentumRate * momentum.vLambda(i) + learningRate * gradient.vLambda(i);  // 非負制約満たすこと
@@ -312,7 +328,8 @@ inline void Trainer<GBRBM>::updateMomentum(GBRBM & rbm) {
 }
 
 // パラメータの更新
-inline void Trainer<GBRBM>::updateParams(GBRBM & rbm) {
+template<class OPTIMIZERTYPE>
+inline void Trainer<GBRBM, OPTIMIZERTYPE>::updateParams(GBRBM & rbm) {
 	for (int i = 0; i < rbm.getVisibleSize(); i++) {
 		rbm.params.b(i) += momentum.vBias(i);
 		//rbm.params.lambda(i) += momentum.vLambda(i);  // 非負制約を満たすこと
@@ -328,7 +345,8 @@ inline void Trainer<GBRBM>::updateParams(GBRBM & rbm) {
 }
 
 // 学習情報出力(JSON)
-inline std::string Trainer<GBRBM>::trainInfoJson(GBRBM & rbm) {
+template<class OPTIMIZERTYPE>
+inline std::string Trainer<GBRBM, OPTIMIZERTYPE>::trainInfoJson(GBRBM & rbm) {
 	auto js = nlohmann::json();
 	js["rbm"] = nlohmann::json::parse(rbm.params.serialize());
 	js["trainCount"] = _trainCount;
@@ -339,7 +357,8 @@ inline std::string Trainer<GBRBM>::trainInfoJson(GBRBM & rbm) {
 	return js.dump();
 }
 
-inline void Trainer<GBRBM>::trainFromTrainInfo(GBRBM & rbm, std::string json) {
+template<class OPTIMIZERTYPE>
+inline void Trainer<GBRBM, OPTIMIZERTYPE>::trainFromTrainInfo(GBRBM & rbm, std::string json) {
 	auto js = nlohmann::json::parse(json);
 	rbm.params.deserialize(js["rbm"].dump());
 	_trainCount = js["trainCount"];
