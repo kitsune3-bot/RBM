@@ -440,7 +440,7 @@ int main(void) {
 		// try rbm 2, 3, 4, 5, cont
 		option.realFlag = false;
 		option.divSize = 1;
-		run(db, option, try_count, rbm_gen, dataset);
+		//run(db, option, try_count, rbm_gen, dataset);
 
 		option.realFlag = false;
 		option.divSize = 2;
@@ -448,27 +448,27 @@ int main(void) {
 
 		option.realFlag = false;
 		option.divSize = 3;
-		run(db, option, try_count, rbm_gen, dataset);
+		//run(db, option, try_count, rbm_gen, dataset);
 
 		option.realFlag = false;
 		option.divSize = 4;
-		run(db, option, try_count, rbm_gen, dataset);
+		//run(db, option, try_count, rbm_gen, dataset);
 
 		option.realFlag = true;
-		run(db, option, try_count, rbm_gen, dataset);
+		//run(db, option, try_count, rbm_gen, dataset);
 
 		// SparseRBM
 		option.realFlag = false;
 		option.divSize = 2;
-		run_sparse(db, option, try_count, rbm_gen, dataset);
+		//run_sparse(db, option, try_count, rbm_gen, dataset);
 
 		option.realFlag = false;
 		option.divSize = 3;
-		run_sparse(db, option, try_count, rbm_gen, dataset);
+		//run_sparse(db, option, try_count, rbm_gen, dataset);
 
 		option.realFlag = false;
 		option.divSize = 4;
-		run_sparse(db, option, try_count, rbm_gen, dataset);
+		//run_sparse(db, option, try_count, rbm_gen, dataset);
 
 		try{
     		db.exec("COMMIT");

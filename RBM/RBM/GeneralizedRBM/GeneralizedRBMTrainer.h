@@ -110,7 +110,7 @@ public:
 };
 
 Trainer<GeneralizedRBM>::Trainer(GeneralizedRBM & rbm) {
-	this->optimizer = Optimizer<GeneralizedRBM>(rbm, Optimizer<GeneralizedRBM>::adam);
+	this->optimizer = Optimizer<GeneralizedRBM>(rbm, Optimizer<GeneralizedRBM>::adaDelta);
 	initGradient(rbm);
 	initDataMean(rbm);
 	initRBMExpected(rbm);
