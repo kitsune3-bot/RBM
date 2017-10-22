@@ -2,11 +2,8 @@
 #include <fstream>
 #include "../Optimizer.h"
 #include "GeneralizedRBM.h"
+#include <cmath>
 
-//
-// TODO: 最適化アルゴリズムを使い分けるのはフラグ管理するよりテンプレートで分けたほうがパフォーマンス的にはよいと思うけど…
-//       まだまだ未熟ですなぁ…
-//
 template <>
 class Optimizer<GeneralizedRBM, OptimizerType::Default> {
 
@@ -340,6 +337,82 @@ inline double Optimizer<GeneralizedRBM, OptimizerType::Adam>::getNewParamWeight(
 	auto v = this->moment2nd.weight(vindex, hindex) / (1 - pow(this->_beta2, this->_iteration));
 
 	auto new_gradient = this->_alpha * m / (sqrt(v) + _epsilonAdam);
+	return new_gradient;
+}
+
+
+template <>
+class Optimizer<GeneralizedRBM, OptimizerType::AdaMax> {
+	struct Moment {
+		Eigen::VectorXd vBias;
+		Eigen::VectorXd hBias;
+		Eigen::MatrixXd weight;
+	};
+
+protected:
+	int _iteration = 1;
+
+	// AdaMax
+	double _alpha = 0.001;
+	double _beta1 = 0.9;
+	double _beta2 = 0.999;
+	double _epsilonAdaMax = 1E-08;
+
+	Moment moment1st;
+	Moment moment2nd;
+
+public:
+	Optimizer() = default;
+	Optimizer(GeneralizedRBM & rbm);
+	~Optimizer() = default;
+	void init(GeneralizedRBM & rbm);
+	double getNewParamVBias(double gradient, int vindex);
+	double getNewParamHBias(double gradient, int hindex);
+	double getNewParamWeight(double gradient, int vindex, int hindex);
+	// next timestep
+	void updateOptimizer();
+};
+
+inline Optimizer<GeneralizedRBM, OptimizerType::AdaMax>::Optimizer(GeneralizedRBM & rbm) {
+	this->init(rbm);
+}
+
+inline void Optimizer<GeneralizedRBM, OptimizerType::AdaMax>::updateOptimizer() {
+	this->_iteration++;
+}
+
+// AdaMax
+inline void Optimizer<GeneralizedRBM, OptimizerType::AdaMax>::init(GeneralizedRBM & rbm) {
+	this->moment1st.vBias.setConstant(rbm.getVisibleSize(), 0.0);
+	this->moment1st.hBias.setConstant(rbm.getHiddenSize(), 0.0);
+	this->moment1st.weight.setConstant(rbm.getVisibleSize(), rbm.getHiddenSize(), 0.0);
+
+	this->moment2nd.vBias.setConstant(rbm.getVisibleSize(), 0.0);
+	this->moment2nd.hBias.setConstant(rbm.getHiddenSize(), 0.0);
+	this->moment2nd.weight.setConstant(rbm.getVisibleSize(), rbm.getHiddenSize(), 0.0);
+}
+
+inline double Optimizer<GeneralizedRBM, OptimizerType::AdaMax>::getNewParamVBias(double gradient, int vindex) {
+	auto m = this->moment1st.vBias(vindex) = this->_beta1 * this->moment1st.vBias(vindex) + (1 - _beta1) * gradient;  // m
+	auto v = this->moment2nd.vBias(vindex) = std::max(this->_beta2 * this->moment2nd.vBias(vindex), abs(gradient));  // v
+
+	auto new_gradient = this->_alpha  / (1 - pow(this->_beta1, _iteration)) * m / v;
+	return new_gradient;
+}
+
+inline double Optimizer<GeneralizedRBM, OptimizerType::AdaMax>::getNewParamHBias(double gradient, int hindex) {
+	auto m = this->moment1st.hBias(hindex) = this->_beta1 * this->moment1st.hBias(hindex) + (1 - _beta1) * gradient;  // m
+	auto v = this->moment2nd.hBias(hindex) = std::max(this->_beta2 * this->moment2nd.hBias(hindex), abs(gradient));  // v
+
+	auto new_gradient = this->_alpha / (1 - pow(this->_beta1, _iteration)) * m / v;
+	return new_gradient;
+}
+
+inline double Optimizer<GeneralizedRBM, OptimizerType::AdaMax>::getNewParamWeight(double gradient, int vindex, int hindex) {
+	auto m = this->moment1st.weight(vindex, hindex) = this->_beta1 * this->moment1st.weight(vindex, hindex) + (1 - _beta1) * gradient;  // m
+	auto v = this->moment2nd.weight(vindex, hindex) = std::max(this->_beta2 * this->moment2nd.weight(vindex, hindex), abs(gradient));  // v
+
+	auto new_gradient = this->_alpha / (1 - pow(this->_beta1, _iteration)) * m / v;
 	return new_gradient;
 }
 

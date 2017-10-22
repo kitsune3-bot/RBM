@@ -102,7 +102,7 @@ double RBM::mu(int hindex) {
 }
 
 // muの可視変数に関する全ての実現値の総和
-double RBM::sumExpMu(int hindex) {
+double RBM::miniNormalizeConstantHidden(int hindex) {
 	// {0, 1}での実装
 	return 1.0 + exp(mu(hindex));
 }
@@ -116,6 +116,6 @@ double RBM::condProbVis(int vindex, double value) {
 // 可視変数を条件で与えた隠れ変数の条件付き確率, P(h_j | v)
 double RBM::condProbHid(int hindex, double value) {
 	double m = mu(hindex);
-	return exp(m * value) / sumExpMu(hindex);
+	return exp(m * value) / miniNormalizeConstantHidden(hindex);
 }
 

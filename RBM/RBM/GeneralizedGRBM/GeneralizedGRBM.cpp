@@ -76,7 +76,7 @@ double GeneralizedGRBM::getFreeEnergy() {
 double GeneralizedGRBM::actHidJ(int hindex) {
 	auto value_set = splitHiddenSet();
 	double numer = 0.0;  // 分子
-	double denom = sumExpMu(hindex);  // 分母
+	double denom = miniNormalizeConstantHidden(hindex);  // 分母
 
 	for (auto & value : value_set) {
 		numer += value * exp(mu(hindex) * value);
@@ -132,7 +132,7 @@ double GeneralizedGRBM::mu(int hindex) {
 }
 
 // muの可視変数に関する全ての実現値の総和
-double GeneralizedGRBM::sumExpMu(int hindex) {
+double GeneralizedGRBM::miniNormalizeConstantHidden(int hindex) {
 	double sum = 0.0;
 
 	for (auto & value : hiddenValueSet) {
@@ -153,7 +153,7 @@ double GeneralizedGRBM::condProbVis(int vindex, double value) {
 // 可視変数を条件で与えた隠れ変数の条件付き確率, P(h_j | v)
 double GeneralizedGRBM::condProbHid(int hindex, double value) {
 	double m = mu(hindex);
-	double prob = exp(m * value) / sumExpMu(hindex);
+	double prob = exp(m * value) / miniNormalizeConstantHidden(hindex);
 	return prob;
 }
 

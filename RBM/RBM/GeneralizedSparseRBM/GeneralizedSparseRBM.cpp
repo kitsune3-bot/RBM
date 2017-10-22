@@ -101,7 +101,7 @@ double GeneralizedSparseRBM::actHidJ(int hindex) {
 	{
 		auto value_set = splitHiddenSet();
 		double numer = 0.0;  // 分子
-		double denom = sumExpMu(hindex);  // 分母
+		double denom = miniNormalizeConstantHidden(hindex);  // 分母
 		auto mu_j = mu(hindex);
 		for (auto & h_j : value_set) {
 			numer += h_j * exp(mu_j * h_j + params.sparse(hindex) * abs(h_j));
@@ -159,8 +159,8 @@ double GeneralizedSparseRBM::mu(int hindex) {
 }
 
 // FIXME: z_jだけども名前変えたほうがよさそうだ。
-// muの可視変数に関する全ての実現値の総和
-double GeneralizedSparseRBM::sumExpMu(int hindex) {
+// muとlambdaの可視変数に関する全ての実現値の総和
+double GeneralizedSparseRBM::miniNormalizeConstantHidden(int hindex) {
 	// 離散型
 	auto sum_discrete = [&]() {
 		double value = 0.0;
@@ -258,7 +258,7 @@ double GeneralizedSparseRBM::condProbVis(int vindex, double value) {
 // 可視変数を条件で与えた隠れ変数の条件付き確率, P(h_j | v)
 double GeneralizedSparseRBM::condProbHid(int hindex, double value) {
 	double mu_j = mu(hindex);
-	double prob = exp(mu_j * value + params.sparse(hindex) * abs(value)) / sumExpMu(hindex);
+	double prob = exp(mu_j * value + params.sparse(hindex) * abs(value)) / miniNormalizeConstantHidden(hindex);
 	return prob;
 }
 
@@ -751,7 +751,7 @@ double GeneralizedSparseRBM::actHidSparseJ(int hindex) {
 	{
 		auto value_set = splitHiddenSet();
 		double numer = 0.0;  // 分子
-		double denom = sumExpMu(hindex);  // 分母
+		double denom = miniNormalizeConstantHidden(hindex);  // 分母
 		auto mu_j = mu(hindex);
 		for (auto & h_j : value_set) {
 			numer += abs(h_j) * exp(mu_j * h_j + params.sparse(hindex) * abs(h_j));

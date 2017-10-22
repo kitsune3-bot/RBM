@@ -397,7 +397,7 @@ inline void Trainer<GeneralizedSparseRBM, OPTIMIZERTYPE>::calcRBMExpectedCD(Gene
 		}
 
 		// CD-K
-		Sampler<GeneralizedSparseRBM, OPTIMIZERTYPE> sampler;
+		Sampler<GeneralizedSparseRBM> sampler;
 		for (int k = 0; k < cdk; k++) {
 			sampler.updateByBlockedGibbsSamplingVisible(rbm);
 			sampler.updateByBlockedGibbsSamplingHidden(rbm);

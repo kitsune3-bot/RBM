@@ -6,7 +6,7 @@
 #include "../StateCounter.h"
 #include <cmath>
 
-class GBRBM : RBMBase {
+class GBRBM {
 private:
     size_t vSize = 0;
     size_t hSize = 0;
@@ -56,7 +56,7 @@ public:
     double mu(int hindex);
 
     // exp(mu)の可視変数に関する全ての実現値の総和
-    double sumExpMu(int hindex);
+    double miniNormalizeConstantHidden(int hindex);
 
     // 隠れ変数を条件で与えた可視変数の条件付き確率, P(v_i | h)
     double condProbVis(int vindex, double value);

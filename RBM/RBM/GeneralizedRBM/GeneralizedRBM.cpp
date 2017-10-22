@@ -98,7 +98,7 @@ double GeneralizedRBM::actHidJ(int hindex) {
 	{
 		auto value_set = splitHiddenSet();
 		double numer = 0.0;  // 分子
-		double denom = sumExpMu(hindex);  // 分母
+		double denom = miniNormalizeConstantHidden(hindex);  // 分母
 		auto mu_j = mu(hindex);
 		for (auto & h_j : value_set) {
 			numer += h_j * exp(mu_j * h_j);
@@ -154,7 +154,7 @@ double GeneralizedRBM::mu(int hindex) {
 }
 
 // muの可視変数に関する全ての実現値の総和
-double GeneralizedRBM::sumExpMu(int hindex) {
+double GeneralizedRBM::miniNormalizeConstantHidden(int hindex) {
 	// 離散型
 	auto sum_discrete = [&]() {
 		double value = 0.0;
@@ -247,7 +247,7 @@ double GeneralizedRBM::condProbVis(int vindex, double value) {
 // 可視変数を条件で与えた隠れ変数の条件付き確率, P(h_j | v)
 double GeneralizedRBM::condProbHid(int hindex, double value) {
 	double m = mu(hindex);
-	double prob = exp(m * value) / sumExpMu(hindex);
+	double prob = exp(m * value) / miniNormalizeConstantHidden(hindex);
 	return prob;
 }
 

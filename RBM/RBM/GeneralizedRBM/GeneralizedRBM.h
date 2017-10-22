@@ -8,8 +8,7 @@
 #include <cmath>
 
 
-class GeneralizedRBM :
-	public RBMBase {
+class GeneralizedRBM {
 protected:
 	size_t vSize = 0;
 	size_t hSize = 0;
@@ -57,7 +56,7 @@ public:
 	double mu(int hindex);
 
 	// exp(mu)の可視変数に関する全ての実現値の総和
-	double sumExpMu(int hindex);
+	double miniNormalizeConstantHidden(int hindex);
 
 	// 可視変数の確率(隠れ変数周辺化済み)
 	double probVis(std::vector<double> & data);

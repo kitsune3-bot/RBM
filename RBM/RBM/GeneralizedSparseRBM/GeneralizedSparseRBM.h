@@ -8,9 +8,7 @@
 #include <cmath>
 
 
-class GeneralizedSparseRBM :
-	public RBMBase
-{
+class GeneralizedSparseRBM {
 protected:
 	size_t vSize = 0;
 	size_t hSize = 0;
@@ -19,7 +17,7 @@ protected:
 	size_t divSize = 1;  // 隠れ変数の区間分割数
 	bool realFlag = false;
 	std::vector <double> hiddenValueSet;  // 隠れ変数の取りうる値
-	
+
 public:
 	GeneralizedSparseRBMParamator params;
 	GeneralizedSparseRBMNode nodes;
@@ -56,8 +54,8 @@ public:
 	// 隠れ変数に関する外部磁場と相互作用
 	double mu(int hindex);
 
-	// exp(mu)の可視変数に関する全ての実現値の総和
-	double sumExpMu(int hindex);
+	// exp(mu+lambda)の可視変数に関する全ての実現値の総和
+	double miniNormalizeConstantHidden(int hindex);
 
 	// 可視変数の確率(隠れ変数周辺化済み)
 	double probVis(std::vector<double> & data);

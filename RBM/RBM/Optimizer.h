@@ -6,7 +6,7 @@ namespace OptimizerType{
 	struct AdaGrad {};
 	struct AdaDelta {};
 	struct Adam {};
-	struct Adamax {};
+	struct AdaMax {};
 	struct Nadam {};
 }
 

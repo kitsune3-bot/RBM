@@ -33,7 +33,7 @@ public:
     virtual double mu(int hindex) = 0;
 
     // exp(mu)の可視変数に関する全ての実現値の総和
-    virtual double sumExpMu(int hindex) = 0;
+    virtual double miniNormalizeConstantHidden(int hindex) = 0;
 
     // 隠れ変数を条件で与えた可視変数の条件付き確率, P(v_i | h)
     virtual double condProbVis(int vindex, double value) = 0;
