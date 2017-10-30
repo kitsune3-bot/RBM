@@ -409,7 +409,7 @@ inline void Trainer<GeneralizedSparseRBM, OPTIMIZERTYPE>::calcRBMExpectedCD(Gene
 		rbmexpected.hBias += rbm.nodes.h;
 
 		for (int j = 0; j < rbm.getHiddenSize(); j++) {
-			rbmexpected.hSparse(j) += abs(rbm.nodes.h(j));
+			rbmexpected.hSparse(j) += -exp(rbm.params.sparse(j)) * abs(rbm.nodes.h(j));
 		}
 
 		for (int i = 0; i < rbm.getVisibleSize(); i++) {

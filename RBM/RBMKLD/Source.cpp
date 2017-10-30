@@ -442,22 +442,22 @@ int main(void) {
 		// try rbm 2, 3, 4, 5, cont
 		option.realFlag = false;
 		option.divSize = 1;
-		run(db, option, try_count, rbm_gen, rbm_train, dataset);
+		//run(db, option, try_count, rbm_gen, rbm_train, dataset);
 
 		option.realFlag = false;
 		option.divSize = 2;
-		run(db, option, try_count, rbm_gen, rbm_train, dataset);
+		//run(db, option, try_count, rbm_gen, rbm_train, dataset);
 
 		option.realFlag = false;
 		option.divSize = 3;
-		run(db, option, try_count, rbm_gen, rbm_train, dataset);
+		//run(db, option, try_count, rbm_gen, rbm_train, dataset);
 
 		option.realFlag = false;
 		option.divSize = 4;
-		run(db, option, try_count, rbm_gen, rbm_train, dataset);
+		//run(db, option, try_count, rbm_gen, rbm_train, dataset);
 
 		option.realFlag = true;
-		run(db, option, try_count, rbm_gen, rbm_train, dataset);
+		//run(db, option, try_count, rbm_gen, rbm_train, dataset);
 
 		// SparseRBM
 		auto rbm_train_sparse = GeneralizedSparseRBM(option.vSize, option.hSize + option.appendH);

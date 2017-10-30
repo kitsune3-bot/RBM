@@ -35,14 +35,14 @@ int main(int argc, char **argv) {
 	rbm.setRealHiddenValue(true);
 
 
-	auto trainer = Trainer<GeneralizedRBM>(rbm);
+	auto trainer = Trainer<GeneralizedRBM, OptimizerType::AdaMax>(rbm);
 	trainer.learningRate = learning_rate;
 	trainer.cdk = cdk;
 	trainer.batchSize = batch_size;
 	trainer.epoch = epoch;
 	trainer.trainExact(rbm, dataset);
 
-	auto trainer_cd = Trainer<GeneralizedRBM>(rbm);
+	auto trainer_cd = Trainer<GeneralizedRBM, OptimizerType::AdaMax>(rbm);
 	trainer_cd.learningRate = learning_rate;
 	trainer_cd.cdk = cdk;
 	trainer_cd.batchSize = batch_size;

@@ -4,7 +4,7 @@ TEST(GeneralizeRBMTrainTest, TrainCDTest) {
 	int vsize = 10;
 	int hsize = 100;
 	auto rbm = GeneralizedRBM(vsize, hsize);
-	auto rbm_train = Trainer<GeneralizedRBM>(rbm);
+	auto rbm_train = Trainer<GeneralizedRBM, OptimizerType::AdaMax>(rbm);
 
 	auto dataset = std::vector< std::vector<double>>();
 	dataset.push_back(std::vector<double>{ 0, 1, 0, 1, 0, 1, 0, 1, 0, 1 });
@@ -39,7 +39,7 @@ TEST(GeneralizeRBMTrainTest, TrainExactTest) {
 	int vsize = 10;
 	int hsize = 10;
 	auto rbm = GeneralizedRBM(vsize, hsize);
-	auto rbm_train = Trainer<GeneralizedRBM>(rbm);
+	auto rbm_train = Trainer<GeneralizedRBM, OptimizerType::AdaMax>(rbm);
 
 	auto dataset = std::vector< std::vector<double>>();
 	dataset.push_back(std::vector<double>{ 0, 1, 0, 1, 0, 1, 0, 1, 0, 1 });
