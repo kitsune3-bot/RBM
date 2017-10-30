@@ -54,7 +54,7 @@ double GeneralizedSparseRBM::getNormalConstant() {
 				double sum = 0.0;
 
 				for (auto & h_val : this->hiddenValueSet) {
-					sum += exp(mu_j * h_val + params.sparse(j) * abs(h_val));
+					sum += exp(mu_j * h_val - exp(params.sparse(j)) * abs(h_val));
 				}
 
 				return sum;
@@ -104,7 +104,7 @@ double GeneralizedSparseRBM::actHidJ(int hindex) {
 		double denom = miniNormalizeConstantHidden(hindex);  // 分母
 		auto mu_j = mu(hindex);
 		for (auto & h_j : value_set) {
-			numer += h_j * exp(mu_j * h_j + params.sparse(hindex) * abs(h_j));
+			numer += h_j * exp(mu_j * h_j - exp(params.sparse(hindex)) * abs(h_j));
 		}
 
 		auto value = numer / denom;
@@ -167,7 +167,7 @@ double GeneralizedSparseRBM::miniNormalizeConstantHidden(int hindex) {
 		double mu_j = mu(hindex);
 
 		for (auto & h_j : hiddenValueSet) {
-			value += exp(mu_j * h_j + params.sparse(hindex) * abs(h_j));
+			value += exp(mu_j * h_j - exp(params.sparse(hindex)) * abs(h_j));
 		}
 
 		return value;
@@ -219,7 +219,7 @@ double GeneralizedSparseRBM::probVis(std::vector<double> & data, double normaliz
 			double sum = 0.0;
 
 			for (auto & h_val : this->hiddenValueSet) {
-				sum += exp(mu_j * h_val + params.sparse(j) * abs(h_val));
+				sum += exp(mu_j * h_val - exp(params.sparse(j)) * abs(h_val));
 			}
 
 			return sum;
@@ -258,7 +258,7 @@ double GeneralizedSparseRBM::condProbVis(int vindex, double value) {
 // 可視変数を条件で与えた隠れ変数の条件付き確率, P(h_j | v)
 double GeneralizedSparseRBM::condProbHid(int hindex, double value) {
 	double mu_j = mu(hindex);
-	double prob = exp(mu_j * value + params.sparse(hindex) * abs(value)) / miniNormalizeConstantHidden(hindex);
+	double prob = exp(mu_j * value - exp(params.sparse(hindex)) * abs(value)) / miniNormalizeConstantHidden(hindex);
 	return prob;
 }
 
@@ -345,7 +345,7 @@ double GeneralizedSparseRBM::expectedValueVis(int vindex, double normalize_const
 			double sum = 0.0;
 
 			for (auto & h_val : this->hiddenValueSet) {
-				sum += exp(mu_j * h_val + params.sparse(j) * abs(h_val));
+				sum += exp(mu_j * h_val - exp(params.sparse(j)) * abs(h_val));
 			}
 
 			return sum;
@@ -429,7 +429,7 @@ double GeneralizedSparseRBM::expectedValueHid(int hindex, double normalize_const
 			double sum = 0.0;
 
 			for (auto & h_val : this->hiddenValueSet) {
-				sum += h_val * exp(mu_j * h_val + params.sparse(j) * abs(h_val));
+				sum += h_val * exp(mu_j * h_val - exp(params.sparse(j)) * abs(h_val));
 			}
 
 			return sum;
@@ -458,7 +458,7 @@ double GeneralizedSparseRBM::expectedValueHid(int hindex, double normalize_const
 			double sum = 0.0;
 
 			for (auto & h_val : this->hiddenValueSet) {
-				sum += exp(mu_l * h_val + params.sparse(l) * abs(h_val));
+				sum += exp(mu_l * h_val - exp(params.sparse(l)) * abs(h_val));
 			}
 
 			return sum;
@@ -541,7 +541,7 @@ double GeneralizedSparseRBM::expectedValueVisHid(int vindex, int hindex, double 
 			double sum = 0.0;
 
 			for (auto & h_val : this->hiddenValueSet) {
-				sum += h_val * exp(mu_j * h_val + params.sparse(j) * abs(h_val));
+				sum += h_val * exp(mu_j * h_val - exp(params.sparse(j)) * abs(h_val));
 			}
 
 			return sum;
@@ -570,7 +570,7 @@ double GeneralizedSparseRBM::expectedValueVisHid(int vindex, int hindex, double 
 			double sum = 0.0;
 
 			for (auto & h_val : this->hiddenValueSet) {
-				sum += exp(mu_j * h_val + params.sparse(j) * abs(h_val));
+				sum += exp(mu_j * h_val - exp(params.sparse(j)) * abs(h_val));
 			}
 
 			return sum;
@@ -626,13 +626,13 @@ double GeneralizedSparseRBM::expectedValueVisHid(int vindex, int hindex, double 
 	return value;
 }
 
-// 隠れ変数の期待値, E[|h_j|]
+// 隠れ変数の期待値, E[-exp(lambda_j)|h_j|]
 double GeneralizedSparseRBM::expectedValueAbsHid(int hindex) {
 	auto z = getNormalConstant();
 	return expectedValueAbsHid(hindex, z);
 }
 
-// 隠れ変数の期待値, E[|h_j|]
+// 隠れ変数の期待値, E[-exp(lambda_j)|h_j|]
 double GeneralizedSparseRBM::expectedValueAbsHid(int hindex, double normalize_constant) {
 	StateCounter<std::vector<int>> sc(std::vector<int>(vSize, 2));  // 可視変数Vの状態カウンター
 	int v_state_map[] = { 0, 1 };  // 可視変数の状態->値変換写像
@@ -653,7 +653,7 @@ double GeneralizedSparseRBM::expectedValueAbsHid(int hindex, double normalize_co
 			double sum = 0.0;
 
 			for (auto & h_val : this->hiddenValueSet) {
-				sum += abs(h_val) * exp(mu_j * h_val + params.sparse(j) * abs(h_val));
+				sum += -exp(params.sparse(j)) * abs(h_val) * exp(mu_j * h_val - exp(params.sparse(j)) * abs(h_val));
 			}
 
 			return sum;
@@ -682,7 +682,7 @@ double GeneralizedSparseRBM::expectedValueAbsHid(int hindex, double normalize_co
 			double sum = 0.0;
 
 			for (auto & h_val : this->hiddenValueSet) {
-				sum += exp(mu_l * h_val + params.sparse(l) * abs(h_val));
+				sum += exp(mu_l * h_val - exp(params.sparse(l)) * abs(h_val));
 			}
 
 			return sum;
@@ -754,7 +754,7 @@ double GeneralizedSparseRBM::actHidSparseJ(int hindex) {
 		double denom = miniNormalizeConstantHidden(hindex);  // 分母
 		auto mu_j = mu(hindex);
 		for (auto & h_j : value_set) {
-			numer += abs(h_j) * exp(mu_j * h_j + params.sparse(hindex) * abs(h_j));
+			numer += - exp(params.sparse(hindex)) * abs(h_j) * exp(mu_j * h_j - exp(params.sparse(hindex)) * abs(h_j));
 		}
 
 		auto value = numer / denom;

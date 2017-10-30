@@ -380,6 +380,7 @@ inline void Trainer<GeneralizedSparseRBM, OPTIMIZERTYPE>::calcDataMean(Generaliz
 	dataMean.hSparse /= static_cast<double>(data_indexes.size());
 }
 
+
 template<class OPTIMIZERTYPE>
 inline void Trainer<GeneralizedSparseRBM, OPTIMIZERTYPE>::calcRBMExpectedCD(GeneralizedSparseRBM & rbm, std::vector<std::vector<double>> & dataset, std::vector<int> & data_indexes) {
 	// 0埋め初期化
