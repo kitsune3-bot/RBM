@@ -208,11 +208,6 @@ protected:
 	double _rhoAdaGrad = 0.95;
 	double _epsilonAdaDelta = 1E-06;
 
-	// Adam
-	double _alpha = 0.001;
-	double _beta1 = 0.9;
-	double _beta2 = 0.999;
-	double _epsilonAdam = 1E-08;
 
 	Moment moment1st;
 	Moment moment2nd;

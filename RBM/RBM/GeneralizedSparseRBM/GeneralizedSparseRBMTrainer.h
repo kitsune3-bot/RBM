@@ -3,18 +3,12 @@
 #include "../Trainer.h"
 #include "GeneralizedSparseRBM.h"
 #include "GeneralizedSparseRBMSampler.h"
+#include "GeneralizedSparseRBMOptimizer.h"
 #include <vector>
 
 
 template<class OPTIMIZERTYPE>
 class Trainer<GeneralizedSparseRBM, OPTIMIZERTYPE>{
-	struct Momentum {
-		Eigen::VectorXd vBias;
-		Eigen::VectorXd hBias;
-		Eigen::MatrixXd weight;
-		Eigen::VectorXd hSparse;
-	};
-
 	struct Gradient {
 		Eigen::VectorXd vBias;
 		Eigen::VectorXd hBias;
@@ -37,10 +31,10 @@ class Trainer<GeneralizedSparseRBM, OPTIMIZERTYPE>{
 	};
 
 private:
-	Momentum momentum;
 	Gradient gradient;
 	DataMean dataMean;
 	RBMExpected rbmexpected;
+	Optimizer<GeneralizedSparseRBM, OPTIMIZERTYPE> optimizer;
 	int _trainCount = 0;
 
 
@@ -49,18 +43,11 @@ public:
 	int batchSize = 1;
 	int cdk = 0;
 	double learningRate = 0.01;
-	double momentumRate = 0.9;
 
 public:
 	Trainer() = default;
 	Trainer(GeneralizedSparseRBM & rbm);
 	~Trainer() = default;
-
-	// モーメンタムベクトル初期化
-	void initMomentum(GeneralizedSparseRBM & rbm);
-
-	// 確保済みのモーメンタムベクトルを0初期化
-	void initMomentum();
 
 	// 勾配ベクトル初期化
 	void initGradient(GeneralizedSparseRBM & rbm);
@@ -113,9 +100,6 @@ public:
 	// 勾配の計算
 	void calcGradient(GeneralizedSparseRBM & rbm, std::vector<int> & data_indexes);
 
-	// モーメンタム更新
-	void updateMomentum(GeneralizedSparseRBM & rbm);
-
 	// 勾配更新
 	void updateParams(GeneralizedSparseRBM & rbm);
 
@@ -131,26 +115,10 @@ public:
 
 template<class OPTIMIZERTYPE>
 inline Trainer<GeneralizedSparseRBM, OPTIMIZERTYPE>::Trainer(GeneralizedSparseRBM & rbm) {
-	initMomentum(rbm);
+	this->optimizer = Optimizer<GeneralizedSparseRBM, OPTIMIZERTYPE>(rbm);
 	initGradient(rbm);
 	initDataMean(rbm);
 	initRBMExpected(rbm);
-}
-
-template<class OPTIMIZERTYPE>
-inline void Trainer<GeneralizedSparseRBM, OPTIMIZERTYPE>::initMomentum(GeneralizedSparseRBM & rbm) {
-	momentum.vBias.setConstant(rbm.getVisibleSize(), 0.0);
-	momentum.hBias.setConstant(rbm.getHiddenSize(), 0.0);
-	momentum.weight.setConstant(rbm.getVisibleSize(), rbm.getHiddenSize(), 0.0);
-	momentum.hSparse.setConstant(rbm.getHiddenSize(), 0.0);
-}
-
-template<class OPTIMIZERTYPE>
-inline void Trainer<GeneralizedSparseRBM, OPTIMIZERTYPE>::initMomentum() {
-	momentum.vBias.setConstant(0.0);
-	momentum.hBias.setConstant(0.0);
-	momentum.weight.setConstant(0.0);
-	momentum.hSparse.setConstant(0.0);
 }
 
 template<class OPTIMIZERTYPE>
@@ -248,11 +216,11 @@ inline void Trainer<GeneralizedSparseRBM, OPTIMIZERTYPE>::trainOnce(GeneralizedS
 	// Contrastive Divergence
 	calcContrastiveDivergence(rbm, dataset, minibatch_indexes);
 
-	// モーメンタムの更新
-	updateMomentum(rbm);
-
 	// 勾配の更新
 	updateParams(rbm);
+
+	// オプティマイザの更新
+	optimizer.updateOptimizer();
 
 	// Trainer情報更新
 	_trainCount++;
@@ -281,11 +249,11 @@ inline void Trainer<GeneralizedSparseRBM, OPTIMIZERTYPE>::trainOnceCD(Generalize
 	// Contrastive Divergence
 	calcContrastiveDivergence(rbm, dataset, minibatch_indexes);
 
-	// モーメンタムの更新
-	updateMomentum(rbm);
-
 	// 勾配の更新
 	updateParams(rbm);
+
+	// オプティマイザの更新
+	optimizer.updateOptimizer();
 
 	// Trainer情報更新
 	_trainCount++;
@@ -314,11 +282,11 @@ inline void Trainer<GeneralizedSparseRBM, OPTIMIZERTYPE>::trainOnceExact(General
 	// Contrastive Divergence
 	calcExact(rbm, dataset, minibatch_indexes);
 
-	// モーメンタムの更新
-	updateMomentum(rbm);
-
 	// 勾配の更新
 	updateParams(rbm);
+
+	// オプティマイザの更新
+	optimizer.updateOptimizer();
 
 	// Trainer情報更新
 	_trainCount++;
@@ -467,36 +435,20 @@ inline void Trainer<GeneralizedSparseRBM, OPTIMIZERTYPE>::calcGradient(Generaliz
 	}
 }
 
-template<class OPTIMIZERTYPE>
-inline void Trainer<GeneralizedSparseRBM, OPTIMIZERTYPE>::updateMomentum(GeneralizedSparseRBM & rbm) {
-	for (int i = 0; i < rbm.getVisibleSize(); i++) {
-		momentum.vBias(i) = momentumRate * momentum.vBias(i) + learningRate * gradient.vBias(i);
-
-		for (int j = 0; j < rbm.getHiddenSize(); j++) {
-			momentum.weight(i, j) = momentumRate * momentum.weight(i, j) + learningRate * gradient.weight(i, j);
-		}
-	}
-
-	for (int j = 0; j < rbm.getHiddenSize(); j++) {
-		momentum.hBias(j) = momentumRate * momentum.hBias(j) + learningRate * gradient.hBias(j);
-		momentum.hSparse(j) = momentumRate * momentum.hSparse(j) + learningRate * gradient.hSparse(j);
-	}
-}
-
 // パラメータの更新
 template<class OPTIMIZERTYPE>
 inline void Trainer<GeneralizedSparseRBM, OPTIMIZERTYPE>::updateParams(GeneralizedSparseRBM & rbm) {
 	for (int i = 0; i < rbm.getVisibleSize(); i++) {
-		rbm.params.b(i) += momentum.vBias(i);
+		rbm.params.b(i) += optimizer.getNewParamVBias(gradient.vBias(i), i);
 
 		for (int j = 0; j < rbm.getHiddenSize(); j++) {
-			rbm.params.w(i, j) += momentum.weight(i, j);
+			rbm.params.w(i, j) += optimizer.getNewParamWeight(gradient.weight(i, j), i, j);
 		}
 	}
 
 	for (int j = 0; j < rbm.getHiddenSize(); j++) {
-		rbm.params.c(j) += momentum.hBias(j);
-		rbm.params.sparse(j) += momentum.hSparse(j);
+		rbm.params.c(j) += optimizer.getNewParamHBias(gradient.hBias(j), j);
+		rbm.params.sparse(j) += optimizer.getNewParamHSparse(gradient.hBias(j), j);
 	}
 }
 
@@ -523,7 +475,6 @@ inline std::string Trainer<GeneralizedSparseRBM, OPTIMIZERTYPE>::trainInfoJson(G
 	js["rbm"] = nlohmann::json::parse(rbm.params.serialize());
 	js["trainCount"] = _trainCount;
 	js["learningRate"] = learningRate;
-	js["momentumRate"] = momentumRate;
 	js["cdk"] = cdk;
 	js["divSize"] = rbm.getHiddenDivSize();
 	js["realFlag"] = rbm.isRealHiddenValue();
@@ -537,7 +488,6 @@ inline void Trainer<GeneralizedSparseRBM, OPTIMIZERTYPE>::trainFromTrainInfo(Gen
 	rbm.params.deserialize(js["rbm"].dump());
 	_trainCount = js["trainCount"];
 	learningRate = js["learningRate"];
-	momentumRate = js["momentumRate"];
 	cdk = js["cdk"];
 	rbm.setHiddenDiveSize(js["divSize"]);
 	rbm.setRealHiddenValue(js["realFlag"]);

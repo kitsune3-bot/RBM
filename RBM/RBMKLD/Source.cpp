@@ -316,7 +316,6 @@ void run_sparse(SQLite::Database & db, OPTION & option, int try_count, RBM_G & r
 	rbm_trainer_exact.cdk = option.cdk;
 	rbm_trainer_exact.batchSize = option.batchsize;
 	rbm_trainer_exact.learningRate = option.learningRate;
-	rbm_trainer_exact.momentumRate = option.momentumRate;
 
 	auto rbm_cd = rbm_train;
 	rbm_exact.params.sparse.setRandom() *= 0.5;
@@ -331,7 +330,6 @@ void run_sparse(SQLite::Database & db, OPTION & option, int try_count, RBM_G & r
 	rbm_trainer_cd.cdk = option.cdk;
 	rbm_trainer_cd.batchSize = option.batchsize;
 	rbm_trainer_cd.learningRate = option.learningRate;
-	rbm_trainer_cd.momentumRate = option.momentumRate;
 
 	//std::cout << "[Exact]" << std::endl;
 	//rbmutil::print_params(rbm_exact);
@@ -404,7 +402,6 @@ int main(void) {
 	option.cdk = 1;
 	option.batchsize = option.datasize;
 	option.learningRate = 0.1;
-	option.momentumRate = 0.9;
 	option.divSize = 1;
 	option.realFlag = false;
 	int try_num = 100;
