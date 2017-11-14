@@ -382,17 +382,18 @@ void Trainer<GeneralizedRBM, OPTIMIZERTYPE>::calcRBMExpectedExact(GeneralizedRBM
 	initRBMExpected();
 
 	auto z = rbm.getNormalConstant();
+	auto mu_vect = rbm.muVect();
 
 	for (int i = 0; i < rbm.getVisibleSize(); i++) {
-		rbmexpected.vBias(i) = rbm.expectedValueVis(i, z);
+		rbmexpected.vBias(i) = rbm.expectedValueVis(i, z, mu_vect);
 
 		for (int j = 0; j < rbm.getHiddenSize(); j++) {
-			rbmexpected.weight(i, j) = rbm.expectedValueVisHid(i, j, z);
+			rbmexpected.weight(i, j) = rbm.expectedValueVisHid(i, j, z, mu_vect);
 		}
 	}
 
 	for (int j = 0; j < rbm.getHiddenSize(); j++) {
-		rbmexpected.hBias(j) = rbm.expectedValueHid(j, z);
+		rbmexpected.hBias(j) = rbm.expectedValueHid(j, z, mu_vect);
 	}
 }
 

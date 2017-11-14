@@ -49,6 +49,9 @@ public:
     // 全てのパラメータを[min, max]の一様乱数で初期化
     void initParamsRandom(double range_min, double range_max);
 
+	// Xavier Initialization
+	void initParamsXavier();
+
 	// パラメータ情報のシリアライズ
 	std::string serialize();
 

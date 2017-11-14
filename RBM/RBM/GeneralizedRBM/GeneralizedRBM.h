@@ -55,8 +55,16 @@ public:
 	// 隠れ変数に関する外部磁場と相互作用
 	double mu(int hindex);
 
+	// 隠れ変数に関する外部磁場と相互作用(一括計算)
+	Eigen::VectorXd muVect();
+
+	double sumHExpMu(Eigen::VectorXd & mu_vect);
+
 	// exp(mu)の可視変数に関する全ての実現値の総和
 	double miniNormalizeConstantHidden(int hindex);
+
+	// exp(mu)の可視変数に関する全ての実現値の総和
+	double miniNormalizeConstantHidden(int hindex, double mu);
 
 	// 可視変数の確率(隠れ変数周辺化済み)
 	double probVis(std::vector<double> & data);
@@ -76,17 +84,26 @@ public:
 	// 可視変数の期待値, E[v_i](分配関数使いまわし)
 	double expectedValueVis(int vindex, double normalize_constant);
 
+	// 可視変数の期待値, E[v_i](分配関数使いまわし)
+	double expectedValueVis(int vindex, double normalize_constant, Eigen::VectorXd & mu_vect);
+
 	// 隠れ変数の期待値, E[h_j]
 	double expectedValueHid(int hindex);
 
 	// 隠れ変数の期待値, E[h_j](分配関数使いまわし)
 	double expectedValueHid(int hindex, double normalize_constant);
 
+	// 隠れ変数の期待値, E[h_j](分配関数使いまわし)
+	double expectedValueHid(int hindex, double normalize_constant, Eigen::VectorXd & mu_vect);
+
 	// 可視変数の期待値, E[v_i h_j]
 	double expectedValueVisHid(int vindex, int hindex);
 
 	// 可視変数の期待値, E[v_i h_j](分配関数使いまわし)
 	double expectedValueVisHid(int vindex, int hindex, double normalize_constant);
+
+	// 可視変数の期待値, E[v_i h_j](分配関数使いまわし)
+	double expectedValueVisHid(int vindex, int hindex, double normalize_constant, Eigen::VectorXd & mu_vect);
 
 	//
 	//appendix methods

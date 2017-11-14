@@ -216,7 +216,7 @@ void write_error_info(SQLite::Database & db, RBMGEN & rbm_gen, RBMTRAIN & rbm_tr
 template<class RBM_G, class RBM_T, class DATASET>
 void run(SQLite::Database & db, OPTION & option, int try_count, RBM_G & rbm_gen, RBM_T & rbm_train, DATASET & dataset) {
 	auto rbm_exact = rbm_train;
-	rbm_exact.params.initParamsRandom(-0.01, 0.01);
+	rbm_exact.params.initParamsXavier();
 	rbm_exact.setHiddenDiveSize(option.divSize);
 	rbm_exact.setHiddenMin(-1.0);
 	rbm_exact.setHiddenMax(1.0);
@@ -304,8 +304,8 @@ void run(SQLite::Database & db, OPTION & option, int try_count, RBM_G & rbm_gen,
 template<class RBM_G, class RBM_T, class DATASET>
 void run_sparse(SQLite::Database & db, OPTION & option, int try_count, RBM_G & rbm_gen, RBM_T & rbm_train, DATASET & dataset) {
 	auto rbm_exact = rbm_train;
-	rbm_exact.params.sparse.setRandom() *= 0.5;
-	rbm_exact.params.initParamsRandom(-0.01, 0.01);
+	rbm_exact.params.sparse.setConstant(4.0);
+	rbm_exact.params.initParamsXavier();
 	rbm_exact.setHiddenDiveSize(option.divSize);
 	rbm_exact.setHiddenMin(-1.0);
 	rbm_exact.setHiddenMax(1.0);
@@ -397,14 +397,14 @@ int main(void) {
 	option.vSize = 5;
 	option.hSize = 10;
 	option.appendH = append_h;
-	option.datasize = 500;
-	option.epoch = 20000;
+	option.datasize = 1000;
+	option.epoch = 10000;
 	option.cdk = 1;
 	option.batchsize = option.datasize;
 	option.learningRate = 0.1;
 	option.divSize = 1;
 	option.realFlag = false;
-	int try_num = 100;
+	int try_num = 10;
 
 
 	SQLite::Database db("./output/sqlite3.db", SQLite::OPEN_CREATE | SQLite::OPEN_READWRITE);
@@ -439,37 +439,37 @@ int main(void) {
 		// try rbm 2, 3, 4, 5, cont
 		option.realFlag = false;
 		option.divSize = 1;
+		run(db, option, try_count, rbm_gen, rbm_train, dataset);
+
+		//option.realFlag = false;
+		//option.divSize = 2;
 		//run(db, option, try_count, rbm_gen, rbm_train, dataset);
 
-		option.realFlag = false;
-		option.divSize = 2;
+		//option.realFlag = false;
+		//option.divSize = 3;
 		//run(db, option, try_count, rbm_gen, rbm_train, dataset);
 
-		option.realFlag = false;
-		option.divSize = 3;
+		//option.realFlag = false;
+		//option.divSize = 4;
 		//run(db, option, try_count, rbm_gen, rbm_train, dataset);
 
-		option.realFlag = false;
-		option.divSize = 4;
+		//option.realFlag = true;
 		//run(db, option, try_count, rbm_gen, rbm_train, dataset);
 
-		option.realFlag = true;
-		//run(db, option, try_count, rbm_gen, rbm_train, dataset);
+		//// SparseRBM
+		//auto rbm_train_sparse = GeneralizedSparseRBM(option.vSize, option.hSize + option.appendH);
 
-		// SparseRBM
-		auto rbm_train_sparse = GeneralizedSparseRBM(option.vSize, option.hSize + option.appendH);
+		//option.realFlag = false;
+		//option.divSize = 2;
+		//run_sparse(db, option, try_count, rbm_gen, rbm_train_sparse, dataset);
 
-		option.realFlag = false;
-		option.divSize = 2;
-		run_sparse(db, option, try_count, rbm_gen, rbm_train_sparse, dataset);
+		//option.realFlag = false;
+		//option.divSize = 3;
+		//run_sparse(db, option, try_count, rbm_gen, rbm_train_sparse, dataset);
 
-		option.realFlag = false;
-		option.divSize = 3;
-		run_sparse(db, option, try_count, rbm_gen, rbm_train_sparse, dataset);
-
-		option.realFlag = false;
-		option.divSize = 4;
-		run_sparse(db, option, try_count, rbm_gen, rbm_train_sparse, dataset);
+		//option.realFlag = false;
+		//option.divSize = 4;
+		//run_sparse(db, option, try_count, rbm_gen, rbm_train_sparse, dataset);
 
 		try{
     		db.exec("COMMIT");

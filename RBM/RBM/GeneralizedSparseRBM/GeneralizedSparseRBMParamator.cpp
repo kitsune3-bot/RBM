@@ -43,6 +43,19 @@ void GeneralizedSparseRBMParamator::initParamsRandom(double range_min, double ra
 	}
 }
 
+void GeneralizedSparseRBMParamator::initParamsXavier()
+{
+	b.resize(vSize);
+	c.resize(hSize);
+	w.resize(vSize, hSize);
+	sparse.resize(hSize);
+
+	b.setRandom() *= 0.00001;
+	c.setRandom() *= 0.00001;
+	w.setRandom() /= sqrt((vSize + hSize) / 2.0);
+	sparse.setConstant(4.0);
+}
+
 
 // 可視変数の総数を返す
 size_t GeneralizedSparseRBMParamator::getVisibleSize() {

@@ -50,6 +50,9 @@ public:
 	// 全てのパラメータを[min, max]の一様乱数で初期化
 	void initParamsRandom(double range_min, double range_max);
 
+	// 全てのパラメータを[min, max]の一様乱数で初期化
+	void initParamsXavier();
+
 	// パラメータ情報のシリアライズ
 	std::string serialize();
 
