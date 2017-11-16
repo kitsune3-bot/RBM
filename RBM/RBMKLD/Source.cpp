@@ -405,7 +405,7 @@ int main(void) {
 	option.learningRate = 0.1;
 	option.divSize = 1;
 	option.realFlag = false;
-	int try_num = 10;
+	int try_num = 1000;
 
 
 	SQLite::Database db("./output/sqlite3.db", SQLite::OPEN_CREATE | SQLite::OPEN_READWRITE);

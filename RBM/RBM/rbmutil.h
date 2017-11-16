@@ -3,6 +3,7 @@
 #include <cmath>
 #include "StateCounter.h"
 #include "Sampler.h"
+#include <omp.h>
 
 namespace rbmutil{
 
@@ -39,9 +40,8 @@ namespace rbmutil{
 	template <class RBM1, class RBM2, class STL>
 	double kld(RBM1 & rbm1, RBM2 & rbm2, STL & v_val) {
 		StateCounter<std::vector<int>> sc(std::vector<int>(rbm1.getVisibleSize(), v_val.size()));
-		std::vector<double> dat(rbm1.getVisibleSize());
-		auto setting_data_from_state = [&] {
-			auto state = sc.getState();
+		auto setting_data_from_state = [&](auto & state_counter, auto & dat) {
+			auto state = state_counter.getState();
 
 			for (int i = 0; i < rbm1.getVisibleSize(); i++) {
 				dat[i] = v_val[state[i]];
@@ -52,21 +52,28 @@ namespace rbmutil{
 
 		int max_count = sc.getMaxCount();
 		double value = 0.0;
-		for (int c = 0; c < max_count; c++, sc++) {
-			setting_data_from_state();
+
+		#pragma omp parallel for schedule(static)
+		for (int c = 0; c < max_count; c++) {
+			std::vector<double> dat(rbm1.getVisibleSize());
+			auto sc_replica = sc;
+			sc_replica.innerCounter = c++;
+			setting_data_from_state(sc_replica, dat);
+			auto rbm1_replica = rbm1;
+			auto rbm2_replica = rbm2;
 			double prob[2];
-			prob[0] = rbm1.probVis(dat);
-			prob[1] = rbm2.probVis(dat);
+			prob[0] = rbm1_replica.probVis(dat);
+			prob[1] = rbm2_replica.probVis(dat);
 
 			value += prob[0] * (log(prob[0]) -log(prob[1]));
 			if (isinf(value)) {
 				volatile auto debug_value = value;
 				volatile auto p1 = prob[0];
 				volatile auto p2 = prob[1];
-				volatile auto z1 = rbm1.getNormalConstant();
-				volatile auto z2 = rbm2.getNormalConstant();
+				volatile auto z1 = rbm1_replica.getNormalConstant();
+				volatile auto z2 = rbm2_replica.getNormalConstant();
 
-				print_params(rbm2);
+				print_params(rbm2_replica);
 
 				throw;
 			}

@@ -7,7 +7,6 @@ template <class T>
 class StateCounter
 {
 protected:
-	size_t _innerCounter = 0;  // 内部状態数カウンター
 	size_t _maxCount = 0;  // 状態数カウンターの最大値
 	size_t _elemNum = 0;  // 桁数
 	T _stateSet;  // 各状態数
@@ -21,7 +20,7 @@ protected:
 			auto & s = _stateSet;
 			auto & sc = _stateCounterSet;
 
-			sc[n] = _innerCounter % std::accumulate(s.begin(), s.begin() + 1 + n, 1, [](int init, int i) {
+			sc[n] = innerCounter % std::accumulate(s.begin(), s.begin() + 1 + n, 1, [](int init, int i) {
 				return init * i;
 			}) / std::accumulate(s.begin(), s.begin() + n, 1, [](int init, int i) {
 				return init * i;
@@ -30,6 +29,8 @@ protected:
 	}
 
 public:
+	size_t innerCounter = 0;  // 内部状態数カウンター
+
 	StateCounter(T state_set = {}) {
 		_stateSet = state_set;
 		_stateCounterSet = state_set;
@@ -41,7 +42,7 @@ public:
 	~StateCounter() = default;
 
 	void operator++(int value) {
-		_innerCounter++;
+		innerCounter++;
 	}
 
 	T operator()(int value) {
