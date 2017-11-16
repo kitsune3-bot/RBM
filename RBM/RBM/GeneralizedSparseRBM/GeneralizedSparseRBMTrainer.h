@@ -492,3 +492,4 @@ inline void Trainer<GeneralizedSparseRBM, OPTIMIZERTYPE>::trainFromTrainInfo(Gen
 	rbm.setHiddenDiveSize(js["divSize"]);
 	rbm.setRealHiddenValue(js["realFlag"]);
 }
+

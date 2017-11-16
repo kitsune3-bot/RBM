@@ -8,6 +8,7 @@
 #include "Sampler.h"
 #include "SQLiteCpp/SQLiteCpp.h"
 #include "sqlite3.h"
+#include <omp.h>
 
 typedef struct {
 	int vSize = 5;
@@ -397,8 +398,8 @@ int main(void) {
 	option.vSize = 5;
 	option.hSize = 10;
 	option.appendH = append_h;
-	option.datasize = 1000;
-	option.epoch = 10000;
+	option.datasize = 100;
+	option.epoch = 5000;
 	option.cdk = 1;
 	option.batchsize = option.datasize;
 	option.learningRate = 0.1;
@@ -437,9 +438,9 @@ int main(void) {
 		auto rbm_train = GeneralizedRBM(option.vSize, option.hSize + option.appendH);
 
 		// try rbm 2, 3, 4, 5, cont
-		option.realFlag = false;
-		option.divSize = 1;
-		run(db, option, try_count, rbm_gen, rbm_train, dataset);
+		//option.realFlag = false;
+		//option.divSize = 1;
+		//run(db, option, try_count, rbm_gen, rbm_train, dataset);
 
 		//option.realFlag = false;
 		//option.divSize = 2;
@@ -453,8 +454,8 @@ int main(void) {
 		//option.divSize = 4;
 		//run(db, option, try_count, rbm_gen, rbm_train, dataset);
 
-		//option.realFlag = true;
-		//run(db, option, try_count, rbm_gen, rbm_train, dataset);
+		option.realFlag = true;
+		run(db, option, try_count, rbm_gen, rbm_train, dataset);
 
 		//// SparseRBM
 		//auto rbm_train_sparse = GeneralizedSparseRBM(option.vSize, option.hSize + option.appendH);

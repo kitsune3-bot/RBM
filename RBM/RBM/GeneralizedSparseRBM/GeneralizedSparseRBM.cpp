@@ -95,7 +95,10 @@ double GeneralizedSparseRBM::getFreeEnergy() {
 
 // 隠れ変数の活性化関数的なもの
 double GeneralizedSparseRBM::actHidJ(int hindex) {
+}
 
+double GeneralizedSparseRBM::actHidJ(int hindex, double mu)
+{
 	// 離散型
 	auto discrete = [&]()
 	{

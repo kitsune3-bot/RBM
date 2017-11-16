@@ -92,6 +92,14 @@ double GeneralizedRBM::getFreeEnergy() {
 
 // 隠れ変数の活性化関数的なもの
 double GeneralizedRBM::actHidJ(int hindex) {
+	auto mu = this->mu(hindex);
+	auto value = this->actHidJ(hindex, mu);
+
+	return value;
+}
+
+double GeneralizedRBM::actHidJ(int hindex, double mu)
+{
 
 	// 離散型
 	auto discrete = [&]()
@@ -99,7 +107,7 @@ double GeneralizedRBM::actHidJ(int hindex) {
 		auto value_set = splitHiddenSet();
 		double numer = 0.0;  // 分子
 		double denom = miniNormalizeConstantHidden(hindex);  // 分母
-		auto mu_j = mu(hindex);
+		auto mu_j = mu;
 		for (auto & h_j : value_set) {
 			numer += h_j * exp(mu_j * h_j);
 		}
@@ -111,7 +119,7 @@ double GeneralizedRBM::actHidJ(int hindex) {
 
 	// 連続型
 	auto real = [&]() {
-		auto mu_j = mu(hindex);
+		auto mu_j = mu;
 		// FIXME: 0除算の可能性あり, 要テイラー展開
 		auto value = (hMax * exp(hMax * mu_j) - hMin * exp(hMin * mu_j)) / (exp(hMax * mu_j) - exp(hMin * mu_j)) - 1 / mu_j;
 
@@ -169,6 +177,8 @@ double GeneralizedRBM::sumHExpMu(Eigen::VectorXd & mu_vect)
 	for (int j = 0; j < this->hSize; j++) {
 		value *= miniNormalizeConstantHidden(j, mu_vect(j));
 	}
+
+	return value;
 }
 
 // muの可視変数に関する全ての実現値の総和
@@ -500,6 +510,11 @@ double GeneralizedRBM::expectedValueVis(int vindex, double normalize_constant, E
 
 		value += term;
 
+		// debug
+		if (isinf(value) || isnan(value)) {
+			volatile auto debug_value = value;
+			throw;
+		}
 	}
 
 	value = value / z;
@@ -656,7 +671,7 @@ double GeneralizedRBM::expectedValueHid(int hindex, double normalize_constant, E
 
 	// 隠れ変数h_lの値の総和計算
 	auto sum_h_l = [&](int l) {
-		auto mu_l = mu(l);
+		auto mu_l = mu_vect(l);
 
 		// 離散型
 		auto sum_h_l_discrete = [&](double mu_l) {
@@ -840,7 +855,7 @@ double GeneralizedRBM::expectedValueVisHid(int vindex, int hindex, double normal
 
 	// sum( h_j exp(mu_j h_j))
 	auto sum_h_j = [&](int j) {
-		auto mu_j = mu(j);
+		auto mu_j = mu_vect(j);
 
 		// 離散型
 		auto sum_h_j_discrete = [&](double mu_j) {
@@ -916,6 +931,12 @@ double GeneralizedRBM::expectedValueVisHid(int vindex, int hindex, double normal
 		}
 
 		value += term;
+	}
+
+	// debug
+	if (isinf(value) || isnan(value)) {
+		volatile auto debug_value = value;
+		throw;
 	}
 
 	value = value / z;

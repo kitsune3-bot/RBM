@@ -9,6 +9,7 @@
 
 
 class GeneralizedRBM {
+
 protected:
 	size_t vSize = 0;
 	size_t hSize = 0;
@@ -45,6 +46,9 @@ public:
 
 	// 隠れ変数の活性化関数的なもの
 	double actHidJ(int hindex);
+
+	// 隠れ変数の活性化関数的なもの
+	double actHidJ(int hindex, double mu);
 
 	// 可視変数に関する外部磁場と相互作用
 	double lambda(int vindex);
@@ -104,6 +108,7 @@ public:
 
 	// 可視変数の期待値, E[v_i h_j](分配関数使いまわし)
 	double expectedValueVisHid(int vindex, int hindex, double normalize_constant, Eigen::VectorXd & mu_vect);
+
 
 	//
 	//appendix methods

@@ -45,6 +45,9 @@ public:
 	// 隠れ変数の活性化関数的なもの
 	double actHidJ(int hindex);
 
+	// 隠れ変数の活性化関数的なもの
+	double actHidJ(int hindex, double mu);
+
 	// 可視変数に関する外部磁場と相互作用
 	double lambda(int vindex);
 

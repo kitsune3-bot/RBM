@@ -92,6 +92,7 @@ public:
 	void calcRBMExpectedExact(GeneralizedRBM & rbm, std::vector<std::vector<double>> & dataset, std::vector<int> & data_indexes);
 
 
+
 	// 勾配の計算
 	void calcGradient(GeneralizedRBM & rbm, std::vector<int> & data_indexes);
 
@@ -381,20 +382,46 @@ void Trainer<GeneralizedRBM, OPTIMIZERTYPE>::calcRBMExpectedExact(GeneralizedRBM
 	// 0埋め初期化
 	initRBMExpected();
 
-	auto z = rbm.getNormalConstant();
-	auto mu_vect = rbm.muVect();
+	StateCounter<std::vector<int>> sc(std::vector<int>(rbm.getVisibleSize(), 2));  // 可視変数Vの状態カウンター
+	int v_state_map[] = { 0, 1 };  // 可視変数の状態->値変換写像
 
-	for (int i = 0; i < rbm.getVisibleSize(); i++) {
-		rbmexpected.vBias(i) = rbm.expectedValueVis(i, z, mu_vect);
+	auto max_count = sc.getMaxCount();
+	for (int c = 0; c < max_count; c++, sc++) {
+		// FIXME: stlのコピーは遅いぞ
+		auto v_state = sc.getState();
 
+		// FIXME: v_i == 0 ときそのままcontinueしたほうが速いぞ
+
+		for (int i = 0; i < rbm.getVisibleSize(); i++) {
+			rbm.nodes.v(i) = v_state_map[v_state[i]];
+		}
+
+
+		auto b_dot_v = rbm.nodes.getVisibleLayer().dot(rbm.params.b);  // bとvの内積
+		auto mu_vect = rbm.muVect();
+		auto sum_h_exp_mu = rbm.sumHExpMu(mu_vect);
+
+		// 期待値一括計算
+		// E[v_i]
+		for (int i = 0; i < rbm.getVisibleSize(); i++) {
+			rbmexpected.vBias(i) += rbm.nodes.v(i) * exp(b_dot_v) * sum_h_exp_mu;
+		}
+
+		// E[v_i h_j] and E[h_j]
 		for (int j = 0; j < rbm.getHiddenSize(); j++) {
-			rbmexpected.weight(i, j) = rbm.expectedValueVisHid(i, j, z, mu_vect);
+			auto mu_j = mu_vect(j);
+			rbmexpected.hBias(j) += exp(b_dot_v) * sum_h_exp_mu * rbm.actHidJ(j, mu_j);
+			for (int i = 0; i < rbm.getVisibleSize(); i++) {
+				rbmexpected.weight(i, j) += rbm.nodes.v(i) * exp(b_dot_v) * sum_h_exp_mu * rbm.actHidJ(j, mu_j);
+			}
 		}
 	}
 
-	for (int j = 0; j < rbm.getHiddenSize(); j++) {
-		rbmexpected.hBias(j) = rbm.expectedValueHid(j, z, mu_vect);
-	}
+	auto z = rbm.getNormalConstant();
+	rbmexpected.vBias /= z;
+	rbmexpected.hBias /= z;
+	rbmexpected.weight /= z;
+
 }
 
 
@@ -422,7 +449,7 @@ void Trainer<GeneralizedRBM, OPTIMIZERTYPE>::calcGradient(GeneralizedRBM & rbm, 
 template<class OPTIMIZERTYPE>
 void Trainer<GeneralizedRBM, OPTIMIZERTYPE>::updateParams(GeneralizedRBM & rbm) {
 	for (int i = 0; i < rbm.getVisibleSize(); i++) {
-		rbm.params.b(i) += optimizer.getNewParamVBias( gradient.vBias(i), i);
+		rbm.params.b(i) += optimizer.getNewParamVBias(gradient.vBias(i), i);
 
 		for (int j = 0; j < rbm.getHiddenSize(); j++) {
 			rbm.params.w(i, j) += optimizer.getNewParamWeight(gradient.weight(i, j), i, j);
