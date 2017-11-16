@@ -53,11 +53,11 @@ namespace rbmutil{
 		int max_count = sc.getMaxCount();
 		double value = 0.0;
 
-		#pragma omp parallel for schedule(static)
+		#pragma omp parallel for schedule(static) reduction(+:value)
 		for (int c = 0; c < max_count; c++) {
 			std::vector<double> dat(rbm1.getVisibleSize());
 			auto sc_replica = sc;
-			sc_replica.innerCounter = c++;
+			sc_replica.innerCounter = c;
 			setting_data_from_state(sc_replica, dat);
 			auto rbm1_replica = rbm1;
 			auto rbm2_replica = rbm2;

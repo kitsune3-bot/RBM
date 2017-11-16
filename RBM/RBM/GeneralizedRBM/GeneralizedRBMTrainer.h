@@ -4,6 +4,7 @@
 #include "GeneralizedRBM.h"
 #include "GeneralizedRBMOptimizer.h"
 #include <vector>
+#include <omp.h>
 
 template<class OPTIMIZERTYPE>
 class Trainer<GeneralizedRBM, OPTIMIZERTYPE> {
@@ -315,22 +316,27 @@ void Trainer<GeneralizedRBM, OPTIMIZERTYPE>::calcDataMean(GeneralizedRBM & rbm, 
 	// 0埋め初期化
 	initDataMean();
 
-	for (auto & n : data_indexes) {
+	auto index_size = data_indexes.size();
+#pragma omp parallel for schedule(static)
+	for (int n = 0; n < index_size; n++) {
 		auto & data = dataset[n];
 		Eigen::VectorXd vect = Eigen::Map<Eigen::VectorXd>(data.data(), data.size());
 		rbm.nodes.v = vect;
 		auto mu_vect = rbm.muVect();
 
-		for (int i = 0; i < rbm.getVisibleSize(); i++) {
-			dataMean.vBias(i) += vect(i);
+#pragma omp critical
+		{
+			for (int i = 0; i < rbm.getVisibleSize(); i++) {
+				dataMean.vBias(i) += vect(i);
+
+				for (int j = 0; j < rbm.getHiddenSize(); j++) {
+					dataMean.weight(i, j) += vect(i) * rbm.actHidJ(j, mu_vect(j));
+				}
+			}
 
 			for (int j = 0; j < rbm.getHiddenSize(); j++) {
-				dataMean.weight(i, j) += vect(i) * rbm.actHidJ(j, mu_vect(j));
+				dataMean.hBias(j) += rbm.actHidJ(j, mu_vect(j));
 			}
-		}
-
-		for (int j = 0; j < rbm.getHiddenSize(); j++) {
-			dataMean.hBias(j) += rbm.actHidJ(j, mu_vect(j));
 		}
 	}
 
@@ -344,31 +350,37 @@ void Trainer<GeneralizedRBM, OPTIMIZERTYPE>::calcRBMExpectedCD(GeneralizedRBM & 
 	// 0埋め初期化
 	initRBMExpected();
 
-	for (auto & n : data_indexes) {
+	auto index_size = data_indexes.size();
+#pragma omp parallel for schedule(static)
+	for (int n = 0; n < index_size; n++) {
 		auto & data = dataset[n];
 		Eigen::VectorXd vect = Eigen::Map<Eigen::VectorXd>(data.data(), data.size());
 
 		// GeneralizedRBMの初期値設定
 		rbm.nodes.v = vect;
+		auto rbm_replica = rbm;
 
-		for (int j = 0; j < rbm.getHiddenSize(); j++) {
-			rbm.nodes.h(j) = rbm.actHidJ(j);
+		for (int j = 0; j < rbm_replica.getHiddenSize(); j++) {
+			rbm_replica.nodes.h(j) = rbm_replica.actHidJ(j);
 		}
 
 		// CD-K
 		Sampler<GeneralizedRBM> sampler;
 		for (int k = 0; k < cdk; k++) {
-			sampler.updateByBlockedGibbsSamplingVisible(rbm);
-			sampler.updateByBlockedGibbsSamplingHidden(rbm);
+			sampler.updateByBlockedGibbsSamplingVisible(rbm_replica);
+			sampler.updateByBlockedGibbsSamplingHidden(rbm_replica);
 		}
 
 		// 結果を格納
-		rbmexpected.vBias += rbm.nodes.v;
-		rbmexpected.hBias += rbm.nodes.h;
+#pragma omp critical
+		{
+			rbmexpected.vBias += rbm_replica.nodes.v;
+			rbmexpected.hBias += rbm_replica.nodes.h;
 
-		for (int i = 0; i < rbm.getVisibleSize(); i++) {
-			for (int j = 0; j < rbm.getHiddenSize(); j++) {
-				rbmexpected.weight(i, j) += rbm.nodes.v(i) * rbm.nodes.h(j);
+			for (int i = 0; i < rbm_replica.getVisibleSize(); i++) {
+				for (int j = 0; j < rbm_replica.getHiddenSize(); j++) {
+					rbmexpected.weight(i, j) += rbm_replica.nodes.v(i) * rbm_replica.nodes.h(j);
+				}
 			}
 		}
 	}
@@ -387,33 +399,41 @@ void Trainer<GeneralizedRBM, OPTIMIZERTYPE>::calcRBMExpectedExact(GeneralizedRBM
 	int v_state_map[] = { 0, 1 };  // 可視変数の状態->値変換写像
 
 	auto max_count = sc.getMaxCount();
-	for (int c = 0; c < max_count; c++, sc++) {
+#pragma omp parallel for schedule(static)
+	for (int c = 0; c < max_count; c++) {
 		// FIXME: stlのコピーは遅いぞ
-		auto v_state = sc.getState();
+		auto sc_replica = sc;
+		sc_replica.innerCounter = c;
+
+		auto v_state = sc_replica.getState();
+		auto rbm_replica = rbm;
 
 		// FIXME: v_i == 0 ときそのままcontinueしたほうが速いぞ
 
-		for (int i = 0; i < rbm.getVisibleSize(); i++) {
-			rbm.nodes.v(i) = v_state_map[v_state[i]];
+		for (int i = 0; i < rbm_replica.getVisibleSize(); i++) {
+			rbm_replica.nodes.v(i) = v_state_map[v_state[i]];
 		}
 
 
-		auto b_dot_v = rbm.nodes.getVisibleLayer().dot(rbm.params.b);  // bとvの内積
-		auto mu_vect = rbm.muVect();
-		auto sum_h_exp_mu = rbm.sumHExpMu(mu_vect);
+		auto b_dot_v = rbm_replica.nodes.getVisibleLayer().dot(rbm_replica.params.b);  // bとvの内積
+		auto mu_vect = rbm_replica.muVect();
+		auto sum_h_exp_mu = rbm_replica.sumHExpMu(mu_vect);
 
 		// 期待値一括計算
-		// E[v_i]
-		for (int i = 0; i < rbm.getVisibleSize(); i++) {
-			rbmexpected.vBias(i) += rbm.nodes.v(i) * exp(b_dot_v) * sum_h_exp_mu;
-		}
+#pragma omp critical
+		{
+			// E[v_i]
+			for (int i = 0; i < rbm_replica.getVisibleSize(); i++) {
+				rbmexpected.vBias(i) += rbm_replica.nodes.v(i) * exp(b_dot_v) * sum_h_exp_mu;
+			}
 
-		// E[v_i h_j] and E[h_j]
-		for (int j = 0; j < rbm.getHiddenSize(); j++) {
-			auto mu_j = mu_vect(j);
-			rbmexpected.hBias(j) += exp(b_dot_v) * sum_h_exp_mu * rbm.actHidJ(j, mu_j);
-			for (int i = 0; i < rbm.getVisibleSize(); i++) {
-				rbmexpected.weight(i, j) += rbm.nodes.v(i) * exp(b_dot_v) * sum_h_exp_mu * rbm.actHidJ(j, mu_j);
+			// E[v_i h_j] and E[h_j]
+			for (int j = 0; j < rbm_replica.getHiddenSize(); j++) {
+				auto mu_j = mu_vect(j);
+				rbmexpected.hBias(j) += exp(b_dot_v) * sum_h_exp_mu * rbm_replica.actHidJ(j, mu_j);
+				for (int i = 0; i < rbm_replica.getVisibleSize(); i++) {
+					rbmexpected.weight(i, j) += rbm_replica.nodes.v(i) * exp(b_dot_v) * sum_h_exp_mu * rbm_replica.actHidJ(j, mu_j);
+				}
 			}
 		}
 	}
