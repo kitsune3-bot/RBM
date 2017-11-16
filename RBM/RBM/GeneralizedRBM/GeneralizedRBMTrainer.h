@@ -319,17 +319,18 @@ void Trainer<GeneralizedRBM, OPTIMIZERTYPE>::calcDataMean(GeneralizedRBM & rbm, 
 		auto & data = dataset[n];
 		Eigen::VectorXd vect = Eigen::Map<Eigen::VectorXd>(data.data(), data.size());
 		rbm.nodes.v = vect;
+		auto mu_vect = rbm.muVect();
 
 		for (int i = 0; i < rbm.getVisibleSize(); i++) {
 			dataMean.vBias(i) += vect(i);
 
 			for (int j = 0; j < rbm.getHiddenSize(); j++) {
-				dataMean.weight(i, j) += vect(i) * rbm.actHidJ(j);
+				dataMean.weight(i, j) += vect(i) * rbm.actHidJ(j, mu_vect(j));
 			}
 		}
 
 		for (int j = 0; j < rbm.getHiddenSize(); j++) {
-			dataMean.hBias(j) += rbm.actHidJ(j);
+			dataMean.hBias(j) += rbm.actHidJ(j, mu_vect(j));
 		}
 	}
 
