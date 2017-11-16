@@ -421,7 +421,6 @@ void Trainer<GeneralizedRBM, OPTIMIZERTYPE>::calcRBMExpectedExact(GeneralizedRBM
 	rbmexpected.vBias /= z;
 	rbmexpected.hBias /= z;
 	rbmexpected.weight /= z;
-
 }
 
 

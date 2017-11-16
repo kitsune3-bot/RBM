@@ -95,6 +95,10 @@ double GeneralizedSparseRBM::getFreeEnergy() {
 
 // 隠れ変数の活性化関数的なもの
 double GeneralizedSparseRBM::actHidJ(int hindex) {
+	auto mu = this->mu(hindex);
+	auto value = this->actHidJ(hindex, mu);
+
+	return value;
 }
 
 double GeneralizedSparseRBM::actHidJ(int hindex, double mu)
@@ -103,9 +107,9 @@ double GeneralizedSparseRBM::actHidJ(int hindex, double mu)
 	auto discrete = [&]()
 	{
 		auto value_set = splitHiddenSet();
+		auto mu_j = mu;
 		double numer = 0.0;  // 分子
-		double denom = miniNormalizeConstantHidden(hindex);  // 分母
-		auto mu_j = mu(hindex);
+		double denom = miniNormalizeConstantHidden(hindex, mu_j);  // 分母
 		for (auto & h_j : value_set) {
 			numer += h_j * exp(mu_j * h_j - exp(params.sparse(hindex)) * abs(h_j));
 		}
@@ -119,7 +123,7 @@ double GeneralizedSparseRBM::actHidJ(int hindex, double mu)
 	auto real = [&]() {
 		// TODO: 導出せよ
 		throw;
-		auto mu_j = mu(hindex);
+		auto mu_j = mu;
 		// FIXME: 0除算の可能性あり, 要テイラー展開
 		auto value = (hMax * exp(hMax * mu_j) - hMin * exp(hMin * mu_j)) / (exp(hMax * mu_j) - exp(hMin * mu_j)) - 1 / mu_j;
 
@@ -161,13 +165,41 @@ double GeneralizedSparseRBM::mu(int hindex) {
 	return mu;
 }
 
+Eigen::VectorXd GeneralizedSparseRBM::muVect()
+{
+	Eigen::VectorXd mu_vect(this->hSize);
+	for (int j = 0; j < this->hSize; j++) {
+		mu_vect(j) = mu(j);
+	}
+
+	return mu_vect;
+}
+
+double GeneralizedSparseRBM::sumHExpMuSparse(Eigen::VectorXd & mu_vect)
+{
+	double value = 1.0;
+	for (int j = 0; j < this->hSize; j++) {
+		value *= miniNormalizeConstantHidden(j, mu_vect(j));
+	}
+
+	return value;
+}
+
 // FIXME: z_jだけども名前変えたほうがよさそうだ。
 // muとlambdaの可視変数に関する全ての実現値の総和
 double GeneralizedSparseRBM::miniNormalizeConstantHidden(int hindex) {
+	auto mu = this->mu(hindex);
+	auto value = this->miniNormalizeConstantHidden(hindex, mu);
+
+	return value;
+}
+
+double GeneralizedSparseRBM::miniNormalizeConstantHidden(int hindex, double mu)
+{
 	// 離散型
 	auto sum_discrete = [&]() {
 		double value = 0.0;
-		double mu_j = mu(hindex);
+		double mu_j = mu;
 
 		for (auto & h_j : hiddenValueSet) {
 			value += exp(mu_j * h_j - exp(params.sparse(hindex)) * abs(h_j));
@@ -180,7 +212,7 @@ double GeneralizedSparseRBM::miniNormalizeConstantHidden(int hindex) {
 	auto sum_real = [&]() {
 		// TODO: 導出せよ
 		throw;
-		double mu_j = mu(hindex);
+		double mu_j = mu;
 		double value = (exp(hMax * mu_j) - exp(hMin * mu_j)) / mu_j;
 
 		return value;
@@ -742,22 +774,30 @@ double GeneralizedSparseRBM::expectedValueAbsHid(int hindex, double normalize_co
 }
 
 
+
 bool GeneralizedSparseRBM::isRealHiddenValue() {
 	return realFlag;
 }
 
 // 隠れ変数の活性化関数(ABS)的なもの
 double GeneralizedSparseRBM::actHidSparseJ(int hindex) {
+	auto mu = this->mu(hindex);
+	auto value = this->actHidSparseJ(hindex, mu);
 
+	return value;
+}
+
+double GeneralizedSparseRBM::actHidSparseJ(int hindex, double mu)
+{
 	// 離散型
 	auto discrete = [&]()
 	{
 		auto value_set = splitHiddenSet();
+		auto mu_j = mu;
 		double numer = 0.0;  // 分子
-		double denom = miniNormalizeConstantHidden(hindex);  // 分母
-		auto mu_j = mu(hindex);
+		double denom = miniNormalizeConstantHidden(hindex, mu_j);  // 分母
 		for (auto & h_j : value_set) {
-			numer += - exp(params.sparse(hindex)) * abs(h_j) * exp(mu_j * h_j - exp(params.sparse(hindex)) * abs(h_j));
+			numer += -exp(params.sparse(hindex)) * abs(h_j) * exp(mu_j * h_j - exp(params.sparse(hindex)) * abs(h_j));
 		}
 
 		auto value = numer / denom;
@@ -769,7 +809,7 @@ double GeneralizedSparseRBM::actHidSparseJ(int hindex) {
 	auto real = [&]() {
 		// TODO: 導出せよ
 		throw;
-		auto mu_j = mu(hindex);
+		auto mu_j = mu;
 		// FIXME: 0除算の可能性あり, 要テイラー展開
 		auto value = (hMax * exp(hMax * mu_j) - hMin * exp(hMin * mu_j)) / (exp(hMax * mu_j) - exp(hMin * mu_j)) - 1 / mu_j;
 

@@ -57,8 +57,16 @@ public:
 	// 隠れ変数に関する外部磁場と相互作用
 	double mu(int hindex);
 
+	// 隠れ変数に関する外部磁場と相互作用(一括計算)
+	Eigen::VectorXd muVect();
+
+	double sumHExpMuSparse(Eigen::VectorXd & mu_vect);
+
 	// exp(mu+lambda)の可視変数に関する全ての実現値の総和
 	double miniNormalizeConstantHidden(int hindex);
+
+	// exp(mu+lambda)の可視変数に関する全ての実現値の総和
+	double miniNormalizeConstantHidden(int hindex, double mu);
 
 	// 可視変数の確率(隠れ変数周辺化済み)
 	double probVis(std::vector<double> & data);
@@ -129,6 +137,9 @@ public:
 
 	// 隠れ変数の(Abs)した活性化関数的なもの
 	double actHidSparseJ(int hindex);
+
+	// 隠れ変数の(Abs)した活性化関数的なもの
+	double actHidSparseJ(int hindex, double mu);
 
 	bool isRealHiddenValue();
 };

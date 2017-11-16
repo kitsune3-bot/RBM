@@ -398,8 +398,8 @@ int main(void) {
 	option.vSize = 5;
 	option.hSize = 10;
 	option.appendH = append_h;
-	option.datasize = 100;
-	option.epoch = 5000;
+	option.datasize = 1000;
+	option.epoch = 20000;
 	option.cdk = 1;
 	option.batchsize = option.datasize;
 	option.learningRate = 0.1;
@@ -438,39 +438,39 @@ int main(void) {
 		auto rbm_train = GeneralizedRBM(option.vSize, option.hSize + option.appendH);
 
 		// try rbm 2, 3, 4, 5, cont
-		//option.realFlag = false;
-		//option.divSize = 1;
-		//run(db, option, try_count, rbm_gen, rbm_train, dataset);
+		option.realFlag = false;
+		option.divSize = 1;
+		run(db, option, try_count, rbm_gen, rbm_train, dataset);
 
-		//option.realFlag = false;
-		//option.divSize = 2;
-		//run(db, option, try_count, rbm_gen, rbm_train, dataset);
+		option.realFlag = false;
+		option.divSize = 2;
+		run(db, option, try_count, rbm_gen, rbm_train, dataset);
 
-		//option.realFlag = false;
-		//option.divSize = 3;
-		//run(db, option, try_count, rbm_gen, rbm_train, dataset);
+		option.realFlag = false;
+		option.divSize = 3;
+		run(db, option, try_count, rbm_gen, rbm_train, dataset);
 
-		//option.realFlag = false;
-		//option.divSize = 4;
-		//run(db, option, try_count, rbm_gen, rbm_train, dataset);
+		option.realFlag = false;
+		option.divSize = 4;
+		run(db, option, try_count, rbm_gen, rbm_train, dataset);
 
 		option.realFlag = true;
 		run(db, option, try_count, rbm_gen, rbm_train, dataset);
 
-		//// SparseRBM
-		//auto rbm_train_sparse = GeneralizedSparseRBM(option.vSize, option.hSize + option.appendH);
+		// SparseRBM
+		auto rbm_train_sparse = GeneralizedSparseRBM(option.vSize, option.hSize + option.appendH);
 
-		//option.realFlag = false;
-		//option.divSize = 2;
-		//run_sparse(db, option, try_count, rbm_gen, rbm_train_sparse, dataset);
+		option.realFlag = false;
+		option.divSize = 2;
+		run_sparse(db, option, try_count, rbm_gen, rbm_train_sparse, dataset);
 
-		//option.realFlag = false;
-		//option.divSize = 3;
-		//run_sparse(db, option, try_count, rbm_gen, rbm_train_sparse, dataset);
+		option.realFlag = false;
+		option.divSize = 3;
+		run_sparse(db, option, try_count, rbm_gen, rbm_train_sparse, dataset);
 
-		//option.realFlag = false;
-		//option.divSize = 4;
-		//run_sparse(db, option, try_count, rbm_gen, rbm_train_sparse, dataset);
+		option.realFlag = false;
+		option.divSize = 4;
+		run_sparse(db, option, try_count, rbm_gen, rbm_train_sparse, dataset);
 
 		try{
     		db.exec("COMMIT");

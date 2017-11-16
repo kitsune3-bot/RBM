@@ -105,9 +105,9 @@ double GeneralizedRBM::actHidJ(int hindex, double mu)
 	auto discrete = [&]()
 	{
 		auto value_set = splitHiddenSet();
-		double numer = 0.0;  // 分子
-		double denom = miniNormalizeConstantHidden(hindex);  // 分母
 		auto mu_j = mu;
+		double numer = 0.0;  // 分子
+		double denom = miniNormalizeConstantHidden(hindex, mu_j);  // 分母
 		for (auto & h_j : value_set) {
 			numer += h_j * exp(mu_j * h_j);
 		}
@@ -143,10 +143,26 @@ double GeneralizedRBM::lambda(int vindex) {
 	return lam;
 }
 
+Eigen::VectorXd GeneralizedRBM::lambdaVect()
+{
+	Eigen::VectorXd lambda_vect(this->vSize);
+	for (int i = 0; i < this->vSize; i++) {
+		lambda_vect(i) = mu(i);
+	}
+
+	return lambda_vect;
+}
+
 // lambdaの可視変数に関する全ての実現値の総和
 double GeneralizedRBM::sumExpLambda(int vindex) {
 	// {0, 1}での実装
 	return 1.0 + exp(lambda(vindex));
+}
+
+double GeneralizedRBM::sumExpLambda(int vindex, double lambda)
+{
+	// {0, 1}での実装
+	return 1.0 + exp(lambda);
 }
 
 // 隠れ変数に関する外部磁場と相互作用
@@ -297,14 +313,25 @@ double GeneralizedRBM::probVis(std::vector<double> & data, double normalize_cons
 
 // 隠れ変数を条件で与えた可視変数の条件付き確率, P(v_i | h)
 double GeneralizedRBM::condProbVis(int vindex, double value) {
-	double lam = lambda(vindex);
-	return exp(lam * value) / sumExpLambda(vindex);
+	return this->condProbVis(vindex, value, this->lambda(vindex));
+}
+
+double GeneralizedRBM::condProbVis(int vindex, double value, double lambda)
+{
+	auto prob = exp(lambda * value) / sumExpLambda(vindex, lambda);
+	return prob;
 }
 
 // 可視変数を条件で与えた隠れ変数の条件付き確率, P(h_j | v)
 double GeneralizedRBM::condProbHid(int hindex, double value) {
-	double m = mu(hindex);
-	double prob = exp(m * value) / miniNormalizeConstantHidden(hindex);
+	double prob = this->condProbHid(hindex, value, this->mu(hindex));
+	return prob;
+}
+
+double GeneralizedRBM::condProbHid(int hindex, double value, double mu)
+{
+	double mu_j = mu;
+	double prob = exp(mu_j * value) / miniNormalizeConstantHidden(hindex, mu_j);
 	return prob;
 }
 
@@ -386,79 +413,6 @@ double GeneralizedRBM::expectedValueVis(int vindex, double normalize_constant) {
 	// 隠れ変数h_jの値の総和計算
 	auto sum_h_j = [&](int j) {
 		auto mu_j = mu(j);
-
-		// 離散型
-		auto sum_h_j_discrete = [&](double mu_j) {
-			double sum = 0.0;
-
-			for (auto & h_val : this->hiddenValueSet) {
-				sum += exp(mu_j * h_val);
-			}
-
-			return sum;
-		};
-
-		// 連続型
-		auto sum_h_j_real = [&](double mu_j) {
-			double sum = (exp(hMax * mu_j) - exp(hMin * mu_j)) / mu_j;
-
-			return sum;
-		};
-
-		auto value = realFlag ? sum_h_j_real(mu_j) : sum_h_j_discrete(mu_j);
-
-		return value;
-	};
-
-	double value = 0.0;
-
-	auto max_count = sc.getMaxCount();
-	for (int c = 0; c < max_count; c++, sc++) {
-		// 項計算の前処理
-		// FIXME: stlのコピーは遅いぞ
-		auto v_state = sc.getState();
-
-		// FIXME: v_i == 0 ときそのままcontinueしたほうが速いぞ
-		//
-		for (int i = 0; i < vSize; i++) {
-			this->nodes.v(i) = v_state_map[v_state[i]];
-		}
-
-		// 項計算
-		// bとvの内積
-		auto b_dot_v = [&]() {
-			return nodes.getVisibleLayer().dot(params.b);
-		}();
-		double term = this->nodes.v(vindex) * exp(b_dot_v);
-
-		for (int j = 0; j < hSize; j++) {
-			term *= sum_h_j(j);
-		}
-
-		value += term;
-
-		// debug
-		if (isinf(value) || isnan(value)) {
-			volatile auto debug_value = value;
-			throw;
-		}
-	}
-
-	value = value / z;
-	return value;
-}
-
-double GeneralizedRBM::expectedValueVis(int vindex, double normalize_constant, Eigen::VectorXd & mu_vect)
-{
-	// TODO: とりあえず可視変数は{0, 1}のボルツマンマシンなので則値代入してます
-	StateCounter<std::vector<int>> sc(std::vector<int>(vSize, 2));  // 可視変数Vの状態カウンター
-	int v_state_map[] = { 0, 1 };  // 可視変数の状態->値変換写像
-
-	auto & z = normalize_constant;
-
-	// 隠れ変数h_jの値の総和計算
-	auto sum_h_j = [&](int j) {
-		auto mu_j = mu_vect(j);
 
 		// 離散型
 		auto sum_h_j_discrete = [&](double mu_j) {
@@ -630,108 +584,6 @@ double GeneralizedRBM::expectedValueHid(int hindex, double normalize_constant) {
 	return value;
 }
 
-double GeneralizedRBM::expectedValueHid(int hindex, double normalize_constant, Eigen::VectorXd & mu_vect)
-{
-	StateCounter<std::vector<int>> sc(std::vector<int>(vSize, 2));  // 可視変数Vの状態カウンター
-	int v_state_map[] = { 0, 1 };  // 可視変数の状態->値変換写像
-
-	auto & z = normalize_constant;  // 分配関数
-
-									// bとvの内積
-	auto b_dot_v = [&]() {
-		return nodes.getVisibleLayer().dot(params.b);
-	};
-
-	// sum( h_j exp(mu_j h_j))
-	auto sum_h_j = [&](int j) {
-		auto mu_j = mu_vect(j);
-
-		// 離散型
-		auto sum_h_j_discrete = [&](double mu_j) {
-			double sum = 0.0;
-
-			for (auto & h_val : this->hiddenValueSet) {
-				sum += h_val * exp(mu_j * h_val);
-			}
-
-			return sum;
-		};
-
-		// 連続型
-		auto sum_h_j_real = [&](double mu_j) {
-			double sum = ((hMax * exp(hMax * mu_j) - hMin * exp(hMin * mu_j)) / mu_j) - ((exp(hMax * mu_j) - exp(hMin * mu_j)) / (mu_j * mu_j));
-
-			return sum;
-		};
-
-		auto value = realFlag ? sum_h_j_real(mu_j) : sum_h_j_discrete(mu_j);
-
-		return value;
-	};
-
-	// 隠れ変数h_lの値の総和計算
-	auto sum_h_l = [&](int l) {
-		auto mu_l = mu_vect(l);
-
-		// 離散型
-		auto sum_h_l_discrete = [&](double mu_l) {
-			double sum = 0.0;
-
-			for (auto & h_val : this->hiddenValueSet) {
-				sum += exp(mu_l * h_val);
-			}
-
-			return sum;
-		};
-
-		// 連続型
-		auto sum_h_l_real = [&](double mu_l) {
-			double sum = (exp(hMax * mu_l) - exp(hMin * mu_l)) / mu_l;
-
-			return sum;
-		};
-
-		auto value = realFlag ? sum_h_l_real(mu_l) : sum_h_l_discrete(mu_l);
-
-		return value;
-	};
-
-
-	double value = 0.0;
-	auto max_count = sc.getMaxCount();
-	for (int c = 0; c < max_count; c++, sc++) {
-		// FIXME: stlのコピーは遅いぞ
-		auto v_state = sc.getState();
-
-		// FIXME: v_i == 0 ときそのままcontinueしたほうが速いぞ
-
-		for (int i = 0; i < vSize; i++) {
-			this->nodes.v(i) = v_state_map[v_state[i]];
-		}
-
-		// 項計算
-		double term = exp(b_dot_v());
-
-		term *= sum_h_j(hindex);
-
-		for (int l = 0; l < hSize; l++) {
-			if (l == hindex) continue;
-
-			term *= sum_h_l(l);
-		}
-
-		value += term;
-	}
-
-	// debug
-	if (isinf(value) || isnan(value)) {
-		volatile auto debug_value = value;
-		throw;
-	}
-
-	value = value / z;
-	return value;
-}
 
 // 可視変数と隠れ変数の期待値, E[v_i h_j]
 double GeneralizedRBM::expectedValueVisHid(int vindex, int hindex) {
@@ -781,108 +633,6 @@ double GeneralizedRBM::expectedValueVisHid(int vindex, int hindex, double normal
 	// 隠れ変数h_lの値の総和計算
 	auto sum_h_l = [&](int j) {
 		auto mu_j = mu(j);
-
-		// 離散型
-		auto sum_h_j_discrete = [&](double mu_j) {
-			double sum = 0.0;
-
-			for (auto & h_val : this->hiddenValueSet) {
-				sum += exp(mu_j * h_val);
-			}
-
-			return sum;
-		};
-
-		// 連続型
-		auto sum_h_j_real = [&](double mu_j) {
-			double sum = (exp(hMax * mu_j) - exp(hMin * mu_j)) / mu_j;
-
-			return sum;
-		};
-
-		auto value = realFlag ? sum_h_j_real(mu_j) : sum_h_j_discrete(mu_j);
-
-		return value;
-	};
-
-	double value = 0.0;
-	auto max_count = sc.getMaxCount();
-	for (int c = 0; c < max_count; c++, sc++) {
-		// FIXME: stlのコピーは遅いぞ
-		auto v_state = sc.getState();
-
-		// FIXME: v_i == 0 ときそのままcontinueしたほうが速いぞ
-
-		for (int i = 0; i < vSize; i++) {
-			this->nodes.v(i) = v_state_map[v_state[i]];
-		}
-
-		// 項計算
-		double term = this->nodes.v(vindex) * exp(b_dot_v());
-
-		term *= sum_h_j(hindex);
-
-		for (int l = 0; l < hSize; l++) {
-			if (l == hindex) continue;
-
-			term *= sum_h_l(l);
-		}
-
-		value += term;
-	}
-
-	// debug
-	if (isinf(value) || isnan(value)) {
-		volatile auto debug_value = value;
-		throw;
-	}
-
-	value = value / z;
-	return value;
-}
-
-double GeneralizedRBM::expectedValueVisHid(int vindex, int hindex, double normalize_constant, Eigen::VectorXd & mu_vect)
-{
-	StateCounter<std::vector<int>> sc(std::vector<int>(vSize, 2));  // 可視変数Vの状態カウンター
-	int v_state_map[] = { 0, 1 };  // 可視変数の状態->値変換写像
-
-	auto & z = normalize_constant;  // 分配関数
-
-									// bとvの内積
-	auto b_dot_v = [&]() {
-		return nodes.getVisibleLayer().dot(params.b);
-	};
-
-	// sum( h_j exp(mu_j h_j))
-	auto sum_h_j = [&](int j) {
-		auto mu_j = mu_vect(j);
-
-		// 離散型
-		auto sum_h_j_discrete = [&](double mu_j) {
-			double sum = 0.0;
-
-			for (auto & h_val : this->hiddenValueSet) {
-				sum += h_val * exp(mu_j * h_val);
-			}
-
-			return sum;
-		};
-
-		// 連続型
-		auto sum_h_j_real = [&](double mu_j) {
-			double sum = ((hMax * exp(hMax * mu_j) - hMin * exp(hMin * mu_j)) / mu_j) - ((exp(hMax * mu_j) - exp(hMin * mu_j)) / (mu_j * mu_j));
-
-			return sum;
-		};
-
-		auto value = realFlag ? sum_h_j_real(mu_j) : sum_h_j_discrete(mu_j);
-
-		return value;
-	};
-
-	// 隠れ変数h_lの値の総和計算
-	auto sum_h_l = [&](int j) {
-		auto mu_j = mu_vect(j);
 
 		// 離散型
 		auto sum_h_j_discrete = [&](double mu_j) {

@@ -398,20 +398,48 @@ inline void Trainer<GeneralizedSparseRBM, OPTIMIZERTYPE>::calcRBMExpectedExact(G
 	// 0埋め初期化
 	initRBMExpected();
 
-	auto z = rbm.getNormalConstant();
+	StateCounter<std::vector<int>> sc(std::vector<int>(rbm.getVisibleSize(), 2));  // 可視変数Vの状態カウンター
+	int v_state_map[] = { 0, 1 };  // 可視変数の状態->値変換写像
 
-	for (int i = 0; i < rbm.getVisibleSize(); i++) {
-		rbmexpected.vBias(i) = rbm.expectedValueVis(i, z);
+	auto max_count = sc.getMaxCount();
+	for (int c = 0; c < max_count; c++, sc++) {
+		// FIXME: stlのコピーは遅いぞ
+		auto v_state = sc.getState();
 
+		// FIXME: v_i == 0 ときそのままcontinueしたほうが速いぞ
+
+		for (int i = 0; i < rbm.getVisibleSize(); i++) {
+			rbm.nodes.v(i) = v_state_map[v_state[i]];
+		}
+
+
+		auto b_dot_v = rbm.nodes.getVisibleLayer().dot(rbm.params.b);  // bとvの内積
+		auto mu_vect = rbm.muVect();
+		auto sum_h_exp_mu_sparse = rbm.sumHExpMuSparse(mu_vect);
+
+		// 期待値一括計算
+		// E[v_i]
+		for (int i = 0; i < rbm.getVisibleSize(); i++) {
+			rbmexpected.vBias(i) += rbm.nodes.v(i) * exp(b_dot_v) * sum_h_exp_mu_sparse;
+		}
+
+		// E[v_i h_j] and E[h_j] and E[|h_j|]
 		for (int j = 0; j < rbm.getHiddenSize(); j++) {
-			rbmexpected.weight(i, j) = rbm.expectedValueVisHid(i, j, z);
+			auto mu_j = mu_vect(j);
+			rbmexpected.hBias(j) += exp(b_dot_v) * sum_h_exp_mu_sparse * rbm.actHidJ(j, mu_j);
+			rbmexpected.hSparse(j) += exp(b_dot_v) * sum_h_exp_mu_sparse * rbm.actHidSparseJ(j, mu_j);
+
+			for (int i = 0; i < rbm.getVisibleSize(); i++) {
+				rbmexpected.weight(i, j) += rbm.nodes.v(i) * exp(b_dot_v) * sum_h_exp_mu_sparse * rbm.actHidJ(j, mu_j);
+			}
 		}
 	}
 
-	for (int j = 0; j < rbm.getHiddenSize(); j++) {
-		rbmexpected.hBias(j) = rbm.expectedValueHid(j, z);
-		rbmexpected.hSparse(j) = rbm.expectedValueAbsHid(j, z);
-	}
+	auto z = rbm.getNormalConstant();
+	rbmexpected.vBias /= z;
+	rbmexpected.hBias /= z;
+	rbmexpected.weight /= z;
+	rbmexpected.hSparse /= z;
 }
 
 
