@@ -94,7 +94,7 @@
       <AdditionalIncludeDirectories>$(SolutionDir)src\;$(SolutionDir)src\json_hpp\;$(SolutionDir)RBM;C:\src\eigen-eigen-dbab66d00651</AdditionalIncludeDirectories>
       <EnableEnhancedInstructionSet>AdvancedVectorExtensions2</EnableEnhancedInstructionSet>
       <FavorSizeOrSpeed>Speed</FavorSizeOrSpeed>
-      <OpenMPSupport>true</OpenMPSupport>
+      <OpenMPSupport>false</OpenMPSupport>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>

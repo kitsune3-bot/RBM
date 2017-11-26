@@ -441,7 +441,7 @@ inline double Optimizer<GeneralizedSparseRBM, OptimizerType::AdaMax>::getNewPara
 	auto m = this->moment1st.vBias(vindex) = this->_beta1 * this->moment1st.vBias(vindex) + (1 - _beta1) * gradient;  // m
 	auto v = this->moment2nd.vBias(vindex) = std::max(this->_beta2 * this->moment2nd.vBias(vindex), abs(gradient));  // v
 
-	auto new_gradient = this->_alpha / (1 - pow(this->_beta1, _iteration)) * m / v;
+	auto new_gradient = this->_alpha / (1 - pow(this->_beta1, _iteration)) * m / (v + _epsilonAdaMax);
 	return new_gradient;
 }
 
@@ -449,7 +449,7 @@ inline double Optimizer<GeneralizedSparseRBM, OptimizerType::AdaMax>::getNewPara
 	auto m = this->moment1st.hBias(hindex) = this->_beta1 * this->moment1st.hBias(hindex) + (1 - _beta1) * gradient;  // m
 	auto v = this->moment2nd.hBias(hindex) = std::max(this->_beta2 * this->moment2nd.hBias(hindex), abs(gradient));  // v
 
-	auto new_gradient = this->_alpha / (1 - pow(this->_beta1, _iteration)) * m / v;
+	auto new_gradient = this->_alpha / (1 - pow(this->_beta1, _iteration)) * m / (v + _epsilonAdaMax);
 	return new_gradient;
 }
 
@@ -457,7 +457,7 @@ inline double Optimizer<GeneralizedSparseRBM, OptimizerType::AdaMax>::getNewPara
 	auto m = this->moment1st.hSparse(hindex) = this->_beta1 * this->moment1st.hSparse(hindex) + (1 - _beta1) * gradient;  // m
 	auto v = this->moment2nd.hSparse(hindex) = std::max(this->_beta2 * this->moment2nd.hSparse(hindex), abs(gradient));  // v
 
-	auto new_gradient = this->_alpha / (1 - pow(this->_beta1, _iteration)) * m / v;
+	auto new_gradient = this->_alpha / (1 - pow(this->_beta1, _iteration)) * m / (v + _epsilonAdaMax);
 	return new_gradient;
 }
 
@@ -466,7 +466,7 @@ inline double Optimizer<GeneralizedSparseRBM, OptimizerType::AdaMax>::getNewPara
 	auto m = this->moment1st.weight(vindex, hindex) = this->_beta1 * this->moment1st.weight(vindex, hindex) + (1 - _beta1) * gradient;  // m
 	auto v = this->moment2nd.weight(vindex, hindex) = std::max(this->_beta2 * this->moment2nd.weight(vindex, hindex), abs(gradient));  // v
 
-	auto new_gradient = this->_alpha / (1 - pow(this->_beta1, _iteration)) * m / v;
+	auto new_gradient = this->_alpha / (1 - pow(this->_beta1, _iteration)) * m / (v + _epsilonAdaMax);
 	return new_gradient;
 }
 

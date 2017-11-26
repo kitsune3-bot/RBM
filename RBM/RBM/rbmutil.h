@@ -66,7 +66,7 @@ namespace rbmutil{
 			prob[1] = rbm2_replica.probVis(dat);
 
 			value += prob[0] * (log(prob[0]) -log(prob[1]));
-			if (isinf(value)) {
+			if (isnan(value) || isinf(value)) {
 				volatile auto debug_value = value;
 				volatile auto p1 = prob[0];
 				volatile auto p2 = prob[1];
