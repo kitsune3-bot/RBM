@@ -52,6 +52,12 @@
     <Filter Include="ソース ファイル\RBM">
       <UniqueIdentifier>{a840c284-8624-441c-8dd2-80356b89b7fe}</UniqueIdentifier>
     </Filter>
+    <Filter Include="ソース ファイル\GeneralizedFullSparseRBM">
+      <UniqueIdentifier>{a750ebf4-4715-449b-8ddb-a7602d5ab876}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="ヘッダー ファイル\GeneralizedFullSparseRBM">
+      <UniqueIdentifier>{ec377449-00f7-4f6a-a0ca-b42e202ecf69}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="RBMMath.h">
@@ -165,6 +171,24 @@
     <ClInclude Include="GeneralizedSparseRBM\GeneralizedSparseRBMOptimizer.h">
       <Filter>ヘッダー ファイル\GeneralizedSparseRBM</Filter>
     </ClInclude>
+    <ClInclude Include="GeneralizedFullSparseRBM\GeneralizedFullSparseRBM.h">
+      <Filter>ヘッダー ファイル\GeneralizedFullSparseRBM</Filter>
+    </ClInclude>
+    <ClInclude Include="GeneralizedFullSparseRBM\GeneralizedFullSparseRBMNode.h">
+      <Filter>ヘッダー ファイル\GeneralizedFullSparseRBM</Filter>
+    </ClInclude>
+    <ClInclude Include="GeneralizedFullSparseRBM\GeneralizedFullSparseRBMOptimizer.h">
+      <Filter>ヘッダー ファイル\GeneralizedFullSparseRBM</Filter>
+    </ClInclude>
+    <ClInclude Include="GeneralizedFullSparseRBM\GeneralizedFullSparseRBMParamator.h">
+      <Filter>ヘッダー ファイル\GeneralizedFullSparseRBM</Filter>
+    </ClInclude>
+    <ClInclude Include="GeneralizedFullSparseRBM\GeneralizedFullSparseRBMSampler.h">
+      <Filter>ヘッダー ファイル\GeneralizedFullSparseRBM</Filter>
+    </ClInclude>
+    <ClInclude Include="GeneralizedFullSparseRBM\GeneralizedFullSparseRBMTrainer.h">
+      <Filter>ヘッダー ファイル\GeneralizedFullSparseRBM</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="RBMMath.cpp">
@@ -238,6 +262,21 @@
     </ClCompile>
     <ClCompile Include="RBM\RBMTrainer.cpp">
       <Filter>ソース ファイル\RBM</Filter>
+    </ClCompile>
+    <ClCompile Include="GeneralizedFullSparseRBM\GeneralizedFullSparseRBM.cpp">
+      <Filter>ソース ファイル\GeneralizedFullSparseRBM</Filter>
+    </ClCompile>
+    <ClCompile Include="GeneralizedFullSparseRBM\GeneralizedFullSparseRBMNode.cpp">
+      <Filter>ソース ファイル\GeneralizedFullSparseRBM</Filter>
+    </ClCompile>
+    <ClCompile Include="GeneralizedFullSparseRBM\GeneralizedFullSparseRBMParamator.cpp">
+      <Filter>ソース ファイル\GeneralizedFullSparseRBM</Filter>
+    </ClCompile>
+    <ClCompile Include="GeneralizedFullSparseRBM\GeneralizedFullSparseRBMSampler.cpp">
+      <Filter>ソース ファイル\GeneralizedFullSparseRBM</Filter>
+    </ClCompile>
+    <ClCompile Include="GeneralizedFullSparseRBM\GeneralizedFullSparseRBMTrainer.cpp">
+      <Filter>ソース ファイル\GeneralizedFullSparseRBM</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>
