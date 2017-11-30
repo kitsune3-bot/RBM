@@ -53,7 +53,13 @@ void GeneralizedSparseRBMParamator::initParamsXavier()
 	b.setRandom() *= 0.00001;
 	c.setRandom() *= 0.00001;
 	w.setRandom() /= sqrt((vSize + hSize) / 2.0);
-	sparse.setConstant(4.0);
+
+	std::random_device rd;
+	std::mt19937 mt(rd());
+	std::uniform_real_distribution<double> dist(2.0, 4.0);
+	for (int j = 0; j < this->hSize; j++) {
+		sparse(j) = dist(mt);
+	}
 }
 
 
