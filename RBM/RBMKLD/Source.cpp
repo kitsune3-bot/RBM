@@ -422,8 +422,8 @@ int main(void) {
 	std::cin >> epoch;
 
 	OPTION option;
-	option.vSize = 5;
-	option.hSize = 10;
+	option.vSize = 8;
+	option.hSize = 5;
 	option.appendH = append_h;
 	option.datasize = datasize;
 	option.epoch = epoch;
@@ -449,7 +449,7 @@ int main(void) {
 		}
 
 		auto rbm_gen = GeneralizedRBM(option.vSize, option.hSize);
-		rbm_gen.params.initParamsRandom(-2, 2);
+		rbm_gen.params.initParamsXavier();
 
 		std::vector<std::vector<double>> dataset;
 		for (int i = 0; i < option.datasize; i++) {

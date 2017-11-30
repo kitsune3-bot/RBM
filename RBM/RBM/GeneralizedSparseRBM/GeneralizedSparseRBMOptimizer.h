@@ -395,7 +395,7 @@ protected:
 	int _iteration = 1;
 
 	// AdaMax
-	double _alpha = 0.001;
+	double _alpha = 0.01;
 	double _beta1 = 0.9;
 	double _beta2 = 0.999;
 	double _epsilonAdaMax = 1E-08;
