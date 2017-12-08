@@ -1,5 +1,5 @@
 ﻿#include "GeneralizedSparseRBMParamator.h"
-
+#include <iostream>
 
 GeneralizedSparseRBMParamator::GeneralizedSparseRBMParamator(size_t v_size, size_t h_size) {
 	vSize = v_size;
@@ -141,4 +141,19 @@ double GeneralizedSparseRBMParamator::getHiddenSparse(int hindex) {
 // 隠れ変数のスパースパラメータベクトルを返す
 Eigen::VectorXd GeneralizedSparseRBMParamator::getHiddenSparseVector() {
 	return sparse;
+}
+
+void GeneralizedSparseRBMParamator::printParams()
+{
+	std::cout << "--- b ---" << std::endl;
+	std::cout << this->b << std::endl;
+
+	std::cout << "--- c ---" << std::endl;
+	std::cout << this->c << std::endl;
+
+	std::cout << "--- w ---" << std::endl;
+	std::cout << this->w << std::endl;
+
+	std::cout << "--- hsparse ---" << std::endl;
+	std::cout << this->sparse << std::endl;
 }

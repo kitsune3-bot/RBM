@@ -22,6 +22,7 @@ typedef struct {
 	double momentumRate = 0.9;
 	int divSize = 1;
 	bool realFlag = false;
+	int runFlag = 0; // 1: exact, 2: cd, 3:exact & sparse
 } OPTION;
 
 typedef struct {
@@ -227,6 +228,9 @@ void write_error_info(SQLite::Database & db, RBMGEN & rbm_gen, RBMTRAIN & rbm_tr
 // 実行ルーチン
 template<class RBM_G, class RBM_T, class DATASET>
 void run(SQLite::Database & db, OPTION & option, int try_count, RBM_G & rbm_gen, RBM_T & rbm_train, DATASET & dataset) {
+	if (!(option.runFlag & 1)) return;
+
+
 	auto rbm_exact = rbm_train;
 	rbm_exact.params.initParamsXavier();
 	rbm_exact.setHiddenDiveSize(option.divSize);
@@ -319,6 +323,8 @@ void run(SQLite::Database & db, OPTION & option, int try_count, RBM_G & rbm_gen,
 // 実行ルーチン
 template<class RBM_G, class RBM_T, class DATASET>
 void run_sparse(SQLite::Database & db, OPTION & option, int try_count, RBM_G & rbm_gen, RBM_T & rbm_train, DATASET & dataset) {
+	if (!(option.runFlag & 2)) return;
+
 	auto rbm_exact = rbm_train;
 	rbm_exact.params.sparse.setConstant(4.0);
 	rbm_exact.params.initParamsXavier();
@@ -421,6 +427,10 @@ int main(void) {
 	std::cout << "epoch:";
 	std::cin >> epoch;
 
+	int run_flag;
+	std::cout << "run flag(1: exact, 2: cd, 3: exact & cd):";
+	std::cin >> run_flag;
+
 	OPTION option;
 	option.vSize = 8;
 	option.hSize = 5;
@@ -432,6 +442,7 @@ int main(void) {
 	option.learningRate = 0.1;
 	option.divSize = 1;
 	option.realFlag = false;
+	option.runFlag = run_flag;
 	int try_num = 1000;
 
 

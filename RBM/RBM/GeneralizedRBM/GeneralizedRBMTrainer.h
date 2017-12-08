@@ -221,6 +221,8 @@ void Trainer<GeneralizedRBM, OPTIMIZERTYPE>::trainOnce(GeneralizedRBM & rbm, std
 
 template<class OPTIMIZERTYPE>
 void Trainer<GeneralizedRBM, OPTIMIZERTYPE>::trainOnceCD(GeneralizedRBM & rbm, std::vector<std::vector<double>> & dataset) {
+	rbm.trainType = "cd";
+
 	// 勾配初期化
 	initGradient();
 
@@ -254,6 +256,8 @@ void Trainer<GeneralizedRBM, OPTIMIZERTYPE>::trainOnceCD(GeneralizedRBM & rbm, s
 
 template<class OPTIMIZERTYPE>
 void Trainer<GeneralizedRBM, OPTIMIZERTYPE>::trainOnceExact(GeneralizedRBM & rbm, std::vector<std::vector<double>> & dataset) {
+	rbm.trainType = "exact";
+
 	// 勾配初期化
 	initGradient();
 

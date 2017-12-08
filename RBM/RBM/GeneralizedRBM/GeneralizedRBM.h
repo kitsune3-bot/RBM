@@ -23,6 +23,7 @@ protected:
 public:
 	GeneralizedRBMParamator params;
 	GeneralizedRBMNode nodes;
+	std::string trainType = "";
 
 public:
 	GeneralizedRBM() = default;

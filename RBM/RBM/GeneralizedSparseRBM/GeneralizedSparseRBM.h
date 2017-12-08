@@ -21,6 +21,7 @@ protected:
 public:
 	GeneralizedSparseRBMParamator params;
 	GeneralizedSparseRBMNode nodes;
+	std::string trainType = "";
 
 public:
 	GeneralizedSparseRBM() = default;

@@ -57,4 +57,7 @@ public:
 
 	// パラメータ情報のデシリアライズ
 	void deserialize(std::string js);
+
+	// パラメータ出力
+	void printParams();
 };

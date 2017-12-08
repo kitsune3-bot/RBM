@@ -1,11 +1,12 @@
 ﻿#pragma once
 #include <iostream>
+#include <fstream>
 #include <cmath>
 #include "StateCounter.h"
 #include "Sampler.h"
 #include <omp.h>
 
-namespace rbmutil{
+namespace rbmutil {
 
 	// generate data from rbm
 	template <class T, class STL>
@@ -53,7 +54,7 @@ namespace rbmutil{
 		int max_count = sc.getMaxCount();
 		double value = 0.0;
 
-		#pragma omp parallel for schedule(static) reduction(+:value)
+#pragma omp parallel for schedule(static) reduction(+:value)
 		for (int c = 0; c < max_count; c++) {
 			std::vector<double> dat(rbm1.getVisibleSize());
 			auto sc_replica = sc;
@@ -65,7 +66,7 @@ namespace rbmutil{
 			prob[0] = rbm1_replica.probVis(dat);
 			prob[1] = rbm2_replica.probVis(dat);
 
-			value += prob[0] * (log(prob[0]) -log(prob[1]));
+			value += prob[0] * (log(prob[0]) - log(prob[1]));
 			if (isnan(value) || isinf(value)) {
 				volatile auto debug_value = value;
 				volatile auto p1 = prob[0];
@@ -73,7 +74,17 @@ namespace rbmutil{
 				volatile auto z1 = rbm1_replica.getNormalConstant();
 				volatile auto z2 = rbm2_replica.getNormalConstant();
 
+				std::cout << "Train type:" << rbm2.trainType << std::endl;
+				std::cout << "p1: " << p1 << std::endl;
+				std::cout << "p2: " << p2 << std::endl;
+				std::cout << "z1: " << z1 << std::endl;
+				std::cout << "z2: " << z2 << std::endl;
 				print_params(rbm2_replica);
+
+
+				std::ofstream outputfile("paramsdump.json", std::ios::out || std::ios::trunc);
+				outputfile << rbm2.params.serialize();
+				outputfile.close();
 
 				throw;
 			}
@@ -84,13 +95,7 @@ namespace rbmutil{
 
 	template<class RBM>
 	void print_params(RBM & rbm) {
-		std::cout << "--- b ---" << std::endl;
-		std::cout << rbm.params.b.transpose() << std::endl;
-		std::cout << "--- c ---" << std::endl;
-		std::cout << rbm.params.c.transpose() << std::endl;
-		std::cout << "--- w ---" << std::endl;
-		std::cout << rbm.params.w << std::endl;
-
+		rbm.params.printParams();
 	}
 }
 

@@ -65,4 +65,6 @@ public:
 	// 隠れ変数のスパースパラメータベクトルを返す
 	Eigen::VectorXd getHiddenSparseVector();
 
+	// パラメータ出力
+	void printParams();
 };

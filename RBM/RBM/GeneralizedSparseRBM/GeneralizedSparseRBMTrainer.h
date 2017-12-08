@@ -229,6 +229,9 @@ inline void Trainer<GeneralizedSparseRBM, OPTIMIZERTYPE>::trainOnce(GeneralizedS
 
 template<class OPTIMIZERTYPE>
 inline void Trainer<GeneralizedSparseRBM, OPTIMIZERTYPE>::trainOnceCD(GeneralizedSparseRBM & rbm, std::vector<std::vector<double>> & dataset) {
+	// RBMに学習タイプを記憶
+	rbm.trainType = "cd";
+
 	// 勾配初期化
 	initGradient();
 
@@ -262,6 +265,9 @@ inline void Trainer<GeneralizedSparseRBM, OPTIMIZERTYPE>::trainOnceCD(Generalize
 
 template<class OPTIMIZERTYPE>
 inline void Trainer<GeneralizedSparseRBM, OPTIMIZERTYPE>::trainOnceExact(GeneralizedSparseRBM & rbm, std::vector<std::vector<double>> & dataset) {
+	rbm.trainType = "exact";
+
+
 	// 勾配初期化
 	initGradient();
 

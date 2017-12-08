@@ -1,4 +1,5 @@
 ﻿#include "GeneralizedRBMParamator.h"
+#include <iostream>
 
 
 GeneralizedRBMParamator::GeneralizedRBMParamator(size_t v_size, size_t h_size) {
@@ -115,4 +116,16 @@ void GeneralizedRBMParamator::deserialize(std::string js) {
 	this->b = Eigen::Map<Eigen::VectorXd>(tmp_b.data(), vSize);
 	this->c = Eigen::Map<Eigen::VectorXd>(tmp_c.data(), hSize);
 	this->w = Eigen::Map<Eigen::MatrixXd>(tmp_w.data(), vSize, hSize);
+}
+
+void GeneralizedRBMParamator::printParams()
+{
+	std::cout << "--- b ---" << std::endl;
+	std::cout << this->b << std::endl;
+
+	std::cout << "--- c ---" << std::endl;
+	std::cout << this->c << std::endl;
+
+	std::cout << "--- w ---" << std::endl;
+	std::cout << this->w << std::endl;
 }
