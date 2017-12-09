@@ -286,7 +286,7 @@ inline void Trainer<GeneralizedSparseRBM, OPTIMIZERTYPE>::trainOnceExact(General
 	std::vector<int> minibatch_indexes(batch_size);
 	std::copy(data_indexes.begin(), data_indexes.begin() + batch_size, minibatch_indexes.begin());
 
-	// Contrastive Divergence
+	// Exact
 	calcExact(rbm, dataset, minibatch_indexes);
 
 	// 勾配の更新
@@ -502,7 +502,7 @@ inline void Trainer<GeneralizedSparseRBM, OPTIMIZERTYPE>::updateParams(Generaliz
 
 	for (int j = 0; j < rbm.getHiddenSize(); j++) {
 		rbm.params.c(j) += optimizer.getNewParamHBias(gradient.hBias(j), j);
-		rbm.params.sparse(j) += optimizer.getNewParamHSparse(gradient.hBias(j), j);
+		rbm.params.sparse(j) += optimizer.getNewParamHSparse(gradient.hSparse(j), j);
 	}
 }
 
