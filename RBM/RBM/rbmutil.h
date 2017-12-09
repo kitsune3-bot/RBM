@@ -79,12 +79,11 @@ namespace rbmutil {
 				std::cout << "p2: " << p2 << std::endl;
 				std::cout << "z1: " << z1 << std::endl;
 				std::cout << "z2: " << z2 << std::endl;
-				print_params(rbm2_replica);
 
-
-				std::ofstream outputfile("paramsdump.json", std::ios::out || std::ios::trunc);
-				outputfile << rbm2.params.serialize();
+				std::ofstream outputfile("./output/paramsdump.json", std::ios::out | std::ios::trunc);
+				outputfile << rbm2_replica.params.serialize();
 				outputfile.close();
+				print_params(rbm2_replica);
 
 				throw;
 			}

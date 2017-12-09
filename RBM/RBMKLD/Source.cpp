@@ -22,7 +22,8 @@ typedef struct {
 	double momentumRate = 0.9;
 	int divSize = 1;
 	bool realFlag = false;
-	int runFlag = 0; // 1: exact, 2: cd, 3:exact & sparse
+	int trainFlag = 0; // 1: exact, 2: cd, 3:exact & cd
+	int rbmFlag = 0;   // 1: normal, 2: sparse, 3:normal & sparse
 } OPTION;
 
 typedef struct {
@@ -228,7 +229,7 @@ void write_error_info(SQLite::Database & db, RBMGEN & rbm_gen, RBMTRAIN & rbm_tr
 // 実行ルーチン
 template<class RBM_G, class RBM_T, class DATASET>
 void run(SQLite::Database & db, OPTION & option, int try_count, RBM_G & rbm_gen, RBM_T & rbm_train, DATASET & dataset) {
-	if (!(option.runFlag & 1)) return;
+	if (!(option.rbmFlag & 1)) return;
 
 
 	auto rbm_exact = rbm_train;
@@ -272,58 +273,62 @@ void run(SQLite::Database & db, OPTION & option, int try_count, RBM_G & rbm_gen,
 	for (int epoch_count = 0; epoch_count < option.epoch; epoch_count++) {
 		RESULT result;
 
-		// Exact
 		std::string rbm_div = option.realFlag ? "c" : std::to_string(option.divSize);
 
-		rbm_trainer_exact.trainOnceExact(rbm_exact, dataset);
-		std::stringstream ss_exact_fname;
-		ss_exact_fname << try_count << "_exact" << "_epoch" << epoch_count << "_div" << rbm_div << ".train.json";
-		//write_train_info(db, rbm_exact, rbm_trainer_exact, ss_exact_fname.str());
+		// Exact
+		if (option.trainFlag & 1) {
+			rbm_trainer_exact.trainOnceExact(rbm_exact, dataset);
+			std::stringstream ss_exact_fname;
+			ss_exact_fname << try_count << "_exact" << "_epoch" << epoch_count << "_div" << rbm_div << ".train.json";
+			//write_train_info(db, rbm_exact, rbm_trainer_exact, ss_exact_fname.str());
 
-		std::stringstream ss_exact_error_fname;
-		ss_exact_error_fname << try_count << "_error_exact" << "_epoch" << epoch_count << "_div" << rbm_div << ".error.json";
-	
-		result.kld = rbmutil::kld(rbm_gen, rbm_exact, std::vector<int>{0, 1});
-		result.loglikelihood = rbm_trainer_exact.logLikeliHood(rbm_exact, dataset);
-		result.data_size = dataset.size();
-		result.v_size = rbm_exact.getVisibleSize();
-		result.h_size = rbm_exact.getHiddenSize();
-		result.rbm_type = rbm_exact.isRealHiddenValue() ? "c" : "d";
-		result.div_size = rbm_exact.getHiddenDivSize();
-		result.train_type = "exact";
-		result.epoch = epoch_count;
-		result.sparse = 0;
-		result.try_count = try_count;
-		write_to_db_result_table(db, result);
+			std::stringstream ss_exact_error_fname;
+			ss_exact_error_fname << try_count << "_error_exact" << "_epoch" << epoch_count << "_div" << rbm_div << ".error.json";
+
+			result.kld = rbmutil::kld(rbm_gen, rbm_exact, std::vector<int>{0, 1});
+			result.loglikelihood = rbm_trainer_exact.logLikeliHood(rbm_exact, dataset);
+			result.data_size = dataset.size();
+			result.v_size = rbm_exact.getVisibleSize();
+			result.h_size = rbm_exact.getHiddenSize();
+			result.rbm_type = rbm_exact.isRealHiddenValue() ? "c" : "d";
+			result.div_size = rbm_exact.getHiddenDivSize();
+			result.train_type = "exact";
+			result.epoch = epoch_count;
+			result.sparse = 0;
+			result.try_count = try_count;
+			write_to_db_result_table(db, result);
+		}
 
 		// Contrastive Divergence
-		rbm_trainer_cd.trainOnceCD(rbm_cd, dataset);
-		std::stringstream ss_cd_fname;
-		ss_cd_fname << try_count << "_cd" << "_epoch" << epoch_count << "_div" << rbm_div << ".train.json";
-		//write_train_info(db, rbm_cd, rbm_trainer_cd, ss_cd_fname.str());
+		if (option.trainFlag & 2) {
+			rbm_trainer_cd.trainOnceCD(rbm_cd, dataset);
+			std::stringstream ss_cd_fname;
+			ss_cd_fname << try_count << "_cd" << "_epoch" << epoch_count << "_div" << rbm_div << ".train.json";
+			//write_train_info(db, rbm_cd, rbm_trainer_cd, ss_cd_fname.str());
 
-		std::stringstream ss_cd_error_fname;
-		ss_cd_error_fname << try_count << "_error_cd" << "_epoch" << epoch_count << "_div" << rbm_div << ".error.json";
+			std::stringstream ss_cd_error_fname;
+			ss_cd_error_fname << try_count << "_error_cd" << "_epoch" << epoch_count << "_div" << rbm_div << ".error.json";
 
-		result.kld = rbmutil::kld(rbm_gen, rbm_cd, std::vector<int>{0, 1});
-		result.loglikelihood = rbm_trainer_cd.logLikeliHood(rbm_cd, dataset);
-		result.data_size = dataset.size();
-		result.v_size = rbm_cd.getVisibleSize();
-		result.h_size = rbm_cd.getHiddenSize();
-		result.rbm_type = rbm_cd.isRealHiddenValue() ? "c" : "d";
-		result.div_size = rbm_cd.getHiddenDivSize();
-		result.train_type = "cd";
-		result.epoch = epoch_count;
-		result.sparse = 0;
-		result.try_count = try_count;
-		write_to_db_result_table(db, result);
+			result.kld = rbmutil::kld(rbm_gen, rbm_cd, std::vector<int>{0, 1});
+			result.loglikelihood = rbm_trainer_cd.logLikeliHood(rbm_cd, dataset);
+			result.data_size = dataset.size();
+			result.v_size = rbm_cd.getVisibleSize();
+			result.h_size = rbm_cd.getHiddenSize();
+			result.rbm_type = rbm_cd.isRealHiddenValue() ? "c" : "d";
+			result.div_size = rbm_cd.getHiddenDivSize();
+			result.train_type = "cd";
+			result.epoch = epoch_count;
+			result.sparse = 0;
+			result.try_count = try_count;
+			write_to_db_result_table(db, result);
+		}
 	}
 }
 
 // 実行ルーチン
 template<class RBM_G, class RBM_T, class DATASET>
 void run_sparse(SQLite::Database & db, OPTION & option, int try_count, RBM_G & rbm_gen, RBM_T & rbm_train, DATASET & dataset) {
-	if (!(option.runFlag & 2)) return;
+	if (!(option.rbmFlag & 2)) return;
 
 	auto rbm_exact = rbm_train;
 	rbm_exact.params.sparse.setConstant(4.0);
@@ -368,45 +373,49 @@ void run_sparse(SQLite::Database & db, OPTION & option, int try_count, RBM_G & r
 	for (int epoch_count = 0; epoch_count < option.epoch; epoch_count++) {
 		RESULT result;
 
-		// Exact
 		std::string rbm_div = option.realFlag ? "c" : std::to_string(option.divSize);
 
-		rbm_trainer_exact.trainOnceExact(rbm_exact, dataset);
-		std::stringstream ss_exact_fname;
-		ss_exact_fname << try_count << "_exact_sparse" << "_epoch" << epoch_count << "_div" << rbm_div << ".train.json";
-		//write_train_info(db, rbm_exact, rbm_trainer_exact, ss_exact_fname.str());
+		// Exact
+		if (option.trainFlag & 1) {
+			rbm_trainer_exact.trainOnceExact(rbm_exact, dataset);
+			std::stringstream ss_exact_fname;
+			ss_exact_fname << try_count << "_exact_sparse" << "_epoch" << epoch_count << "_div" << rbm_div << ".train.json";
+			//write_train_info(db, rbm_exact, rbm_trainer_exact, ss_exact_fname.str());
 
-		result.kld = rbmutil::kld(rbm_gen, rbm_exact, std::vector<int>{0, 1});
-		result.loglikelihood = rbm_trainer_exact.logLikeliHood(rbm_exact, dataset);
-		result.data_size = dataset.size();
-		result.v_size = rbm_exact.getVisibleSize();
-		result.h_size = rbm_exact.getHiddenSize();
-		result.rbm_type = rbm_exact.isRealHiddenValue() ? "c" : "d";
-		result.div_size = rbm_exact.getHiddenDivSize();
-		result.train_type = "exact";
-		result.epoch = epoch_count;
-		result.sparse = 1;
-		result.try_count = try_count;
-		write_to_db_result_table(db, result);
+			result.kld = rbmutil::kld(rbm_gen, rbm_exact, std::vector<int>{0, 1});
+			result.loglikelihood = rbm_trainer_exact.logLikeliHood(rbm_exact, dataset);
+			result.data_size = dataset.size();
+			result.v_size = rbm_exact.getVisibleSize();
+			result.h_size = rbm_exact.getHiddenSize();
+			result.rbm_type = rbm_exact.isRealHiddenValue() ? "c" : "d";
+			result.div_size = rbm_exact.getHiddenDivSize();
+			result.train_type = "exact";
+			result.epoch = epoch_count;
+			result.sparse = 1;
+			result.try_count = try_count;
+			write_to_db_result_table(db, result);
+		}
 
 		// Contrastive Divergence
-		rbm_trainer_cd.trainOnceCD(rbm_cd, dataset);
-		std::stringstream ss_cd_fname;
-		ss_cd_fname << try_count << "_cd_sparse" << "_epoch" << epoch_count << "_div" << rbm_div << ".train.json";
-		//write_train_info(db, rbm_cd, rbm_trainer_cd, ss_cd_fname.str());
+		if (option.trainFlag & 2) {
+			rbm_trainer_cd.trainOnceCD(rbm_cd, dataset);
+			std::stringstream ss_cd_fname;
+			ss_cd_fname << try_count << "_cd_sparse" << "_epoch" << epoch_count << "_div" << rbm_div << ".train.json";
+			//write_train_info(db, rbm_cd, rbm_trainer_cd, ss_cd_fname.str());
 
-		result.kld = rbmutil::kld(rbm_gen, rbm_cd, std::vector<int>{0, 1});
-		result.loglikelihood = rbm_trainer_cd.logLikeliHood(rbm_cd, dataset);
-		result.data_size = dataset.size();
-		result.v_size = rbm_cd.getVisibleSize();
-		result.h_size = rbm_cd.getHiddenSize();
-		result.rbm_type = rbm_cd.isRealHiddenValue() ? "c" : "d";
-		result.div_size = rbm_cd.getHiddenDivSize();
-		result.train_type = "cd";
-		result.epoch = epoch_count;
-		result.sparse = 1;
-		result.try_count = try_count;
-		write_to_db_result_table(db, result);
+			result.kld = rbmutil::kld(rbm_gen, rbm_cd, std::vector<int>{0, 1});
+			result.loglikelihood = rbm_trainer_cd.logLikeliHood(rbm_cd, dataset);
+			result.data_size = dataset.size();
+			result.v_size = rbm_cd.getVisibleSize();
+			result.h_size = rbm_cd.getHiddenSize();
+			result.rbm_type = rbm_cd.isRealHiddenValue() ? "c" : "d";
+			result.div_size = rbm_cd.getHiddenDivSize();
+			result.train_type = "cd";
+			result.epoch = epoch_count;
+			result.sparse = 1;
+			result.try_count = try_count;
+			write_to_db_result_table(db, result);
+		}
 	}
 }
 
@@ -427,13 +436,18 @@ int main(void) {
 	std::cout << "epoch:";
 	std::cin >> epoch;
 
-	int run_flag;
-	std::cout << "run flag(1: exact, 2: cd, 3: exact & cd):";
-	std::cin >> run_flag;
+	int train_flag;
+	std::cout << "train flag(1: exact, 2: cd, 3: exact & cd):";
+	std::cin >> train_flag;
+
+	int rbm_flag;
+	std::cout << "rbm flag(1: normal, 2: sparse, 3: normal & sparse):";
+	std::cin >> rbm_flag;
+
 
 	OPTION option;
 	option.vSize = 8;
-	option.hSize = 5;
+	option.hSize = 3;
 	option.appendH = append_h;
 	option.datasize = datasize;
 	option.epoch = epoch;
@@ -442,7 +456,8 @@ int main(void) {
 	option.learningRate = 0.1;
 	option.divSize = 1;
 	option.realFlag = false;
-	option.runFlag = run_flag;
+	option.trainFlag = train_flag;
+	option.rbmFlag = rbm_flag;
 	int try_num = 1000;
 
 
