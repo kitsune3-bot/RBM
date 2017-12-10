@@ -502,7 +502,7 @@ inline void Trainer<GeneralizedSparseRBM, OPTIMIZERTYPE>::updateParams(Generaliz
 
 	for (int j = 0; j < rbm.getHiddenSize(); j++) {
 		rbm.params.c(j) += optimizer.getNewParamHBias(gradient.hBias(j), j);
-		rbm.params.sparse(j) += optimizer.getNewParamHSparse(gradient.hSparse(j), j);
+		rbm.params.sparse(j) += optimizer.getNewParamHSparse(gradient.hSparse(j)/(-exp(rbm.params.sparse(j))), j);
 	}
 }
 
