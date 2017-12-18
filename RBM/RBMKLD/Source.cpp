@@ -424,11 +424,15 @@ void run_sparse(SQLite::Database & db, OPTION & option, int try_count, RBM_G & r
 //
 int main(void) {
 
+	std::cout << "vsize:";
+	int vsize;
+	std::cin >> vsize;
+
 	std::cout << "append h:";
 	int append_h;
 	std::cin >> append_h;
-	int datasize;
 
+	int datasize;
 	std::cout << "datasize:";
 	std::cin >> datasize;
 
@@ -446,7 +450,7 @@ int main(void) {
 
 
 	OPTION option;
-	option.vSize = 8;
+	option.vSize = vsize;
 	option.hSize = 3;
 	option.appendH = append_h;
 	option.datasize = datasize;

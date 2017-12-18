@@ -442,6 +442,7 @@ inline void Trainer<GeneralizedSparseRBM, OPTIMIZERTYPE>::calcRBMExpectedExact(G
 
 #pragma omp critical
 		{
+			// FIXME: この計算本当にあってる???
 			// 期待値一括計算
 			// E[v_i]
 			for (int i = 0; i < rbm_replica.getVisibleSize(); i++) {
