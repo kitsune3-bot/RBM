@@ -405,10 +405,10 @@ inline void Trainer<GeneralizedSparseRBM, OPTIMIZERTYPE>::calcRBMExpectedCD(Gene
 		}
 	}
 
-	rbmexpected.vBias /= static_cast<double>(data_indexes.size());
-	rbmexpected.hBias /= static_cast<double>(data_indexes.size());
-	rbmexpected.weight /= static_cast<double>(data_indexes.size());
-	rbmexpected.hSparse /= static_cast<double>(data_indexes.size());
+	rbmexpected.vBias /= static_cast<double>(index_size);
+	rbmexpected.hBias /= static_cast<double>(index_size);
+	rbmexpected.weight /= static_cast<double>(index_size);
+	rbmexpected.hSparse /= static_cast<double>(index_size);
 }
 
 template<class OPTIMIZERTYPE>
@@ -417,7 +417,7 @@ inline void Trainer<GeneralizedSparseRBM, OPTIMIZERTYPE>::calcRBMExpectedExact(G
 	initRBMExpected();
 
 	StateCounter<std::vector<int>> sc(std::vector<int>(rbm.getVisibleSize(), 2));  // 可視変数Vの状態カウンター
-	int v_state_map[] = { 0, 1 };  // 可視変数の状態->値変換写像
+	auto & v_state_map = rbm.visibleValueSet;  // 可視変数の状態->値変換写像
 
 	auto max_count = sc.getMaxCount();
 	#pragma omp parallel for schedule(static)
@@ -486,7 +486,7 @@ inline void Trainer<GeneralizedSparseRBM, OPTIMIZERTYPE>::calcGradient(Generaliz
 
 	for (int j = 0; j < rbm.getHiddenSize(); j++) {
 		gradient.hBias(j) = dataMean.hBias(j) - rbmexpected.hBias(j);
-		gradient.hSparse(j) = dataMean.hSparse(j) - rbmexpected.hSparse(j);
+		gradient.hSparse(j) = (dataMean.hSparse(j) - rbmexpected.hSparse(j)) / exp(rbm.params.sparse(j)) ;
 	}
 }
 
@@ -503,7 +503,7 @@ inline void Trainer<GeneralizedSparseRBM, OPTIMIZERTYPE>::updateParams(Generaliz
 
 	for (int j = 0; j < rbm.getHiddenSize(); j++) {
 		rbm.params.c(j) += optimizer.getNewParamHBias(gradient.hBias(j), j);
-		rbm.params.sparse(j) += optimizer.getNewParamHSparse(gradient.hSparse(j)/(-exp(rbm.params.sparse(j))), j);
+		rbm.params.sparse(j) += optimizer.getNewParamHSparse(gradient.hSparse(j), j);
 	}
 }
 

@@ -31,7 +31,7 @@ size_t GeneralizedRBM::getHiddenSize() {
 // 規格化を返します
 double GeneralizedRBM::getNormalConstant() {
 	StateCounter<std::vector<int>> sc(std::vector<int>(vSize, 2));  // 可視変数Vの状態カウンター
-	int v_state_map[] = { 0, 1 };  // 可視変数の状態->値変換写像
+	auto & v_state_map = this->visibleValueSet;  // 可視変数の状態->値変換写像
 
 	double z = 0.0;
 	auto max_count = sc.getMaxCount();
@@ -155,14 +155,17 @@ Eigen::VectorXd GeneralizedRBM::lambdaVect()
 
 // lambdaの可視変数に関する全ての実現値の総和
 double GeneralizedRBM::sumExpLambda(int vindex) {
-	// {0, 1}での実装
-	return 1.0 + exp(lambda(vindex));
+	auto lambda = this->lambda(vindex);
+	return this->sumExpLambda(vindex, lambda);
 }
 
 double GeneralizedRBM::sumExpLambda(int vindex, double lambda)
 {
-	// {0, 1}での実装
-	return 1.0 + exp(lambda);
+	double value = 0.0;
+	for (auto & v_i : this->visibleValueSet) {
+		value += exp(lambda * v_i);
+	}
+	return value;
 }
 
 // 隠れ変数に関する外部磁場と相互作用
@@ -335,6 +338,7 @@ double GeneralizedRBM::condProbHid(int hindex, double value, double mu)
 	return prob;
 }
 
+
 std::vector<double> GeneralizedRBM::splitHiddenSet() {
 	std::vector<double> set(divSize + 1);
 
@@ -383,7 +387,7 @@ size_t GeneralizedRBM::getHiddenDivSize() {
 }
 
 // 隠れ変数の区間分割数を設定
-void GeneralizedRBM::setHiddenDiveSize(size_t div_size) {
+void GeneralizedRBM::setHiddenDivSize(size_t div_size) {
 	divSize = div_size;
 
 	// 区間分割
@@ -406,7 +410,7 @@ double GeneralizedRBM::expectedValueVis(int vindex) {
 double GeneralizedRBM::expectedValueVis(int vindex, double normalize_constant) {
 	// TODO: とりあえず可視変数は{0, 1}のボルツマンマシンなので則値代入してます
 	StateCounter<std::vector<int>> sc(std::vector<int>(vSize, 2));  // 可視変数Vの状態カウンター
-	int v_state_map[] = { 0, 1 };  // 可視変数の状態->値変換写像
+	auto & v_state_map = this->visibleValueSet;  // 可視変数の状態->値変換写像
 
 	auto & z = normalize_constant;
 
@@ -484,7 +488,7 @@ double GeneralizedRBM::expectedValueHid(int hindex) {
 // 隠れ変数の期待値, E[h_j]
 double GeneralizedRBM::expectedValueHid(int hindex, double normalize_constant) {
 	StateCounter<std::vector<int>> sc(std::vector<int>(vSize, 2));  // 可視変数Vの状態カウンター
-	int v_state_map[] = { 0, 1 };  // 可視変数の状態->値変換写像
+	auto & v_state_map = this->visibleValueSet;  // 可視変数の状態->値変換写像
 
 	auto & z = normalize_constant;  // 分配関数
 
@@ -594,7 +598,7 @@ double GeneralizedRBM::expectedValueVisHid(int vindex, int hindex) {
 // 可視変数と隠れ変数の期待値, E[v_i h_j]
 double GeneralizedRBM::expectedValueVisHid(int vindex, int hindex, double normalize_constant) {
 	StateCounter<std::vector<int>> sc(std::vector<int>(vSize, 2));  // 可視変数Vの状態カウンター
-	int v_state_map[] = { 0, 1 };  // 可視変数の状態->値変換写像
+	auto & v_state_map = this->visibleValueSet;  // 可視変数の状態->値変換写像
 
 	auto & z = normalize_constant;  // 分配関数
 

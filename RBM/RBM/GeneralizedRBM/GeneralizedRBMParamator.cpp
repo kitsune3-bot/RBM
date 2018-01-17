@@ -47,7 +47,7 @@ void GeneralizedRBMParamator::initParamsXavier() {
 
 	b.setRandom() *= 0.00001;
 	c.setRandom() *= 0.00001;
-	w.setRandom() /= sqrt((vSize + hSize) / 2);
+	w.setRandom() *= sqrt(3.0/vSize);
 }
 
 

@@ -16,12 +16,14 @@ protected:
 	double hMax = 1.0;
 	size_t divSize = 1;  // 隠れ変数の区間分割数
 	bool realFlag = false;
-	std::vector <double> hiddenValueSet;  // 隠れ変数の取りうる値
 
 public:
 	GeneralizedSparseRBMParamator params;
 	GeneralizedSparseRBMNode nodes;
 	std::string trainType = "";
+	std::vector <double> visibleValueSet = { -1.0, 1.0 };
+	std::vector <double> hiddenValueSet;  // 隠れ変数の取りうる値
+
 
 public:
 	GeneralizedSparseRBM() = default;
@@ -125,7 +127,7 @@ public:
 	size_t getHiddenDivSize();
 
 	// 隠れ変数の区間分割数を設定
-	void setHiddenDiveSize(size_t div_size);
+	void setHiddenDivSize(size_t div_size);
 
 	// 隠れ変数を連続値にするか離散値にするか
 	void setRealHiddenValue(bool flag);

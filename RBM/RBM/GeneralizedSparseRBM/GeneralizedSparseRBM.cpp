@@ -32,7 +32,7 @@ size_t GeneralizedSparseRBM::getHiddenSize() {
 // 規格化定数を返します
 double GeneralizedSparseRBM::getNormalConstant() {
 	StateCounter<std::vector<int>> sc(std::vector<int>(vSize, 2));  // 可視変数Vの状態カウンター
-	int v_state_map[] = { 0, 1 };  // 可視変数の状態->値変換写像
+	auto & v_state_map = this->visibleValueSet;  // 可視変数の状態->値変換写像
 
 	double z = 0.0;
 	auto max_count = sc.getMaxCount();
@@ -47,15 +47,11 @@ double GeneralizedSparseRBM::getNormalConstant() {
 		// 項計算
 		double term = exp(nodes.getVisibleLayer().dot(params.b));
 		for (int j = 0; j < hSize; j++) {
-			auto mu_j = mu(j);
+			auto mu_j = this->mu(j);
 
 			// 離散型
 			auto sum_h_j_discrete = [&](double mu_j) {
-				double sum = 0.0;
-
-				for (auto & h_val : this->hiddenValueSet) {
-					sum += exp(mu_j * h_val - exp(params.sparse(j)) * abs(h_val));
-				}
+				double sum = this->miniNormalizeConstantHidden(j, mu_j);
 
 				return sum;
 			};
@@ -149,8 +145,12 @@ double GeneralizedSparseRBM::lambda(int vindex) {
 
 // lambdaの可視変数に関する全ての実現値の総和
 double GeneralizedSparseRBM::sumExpLambda(int vindex) {
-	// {0, 1}での実装
-	return 1.0 + exp(lambda(vindex));
+	auto lambda = this->lambda(vindex);
+	double value = 0.0;
+	for (auto & v_i : this->visibleValueSet) {
+		value += exp(lambda * v_i);
+	}
+	return value;
 }
 
 // 隠れ変数に関する外部磁場と相互作用
@@ -251,11 +251,7 @@ double GeneralizedSparseRBM::probVis(std::vector<double> & data, double normaliz
 
 		// 離散型
 		auto sum_h_j_discrete = [&](double mu_j) {
-			double sum = 0.0;
-
-			for (auto & h_val : this->hiddenValueSet) {
-				sum += exp(mu_j * h_val - exp(params.sparse(j)) * abs(h_val));
-			}
+			double sum = this->miniNormalizeConstantHidden(j, mu_j);
 
 			return sum;
 		};
@@ -345,7 +341,7 @@ size_t GeneralizedSparseRBM::getHiddenDivSize() {
 }
 
 // 隠れ変数の区間分割数を設定
-void GeneralizedSparseRBM::setHiddenDiveSize(size_t div_size) {
+void GeneralizedSparseRBM::setHiddenDivSize(size_t div_size) {
 	divSize = div_size;
 
 	// 区間分割
@@ -367,7 +363,7 @@ double GeneralizedSparseRBM::expectedValueVis(int vindex) {
 double GeneralizedSparseRBM::expectedValueVis(int vindex, double normalize_constant) {
 	// TODO: とりあえず可視変数は{0, 1}のボルツマンマシンなので則値代入してます
 	StateCounter<std::vector<int>> sc(std::vector<int>(vSize, 2));  // 可視変数Vの状態カウンター
-	int v_state_map[] = { 0, 1 };  // 可視変数の状態->値変換写像
+	auto & v_state_map = this->visibleValueSet;  // 可視変数の状態->値変換写像
 
 	auto & z = normalize_constant;  // 分配関数
 
@@ -446,7 +442,7 @@ double GeneralizedSparseRBM::expectedValueHid(int hindex) {
 // 隠れ変数の期待値, E[h_j]
 double GeneralizedSparseRBM::expectedValueHid(int hindex, double normalize_constant) {
 	StateCounter<std::vector<int>> sc(std::vector<int>(vSize, 2));  // 可視変数Vの状態カウンター
-	int v_state_map[] = { 0, 1 };  // 可視変数の状態->値変換写像
+	auto & v_state_map = this->visibleValueSet;  // 可視変数の状態->値変換写像
 
 	auto & z = normalize_constant;  // 分配関数
 
@@ -558,7 +554,7 @@ double GeneralizedSparseRBM::expectedValueVisHid(int vindex, int hindex) {
 // 可視変数と隠れ変数の期待値, E[v_i h_j]
 double GeneralizedSparseRBM::expectedValueVisHid(int vindex, int hindex, double normalize_constant) {
 	StateCounter<std::vector<int>> sc(std::vector<int>(vSize, 2));  // 可視変数Vの状態カウンター
-	int v_state_map[] = { 0, 1 };  // 可視変数の状態->値変換写像
+	auto & v_state_map = this->visibleValueSet;  // 可視変数の状態->値変換写像
 
 	auto & z = normalize_constant;  // 分配関数
 
@@ -670,7 +666,7 @@ double GeneralizedSparseRBM::expectedValueAbsHid(int hindex) {
 // 隠れ変数の期待値, E[-exp(lambda_j)|h_j|]
 double GeneralizedSparseRBM::expectedValueAbsHid(int hindex, double normalize_constant) {
 	StateCounter<std::vector<int>> sc(std::vector<int>(vSize, 2));  // 可視変数Vの状態カウンター
-	int v_state_map[] = { 0, 1 };  // 可視変数の状態->値変換写像
+	auto & v_state_map = this->visibleValueSet;  // 可視変数の状態->値変換写像
 
 	auto & z = normalize_constant;  // 分配関数
 

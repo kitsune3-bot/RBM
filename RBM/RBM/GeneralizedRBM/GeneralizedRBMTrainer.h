@@ -400,7 +400,7 @@ void Trainer<GeneralizedRBM, OPTIMIZERTYPE>::calcRBMExpectedExact(GeneralizedRBM
 	initRBMExpected();
 
 	StateCounter<std::vector<int>> sc(std::vector<int>(rbm.getVisibleSize(), 2));  // 可視変数Vの状態カウンター
-	int v_state_map[] = { 0, 1 };  // 可視変数の状態->値変換写像
+	auto & v_state_map = rbm.visibleValueSet;  // 可視変数の状態->値変換写像
 
 	auto max_count = sc.getMaxCount();
 #pragma omp parallel for schedule(static)

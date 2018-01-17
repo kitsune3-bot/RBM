@@ -52,7 +52,7 @@ void GeneralizedSparseRBMParamator::initParamsXavier()
 
 	b.setRandom() *= 0.00001;
 	c.setRandom() *= 0.00001;
-	w.setRandom() /= sqrt((vSize + hSize) / 2.0);
+	w.setRandom() *= sqrt(3.0 / vSize);
 
 	std::random_device rd;
 	std::mt19937 mt(rd());

@@ -25,13 +25,13 @@ int main(int argc, char **argv) {
 	auto rbm = GeneralizedRBM(vsize, hsize);
 	rbm.setHiddenMax(1.0);
 	rbm.setHiddenMin(-1.0);
-	rbm.setHiddenDiveSize(3);
+	rbm.setHiddenDivSize(3);
 	rbm.setRealHiddenValue(true);
 
 	auto rbm_cd = GeneralizedRBM(vsize, hsize);
 	rbm.setHiddenMax(1.0);
 	rbm.setHiddenMin(-1.0);
-	rbm.setHiddenDiveSize(3);
+	rbm.setHiddenDivSize(3);
 	rbm.setRealHiddenValue(true);
 
 

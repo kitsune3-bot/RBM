@@ -1,7 +1,7 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 15
-VisualStudioVersion = 15.0.26730.8
+VisualStudioVersion = 15.0.27004.2006
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "RBM", "RBM\RBM.vcxproj", "{C54A46F8-7924-49A3-97C2-C059F6FA92A1}"
 EndProject
@@ -20,6 +20,8 @@ EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "test", "test", "{78F73819-36BA-4653-B276-5A20D76382CB}"
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "GeneralizedRBMTest", "GeneralizedRBMTest\GeneralizedRBMTest.vcxproj", "{CE4E4ACB-F9F7-400D-817D-0F0FB00CFFA9}"
+EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "RBMOverHidden", "RBMOverHidden\RBMOverHidden.vcxproj", "{5FAFE346-B99E-4904-A2C1-3826273AB38C}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -77,6 +79,14 @@ Global
 		{CE4E4ACB-F9F7-400D-817D-0F0FB00CFFA9}.Release|x64.Build.0 = Release|x64
 		{CE4E4ACB-F9F7-400D-817D-0F0FB00CFFA9}.Release|x86.ActiveCfg = Release|Win32
 		{CE4E4ACB-F9F7-400D-817D-0F0FB00CFFA9}.Release|x86.Build.0 = Release|Win32
+		{5FAFE346-B99E-4904-A2C1-3826273AB38C}.Debug|x64.ActiveCfg = Debug|x64
+		{5FAFE346-B99E-4904-A2C1-3826273AB38C}.Debug|x64.Build.0 = Debug|x64
+		{5FAFE346-B99E-4904-A2C1-3826273AB38C}.Debug|x86.ActiveCfg = Debug|Win32
+		{5FAFE346-B99E-4904-A2C1-3826273AB38C}.Debug|x86.Build.0 = Debug|Win32
+		{5FAFE346-B99E-4904-A2C1-3826273AB38C}.Release|x64.ActiveCfg = Release|x64
+		{5FAFE346-B99E-4904-A2C1-3826273AB38C}.Release|x64.Build.0 = Release|x64
+		{5FAFE346-B99E-4904-A2C1-3826273AB38C}.Release|x86.ActiveCfg = Release|Win32
+		{5FAFE346-B99E-4904-A2C1-3826273AB38C}.Release|x86.Build.0 = Release|Win32
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -88,6 +98,7 @@ Global
 		{FD32413F-EDA9-439C-9FB1-A9F860561D3B} = {3A4A7D63-9A1F-42C9-AFD0-3D5E3C3900F8}
 		{F89CC930-B6CD-4699-B1CF-F28296E6E930} = {3A4A7D63-9A1F-42C9-AFD0-3D5E3C3900F8}
 		{CE4E4ACB-F9F7-400D-817D-0F0FB00CFFA9} = {78F73819-36BA-4653-B276-5A20D76382CB}
+		{5FAFE346-B99E-4904-A2C1-3826273AB38C} = {3A4A7D63-9A1F-42C9-AFD0-3D5E3C3900F8}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {E29CD62E-5814-4881-A6EC-152AFF3D525A}

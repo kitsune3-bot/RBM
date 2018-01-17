@@ -11,7 +11,7 @@
 #include <omp.h>
 
 typedef struct {
-	int vSize = 5;
+	int vSize = 8;
 	int hSize = 10;
 	int appendH = 0;
 	int datasize = 100;
@@ -126,7 +126,7 @@ void make_table(SQLite::Database & db) {
 		<< ", epoch INTEGER"
 		<< ", sparse INTEGER"
 		<< ", try_count INTEGER)";
-		db.exec(ss_query.str());
+	db.exec(ss_query.str());
 
 	try {
 		db.exec("COMMIT");
@@ -325,100 +325,6 @@ void run(SQLite::Database & db, OPTION & option, int try_count, RBM_G & rbm_gen,
 	}
 }
 
-// 実行ルーチン
-template<class RBM_G, class RBM_T, class DATASET>
-void run_sparse(SQLite::Database & db, OPTION & option, int try_count, RBM_G & rbm_gen, RBM_T & rbm_train, DATASET & dataset) {
-	if (!(option.rbmFlag & 2)) return;
-
-	auto rbm_exact = rbm_train;
-//	rbm_exact.params.sparse.setConstant(4.0);
-	rbm_exact.params.initParamsXavier();
-	rbm_exact.setHiddenMin(-1.0);
-	rbm_exact.setHiddenMax(1.0);
-	rbm_exact.setHiddenDivSize(option.divSize);
-	rbm_exact.setRealHiddenValue(option.realFlag);
-
-	auto rbm_trainer_exact = Trainer<GeneralizedSparseRBM, OptimizerType::AdaMax>(rbm_exact);
-	rbm_trainer_exact.epoch = option.epoch;
-	rbm_trainer_exact.cdk = option.cdk;
-	rbm_trainer_exact.batchSize = option.batchsize;
-	rbm_trainer_exact.learningRate = option.learningRate;
-
-	auto rbm_cd = rbm_train;
-//	rbm_exact.params.sparse.setRandom() *= 0.5;
-	rbm_cd.params.initParamsXavier();
-	rbm_cd.setHiddenMin(-1.0);
-	rbm_cd.setHiddenMax(1.0);
-	rbm_cd.setHiddenDivSize(option.divSize);
-	rbm_cd.setRealHiddenValue(option.realFlag);
-
-	auto rbm_trainer_cd = Trainer<GeneralizedSparseRBM, OptimizerType::AdaMax>(rbm_cd);
-	rbm_trainer_cd.epoch = option.epoch;
-	rbm_trainer_cd.cdk = option.cdk;
-	rbm_trainer_cd.batchSize = option.batchsize;
-	rbm_trainer_cd.learningRate = option.learningRate;
-
-	//std::cout << "[Exact]" << std::endl;
-	//rbmutil::print_params(rbm_exact);
-	//std::cout << "KLD: " << rbmutil::kld(rbm_gen, rbm_exact, std::vector<int>{0, 1}) << std::endl;
-	//std::cout << "Logliklihood: " << rbm_trainer_exact.logLikeliHood(rbm_exact, dataset) << std::endl;
-	//std::cout << std::endl;
-
-	//std::cout << "[Contrastive Divergence]" << std::endl;
-	//rbmutil::print_params(rbm_cd);
-	//std::cout << "KLD: " << rbmutil::kld(rbm_gen, rbm_cd, std::vector<int>{0, 1}) << std::endl;
-	//std::cout << "Logliklihood: " << rbm_trainer_cd.logLikeliHood(rbm_cd, dataset) << std::endl;
-
-
-	for (int epoch_count = 0; epoch_count < option.epoch; epoch_count++) {
-		RESULT result;
-
-		std::string rbm_div = option.realFlag ? "c" : std::to_string(option.divSize);
-
-		// Exact
-		if (option.trainFlag & 1) {
-			rbm_trainer_exact.trainOnceExact(rbm_exact, dataset);
-			std::stringstream ss_exact_fname;
-			ss_exact_fname << try_count << "_exact_sparse" << "_epoch" << epoch_count << "_div" << rbm_div << ".train.json";
-			//write_train_info(db, rbm_exact, rbm_trainer_exact, ss_exact_fname.str());
-
-			result.kld = rbmutil::kld(rbm_gen, rbm_exact, std::vector<double>{-1.0, 1.0});
-			result.loglikelihood = rbm_trainer_exact.logLikeliHood(rbm_exact, dataset);
-			result.data_size = dataset.size();
-			result.v_size = rbm_exact.getVisibleSize();
-			result.h_size = rbm_exact.getHiddenSize();
-			result.rbm_type = rbm_exact.isRealHiddenValue() ? "c" : "d";
-			result.div_size = rbm_exact.getHiddenDivSize();
-			result.train_type = "exact";
-			result.epoch = epoch_count;
-			result.sparse = 1;
-			result.try_count = try_count;
-			write_to_db_result_table(db, result);
-		}
-
-		// Contrastive Divergence
-		if (option.trainFlag & 2) {
-			rbm_trainer_cd.trainOnceCD(rbm_cd, dataset);
-			std::stringstream ss_cd_fname;
-			ss_cd_fname << try_count << "_cd_sparse" << "_epoch" << epoch_count << "_div" << rbm_div << ".train.json";
-			//write_train_info(db, rbm_cd, rbm_trainer_cd, ss_cd_fname.str());
-
-			result.kld = rbmutil::kld(rbm_gen, rbm_cd, std::vector<double>{-1.0, 1.0});
-			result.loglikelihood = rbm_trainer_cd.logLikeliHood(rbm_cd, dataset);
-			result.data_size = dataset.size();
-			result.v_size = rbm_cd.getVisibleSize();
-			result.h_size = rbm_cd.getHiddenSize();
-			result.rbm_type = rbm_cd.isRealHiddenValue() ? "c" : "d";
-			result.div_size = rbm_cd.getHiddenDivSize();
-			result.train_type = "cd";
-			result.epoch = epoch_count;
-			result.sparse = 1;
-			result.try_count = try_count;
-			write_to_db_result_table(db, result);
-		}
-	}
-}
-
 //
 // 生成モデルと学習モデルとのカルバックライブラー情報量を比較
 //
@@ -451,7 +357,7 @@ int main(void) {
 
 	OPTION option;
 	option.vSize = vsize;
-	option.hSize = 4;
+	option.hSize = 10;
 	option.appendH = append_h;
 	option.datasize = datasize;
 	option.epoch = epoch;
@@ -495,45 +401,21 @@ int main(void) {
 		ss_gen_fname << try_count << "_gen.rbm.json";
 		//write_params(db, rbm_gen, ss_gen_fname.str());
 
-		auto rbm_train = GeneralizedRBM(option.vSize, option.hSize + option.appendH);
+		auto rbm_train1 = GeneralizedRBM(option.vSize, option.hSize - 5);
+		auto rbm_train2 = GeneralizedRBM(option.vSize, option.hSize - 0);
+		auto rbm_train3 = GeneralizedRBM(option.vSize, option.hSize + 5);
+		auto rbm_train4 = GeneralizedRBM(option.vSize, option.hSize + 10);
 
-		// try rbm 2, 3, 4, 5, cont
+		// try rbm 2
 		option.realFlag = false;
 		option.divSize = 1;
-		run(db, option, try_count, rbm_gen, rbm_train, dataset);
+		run(db, option, try_count, rbm_gen, rbm_train1, dataset); // H - 5
+		run(db, option, try_count, rbm_gen, rbm_train1, dataset); // H - 0
+		run(db, option, try_count, rbm_gen, rbm_train1, dataset); // H + 5
+		run(db, option, try_count, rbm_gen, rbm_train1, dataset); // H + 10
 
-		option.realFlag = false;
-		option.divSize = 2;
-		run(db, option, try_count, rbm_gen, rbm_train, dataset);
-
-		option.realFlag = false;
-		option.divSize = 3;
-		run(db, option, try_count, rbm_gen, rbm_train, dataset);
-
-		option.realFlag = false;
-		option.divSize = 4;
-		run(db, option, try_count, rbm_gen, rbm_train, dataset);
-
-		option.realFlag = true;
-		run(db, option, try_count, rbm_gen, rbm_train, dataset);
-
-		// SparseRBM
-		auto rbm_train_sparse = GeneralizedSparseRBM(option.vSize, option.hSize + option.appendH);
-
-		option.realFlag = false;
-		option.divSize = 2;
-		run_sparse(db, option, try_count, rbm_gen, rbm_train_sparse, dataset);
-
-		option.realFlag = false;
-		option.divSize = 3;
-		run_sparse(db, option, try_count, rbm_gen, rbm_train_sparse, dataset);
-
-		option.realFlag = false;
-		option.divSize = 4;
-		run_sparse(db, option, try_count, rbm_gen, rbm_train_sparse, dataset);
-
-		try{
-    		db.exec("COMMIT");
+		try {
+			db.exec("COMMIT");
 			std::cout << "h10 + " << option.appendH << ", cimmit: " << try_count << std::endl;
 		}
 		catch (std::exception& e)

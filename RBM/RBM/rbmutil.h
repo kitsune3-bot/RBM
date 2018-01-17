@@ -37,7 +37,6 @@ namespace rbmutil {
 	}
 
 	// Kullback–Leibler divergence
-	// v_val: EX: v_i \in {0, 1}
 	template <class RBM1, class RBM2, class STL>
 	double kld(RBM1 & rbm1, RBM2 & rbm2, STL & v_val) {
 		StateCounter<std::vector<int>> sc(std::vector<int>(rbm1.getVisibleSize(), v_val.size()));
@@ -54,7 +53,7 @@ namespace rbmutil {
 		int max_count = sc.getMaxCount();
 		double value = 0.0;
 
-#pragma omp parallel for schedule(static) reduction(+:value)
+//#pragma omp parallel for schedule(static) reduction(+:value)
 		for (int c = 0; c < max_count; c++) {
 			std::vector<double> dat(rbm1.getVisibleSize());
 			auto sc_replica = sc;
@@ -66,7 +65,7 @@ namespace rbmutil {
 			prob[0] = rbm1_replica.probVis(dat);
 			prob[1] = rbm2_replica.probVis(dat);
 
-			value += prob[0] * (log(prob[0]) - log(prob[1]));
+			value += prob[0] * log(prob[0] / prob[1]);
 			if (isnan(value) || isinf(value)) {
 				volatile auto debug_value = value;
 				volatile auto p1 = prob[0];
