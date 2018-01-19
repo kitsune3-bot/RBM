@@ -20,13 +20,19 @@ void GeneralizedSparseRBMParamator::initParams() {
 }
 
 void GeneralizedSparseRBMParamator::initParamsRandom(double range_min, double range_max) {
+	std::random_device rd;
+	std::mt19937 mt(rd());
+
+	this->initParamsRandom(range_min, range_max, mt());
+}
+
+void GeneralizedSparseRBMParamator::initParamsRandom(double range_min, double range_max, int seed) {
 	b.resize(vSize);
 	c.resize(hSize);
 	w.resize(vSize, hSize);
 	sparse.resize(hSize);
 
-	std::random_device rd;
-	std::mt19937 mt(rd());
+	std::mt19937 mt(seed);
 	std::uniform_real_distribution<double> dist(range_min, range_max);
 
 	for (int i = 0; i < vSize; i++) {
@@ -43,16 +49,35 @@ void GeneralizedSparseRBMParamator::initParamsRandom(double range_min, double ra
 	}
 }
 
+
 void GeneralizedSparseRBMParamator::initParamsXavier()
+{
+	std::random_device rd;
+	std::mt19937 mt(rd());
+	this->initParamsXavier(mt());
+}
+
+void GeneralizedSparseRBMParamator::initParamsXavier(int seed)
 {
 	b.resize(vSize);
 	c.resize(hSize);
 	w.resize(vSize, hSize);
 	sparse.resize(hSize);
 
-	b.setRandom() *= 0.00001;
-	c.setRandom() *= 0.00001;
-	w.setRandom() *= sqrt(3.0 / vSize);
+	std::mt19937 mt(seed);
+	std::uniform_real_distribution<double> dist(-1.0, 1.0);
+
+	for (int i = 0; i < vSize; i++) {
+		b(i) = dist(mt);
+
+		for (int j = 0; j < hSize; j++) {
+			w(i, j) = dist(mt);
+		}
+	}
+
+	for (int j = 0; j < hSize; j++) {
+		c(j) = dist(mt);
+	}
 
 	std::random_device rd;
 	std::mt19937 mt(rd());
@@ -61,6 +86,7 @@ void GeneralizedSparseRBMParamator::initParamsXavier()
 		sparse(j) = dist(mt);
 	}
 }
+
 
 
 // 可視変数の総数を返す
