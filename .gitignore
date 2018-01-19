@@ -282,3 +282,5 @@ __pycache__/
 /RBM/RBMOverHidden/output/sqlite3.db
 /RBM/RBMOverHidden/SQLiteCpp.lib
 /RBM/RBMOverHidden/sqlite3.lib
+/RBM/RBMKLD/SQLiteCpp.md.lib
+/RBM/RBMKLD/sqlite3.md.lib

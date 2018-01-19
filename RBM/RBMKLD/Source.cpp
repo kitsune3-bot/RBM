@@ -2,13 +2,13 @@
 #include <fstream>
 #include <string>
 #include <sstream>
+#include <boost/program_options.hpp>
 #include "rbmutil.h"
 #include "RBMCore.h"
 #include "Trainer.h"
 #include "Sampler.h"
 #include "SQLiteCpp/SQLiteCpp.h"
 #include "sqlite3.h"
-#include <omp.h>
 
 typedef struct {
 	int vSize = 5;
