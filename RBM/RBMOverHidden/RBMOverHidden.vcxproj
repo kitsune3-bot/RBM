@@ -79,6 +79,7 @@
       <SDLCheck>false</SDLCheck>
       <AdditionalIncludeDirectories>$(SolutionDir)src\;$(SolutionDir)src\json_hpp\;$(SolutionDir)RBM;C:\src\eigen-eigen-dbab66d00651</AdditionalIncludeDirectories>
       <OpenMPSupport>true</OpenMPSupport>
+      <RuntimeLibrary>MultiThreaded</RuntimeLibrary>
     </ClCompile>
     <Link>
       <EnableCOMDATFolding>true</EnableCOMDATFolding>

@@ -11,7 +11,9 @@ class GeneralizedSparseRBM;
 template<>
 class Sampler<GeneralizedSparseRBM> {
 public:
-	Sampler() = default;
+	std::mt19937 randEngine = std::mt19937();
+public:
+	Sampler();
 	~Sampler() = default;
 
 	// 可視変数一つをギブスサンプリング
@@ -40,13 +42,15 @@ public:
 };
 
 
+inline Sampler<GeneralizedSparseRBM>::Sampler() {
+	std::random_device rd;
+	this->randEngine = std::mt19937(rd());
+}
 
 inline double Sampler<GeneralizedSparseRBM>::gibbsSamplingVisible(GeneralizedSparseRBM & rbm, int vindex) {
-	std::random_device rd;
-	std::mt19937 mt(rd());
 	std::uniform_real_distribution<double> dist(0.0, 1.0);
 
-	double value = dist(mt) < rbm.condProbVis(vindex, -1.0) ? -1.0 : 1.0;
+	double value = dist(this->randEngine) < rbm.condProbVis(vindex, -1.0) ? -1.0 : 1.0;
 
 	return value;
 }
@@ -61,11 +65,9 @@ inline double Sampler<GeneralizedSparseRBM>::gibbsSamplingHidden(GeneralizedSpar
 			probs[i] = rbm.condProbHid(hindex, hidset[i]);
 		}
 
-		std::random_device rd;
-		std::mt19937 mt(rd());
 		std::discrete_distribution<> dist(probs.begin(), probs.end());
 
-		double value = hidset[dist(mt)];
+		double value = hidset[dist(this->randEngine)];
 
 		return value;
 	};
@@ -75,10 +77,8 @@ inline double Sampler<GeneralizedSparseRBM>::gibbsSamplingHidden(GeneralizedSpar
 		// TODO: まだ導出していない
 		throw;
 		// 連続値は逆関数法で
-		std::random_device rd;
-		std::mt19937 mt(rd());
 		std::uniform_real_distribution<double> dist(0.0, 1.0);
-		auto u = dist(mt);
+		auto u = dist(this->randEngine);
 		auto h_max = rbm.getHiddenMax();
 		auto h_min = rbm.getHiddenMin();
 

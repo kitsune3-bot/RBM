@@ -47,27 +47,6 @@ void GeneralizedRBMParamator::initParamsRandom(double range_min, double range_ma
 	}
 }
 
-void GeneralizedRBMParamator::initParamsRandom(double range_min, double range_max, int seed) {
-	b.resize(vSize);
-	c.resize(hSize);
-	w.resize(vSize, hSize);
-
-	std::mt19937 mt(seed);
-	std::uniform_real_distribution<double> dist(range_min, range_max);
-
-	for (int i = 0; i < vSize; i++) {
-		b(i) = dist(mt);
-
-		for (int j = 0; j < hSize; j++) {
-			w(i, j) = dist(mt);
-		}
-	}
-
-	for (int j = 0; j < hSize; j++) {
-		c(j) = dist(mt);
-	}
-}
-
 
 void GeneralizedRBMParamator::initParamsXavier() {
 	std::random_device seed_gen;
