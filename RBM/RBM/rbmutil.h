@@ -2,6 +2,7 @@
 #include <iostream>
 #include <fstream>
 #include <cmath>
+#include <random>
 #include "StateCounter.h"
 #include "Sampler.h"
 #include <omp.h>
@@ -11,7 +12,15 @@ namespace rbmutil {
 	// generate data from rbm
 	template <class T, class STL>
 	STL data_gen(T & rbm, int update_count) {
+		return rbmutil::data_gen<T, STL>(rbm, update_count, std::random_device()());
+	}
+
+	template <class T, class STL>
+	STL data_gen(T & rbm, int update_count, int seed) {
 		Sampler<T> sampler;
+		std::mt19937 mt(seed);
+		sampler.randEngine = mt;
+
 		for (int c = 0; c < update_count; c++) {
 			sampler.updateByBlockedGibbsSamplingVisible(rbm);
 			sampler.updateByBlockedGibbsSamplingHidden(rbm);
