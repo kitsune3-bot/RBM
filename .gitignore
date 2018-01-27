@@ -284,3 +284,6 @@ __pycache__/
 /RBM/RBMOverHidden/sqlite3.lib
 /RBM/RBMKLD/SQLiteCpp.md.lib
 /RBM/RBMKLD/sqlite3.md.lib
+/RBM/RBMKLD/mysqlcppconn.lib
+/RBM/RBMKLD/mysqlcppconn.dll
+/RBM/RBMKLD/mysqlcppconn-static.lib

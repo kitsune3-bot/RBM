@@ -5,7 +5,7 @@
 #include "GeneralizedSparseRBMSampler.h"
 #include "GeneralizedSparseRBMOptimizer.h"
 #include <vector>
-#include <omp.h>
+#include <random>
 
 
 template<class OPTIMIZERTYPE>
@@ -44,6 +44,7 @@ public:
 	int batchSize = 1;
 	int cdk = 0;
 	double learningRate = 0.01;
+	std::mt19937 randDevice = std::mt19937(std::random_device()());
 
 public:
 	Trainer() = default;
@@ -204,7 +205,7 @@ inline void Trainer<GeneralizedSparseRBM, OPTIMIZERTYPE>::trainOnce(GeneralizedS
 
 	// ミニバッチ学習のためにデータインデックスをシャッフルする
 	std::iota(data_indexes.begin(), data_indexes.end(), 0);
-	std::shuffle(data_indexes.begin(), data_indexes.end(), std::mt19937());
+	std::shuffle(data_indexes.begin(), data_indexes.end(), this->randDevice);
 
 	// ミニバッチ
 	// バッチサイズの確認
@@ -240,7 +241,7 @@ inline void Trainer<GeneralizedSparseRBM, OPTIMIZERTYPE>::trainOnceCD(Generalize
 
 	// ミニバッチ学習のためにデータインデックスをシャッフルする
 	std::iota(data_indexes.begin(), data_indexes.end(), 0);
-	std::shuffle(data_indexes.begin(), data_indexes.end(), std::mt19937());
+	std::shuffle(data_indexes.begin(), data_indexes.end(), this->randDevice);
 
 	// ミニバッチ
 	// バッチサイズの確認
@@ -276,7 +277,7 @@ inline void Trainer<GeneralizedSparseRBM, OPTIMIZERTYPE>::trainOnceExact(General
 
 	// ミニバッチ学習のためにデータインデックスをシャッフルする
 	std::iota(data_indexes.begin(), data_indexes.end(), 0);
-	std::shuffle(data_indexes.begin(), data_indexes.end(), std::mt19937());
+	std::shuffle(data_indexes.begin(), data_indexes.end(), this->randDevice);
 
 	// ミニバッチ
 	// バッチサイズの確認
@@ -383,6 +384,7 @@ inline void Trainer<GeneralizedSparseRBM, OPTIMIZERTYPE>::calcRBMExpectedCD(Gene
 
 		// CD-K
 		Sampler<GeneralizedSparseRBM> sampler;
+		sampler.randEngine = this->randDevice;
 		for (int k = 0; k < cdk; k++) {
 			sampler.updateByBlockedGibbsSamplingVisible(rbm_replica);
 			sampler.updateByBlockedGibbsSamplingHidden(rbm_replica);

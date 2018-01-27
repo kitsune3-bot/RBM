@@ -39,6 +39,7 @@ public:
 	int batchSize = 1;
 	int cdk = 0;
 	double learningRate = 0.01;
+	std::mt19937 randDevice = std::mt19937(std::random_device()());
 
 public:
 	Trainer() = default;
@@ -196,7 +197,7 @@ void Trainer<GeneralizedRBM, OPTIMIZERTYPE>::trainOnce(GeneralizedRBM & rbm, std
 
 	// ミニバッチ学習のためにデータインデックスをシャッフルする
 	std::iota(data_indexes.begin(), data_indexes.end(), 0);
-	std::shuffle(data_indexes.begin(), data_indexes.end(), std::mt19937());
+	std::shuffle(data_indexes.begin(), data_indexes.end(), this->randDevice);
 
 	// ミニバッチ
 	// バッチサイズの確認
@@ -231,7 +232,7 @@ void Trainer<GeneralizedRBM, OPTIMIZERTYPE>::trainOnceCD(GeneralizedRBM & rbm, s
 
 	// ミニバッチ学習のためにデータインデックスをシャッフルする
 	std::iota(data_indexes.begin(), data_indexes.end(), 0);
-	std::shuffle(data_indexes.begin(), data_indexes.end(), std::mt19937());
+	std::shuffle(data_indexes.begin(), data_indexes.end(), this->randDevice);
 
 	// ミニバッチ
 	// バッチサイズの確認
@@ -266,7 +267,7 @@ void Trainer<GeneralizedRBM, OPTIMIZERTYPE>::trainOnceExact(GeneralizedRBM & rbm
 
 	// ミニバッチ学習のためにデータインデックスをシャッフルする
 	std::iota(data_indexes.begin(), data_indexes.end(), 0);
-	std::shuffle(data_indexes.begin(), data_indexes.end(), std::mt19937());
+	std::shuffle(data_indexes.begin(), data_indexes.end(), this->randDevice);
 
 	// ミニバッチ
 	// バッチサイズの確認
@@ -370,6 +371,7 @@ void Trainer<GeneralizedRBM, OPTIMIZERTYPE>::calcRBMExpectedCD(GeneralizedRBM & 
 
 		// CD-K
 		Sampler<GeneralizedRBM> sampler;
+		sampler.randEngine = this->randDevice;
 		for (int k = 0; k < cdk; k++) {
 			sampler.updateByBlockedGibbsSamplingVisible(rbm_replica);
 			sampler.updateByBlockedGibbsSamplingHidden(rbm_replica);
