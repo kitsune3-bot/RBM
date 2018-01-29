@@ -8,16 +8,16 @@
 #include "RBMCore.h"
 #include "Trainer.h"
 #include "Sampler.h"
-//#include "SQLiteCpp/SQLiteCpp.h"
-//#include "sqlite3.h"
+#include "SQLiteCpp/SQLiteCpp.h"
+#include "sqlite3.h"
 
 
-//#include "mysql_driver.h"
-//#include "mysql_connection.h"
-//#include "mysql_error.h"
-//#include "cppconn/Statement.h"
-//#include "cppconn/prepared_statement.h"
-//#include "cppconn/ResultSet.h"
+#include "mysql_driver.h"
+#include "mysql_connection.h"
+#include "mysql_error.h"
+#include "cppconn/Statement.h"
+#include "cppconn/prepared_statement.h"
+#include "cppconn/ResultSet.h"
 
 typedef struct {
 	int vSize = 5;
@@ -56,6 +56,7 @@ typedef struct {
 	std::string valuesQuery;
 } QUERY;
 
+
 /**
 // SQLITE3 データベース仕様(仮)
 // +-------------+------+-------------+
@@ -91,48 +92,47 @@ typedef struct {
 **/
 
 
-void make_table();
+void make_table(sql::Connection * con);
 QUERY make_sql_result_insert();
 QUERY & make_sql_result_values(QUERY & query, RESULT & result);
-
-void write_to_db_data_table(std::string & name, std::string & json);
-void write_to_db_result_table(RESULT & result, OPTION & option);
-
+void write_to_db_data_table(sql::Connection * con, std::string & name, std::string & json);
+void write_to_db_result_table(sql::Connection *con, RESULT & result, OPTION & option);
+void write_to_db_result_table(sql::Connection *con, std::string & query);
 
 // パラメータファイル書き込み(SQLITEに)
 template <class RBM>
-void write_params(RBM & rbm, std::string fname);
+void write_params(sql::Connection * con, RBM & rbm, std::string fname);
 
 // 学習情報書き込み(SQLITEに)
 template <class RBM, class Trainer>
-void write_train_info(RBM & rbm, Trainer & trainer, std::string fname);
+void write_train_info(sql::Connection * con, RBM & rbm, Trainer & trainer, std::string fname);
 
 // (汎化|訓練)誤差情報書き込み(SQLITEに)
 template <class RBMGEN, class RBMTRAIN, class Trainer, class Dataset>
-void write_error_info(RBMGEN & rbm_gen, RBMTRAIN & rbm_train, Trainer & trainer, Dataset & dataset, std::string fname);
+void write_error_info(sql::Connection * con, RBMGEN & rbm_gen, RBMTRAIN & rbm_train, Trainer & trainer, Dataset & dataset, std::string fname);
 
 // 実行ルーチン
 template<class RBM_G, class RBM_T, class DATASET>
-void run(OPTION & option, int try_count, RBM_G & rbm_gen, RBM_T & rbm_train, DATASET & dataset);
+void run(sql::Connection * con, OPTION & option, int try_count, RBM_G & rbm_gen, RBM_T & rbm_train, DATASET & dataset);
 
 template<class RBM_G, class RBM_T, class DATASET>
-void run_sparse(OPTION & option, int try_count, RBM_G & rbm_gen, RBM_T & rbm_train, DATASET & dataset);
+void run_sparse(sql::Connection * con, OPTION & option, int try_count, RBM_G & rbm_gen, RBM_T & rbm_train, DATASET & dataset);
 
 // コマンドラインオプションの設定
 // 対話するかしないかも。
 OPTION get_option(int argc, char** argv);
 
 
-void make_table() {
-	//auto stmt = con->createStatement();
+void make_table(sql::Connection *con) {
+	auto stmt = con->createStatement();
 
-	//try {
-	//	stmt->execute("BEGIN TRANSACTION");
-	//}
-	//catch (std::exception& e)
-	//{
-	//	std::cout << "exception: " << e.what() << std::endl;
-	//}
+	try {
+		stmt->execute("BEGIN TRANSACTION");
+	}
+	catch (std::exception& e)
+	{
+		std::cout << "exception: " << e.what() << std::endl;
+	}
 
 	char *err_msg = NULL;
 	//if (stmt->tableExists("result")) {
@@ -147,7 +147,7 @@ void make_table() {
 
 	// make train_info table
 	std::string query = "CREATE TABLE datafile (uid INTEGER PRIMARY KEY AUTOINCREMENT, name TEXT, json BLOB, time TEXT);";
-	//stmt->execute(query);
+	stmt->execute(query);
 
 	// make result table
 	//   uid INTEGER PRIMARY KEY AUTOINCREMENT
@@ -176,19 +176,20 @@ void make_table() {
 		<< ", epoch INTEGER"
 		<< ", sparse INTEGER"
 		<< ", try_count INTEGER)";
-		//stmt->execute(ss_query.str());
+	stmt->execute(ss_query.str());
 
-	//try {
-	//	stmt->execute("COMMIT");
-	//}
-	//catch (std::exception& e)
-	//{
-	//	std::cout << "exception: " << e.what() << std::endl;
-	//}
+	try {
+		stmt->execute("COMMIT");
+	}
+	catch (std::exception& e)
+	{
+		std::cout << "exception: " << e.what() << std::endl;
+	}
 
-	//delete stmt;
+	delete stmt;
 
 }
+
 
 QUERY make_sql_result_insert() {
 	QUERY query;
@@ -210,9 +211,9 @@ QUERY & make_sql_result_values(QUERY & query, RESULT & result) {
 	values_query += ", " + std::to_string(result.data_size);
 	values_query += ", " + std::to_string(result.v_size);
 	values_query += ", " + std::to_string(result.h_size);
-	values_query += ", " + (result.rbm_type);
+	values_query += ", " + std::string("\"") + (result.rbm_type) + std::string("\"");
 	values_query += ", " + std::to_string(result.div_size);
-	values_query += ", " + (result.train_type);
+	values_query += ", " + std::string("\"") + (result.train_type) + std::string("\"");
 	values_query += ", " + std::to_string(result.epoch);
 	values_query += ", " + std::to_string(result.sparse);
 	values_query += ", " + std::to_string(result.try_count);
@@ -225,22 +226,23 @@ QUERY & make_sql_result_values(QUERY & query, RESULT & result) {
 }
 
 
-void write_to_db_data_table(std::string & name, std::string & json) {
-	
+
+void write_to_db_data_table(sql::Connection *con, std::string & name, std::string & json) {
+
 	try {
 		std::stringstream ss_query;
 		ss_query << "INSERT INTO datafile(name, json, time) VALUES(?, ?, datetime(CURRENT_TIMESTAMP,'localtime'));";
 		std::string query = ss_query.str();
 
-		//auto *prep_stmt = con->prepareStatement(query);
-		//prep_stmt->setString(1, name);
-		//prep_stmt->setString(2, json);
-		//prep_stmt->execute();
+		auto *prep_stmt = con->prepareStatement(query);
+		prep_stmt->setString(1, name);
+		prep_stmt->setString(2, json);
+		prep_stmt->execute();
 		//if (ret != sqlite_ok) {
 		//	throw;
 		//}
 
-		//delete prep_stmt;
+		delete prep_stmt;
 	}
 	catch (std::exception& e)
 	{
@@ -248,7 +250,7 @@ void write_to_db_data_table(std::string & name, std::string & json) {
 	}
 }
 
-void write_to_db_result_table(RESULT & result, OPTION & option) {
+void write_to_db_result_table(sql::Connection *con, RESULT & result, OPTION & option) {
 	try {
 		//   kld REAL
 		//   loglikelihood REAL
@@ -267,25 +269,37 @@ void write_to_db_result_table(RESULT & result, OPTION & option) {
 		std::string query = ss_query.str();
 
 		// TODO: ほんとにtry_count??? option読まなくていいの???
-		//auto prep_stmt = con->prepareStatement(query);
-		//prep_stmt->setDouble(1, result.kld);
-		//prep_stmt->setDouble(2, result.loglikelihood);
-		//prep_stmt->setInt(3, result.data_size);
-		//prep_stmt->setInt(4, result.v_size);
-		//prep_stmt->setInt(5, result.h_size);
-		//prep_stmt->setString(6, result.rbm_type);
-		//prep_stmt->setInt(7, result.div_size);
-		//prep_stmt->setString(8, result.train_type);
-		//prep_stmt->setInt(9, result.epoch);
-		//prep_stmt->setInt(10, result.sparse);
-		//prep_stmt->setInt(11, result.try_count);
-		//prep_stmt->setInt(12, option.seed);
-		//prep_stmt->execute();
+		auto prep_stmt = con->prepareStatement(query);
+		prep_stmt->setDouble(1, result.kld);
+		prep_stmt->setDouble(2, result.loglikelihood);
+		prep_stmt->setInt(3, result.data_size);
+		prep_stmt->setInt(4, result.v_size);
+		prep_stmt->setInt(5, result.h_size);
+		prep_stmt->setString(6, result.rbm_type);
+		prep_stmt->setInt(7, result.div_size);
+		prep_stmt->setString(8, result.train_type);
+		prep_stmt->setInt(9, result.epoch);
+		prep_stmt->setInt(10, result.sparse);
+		prep_stmt->setInt(11, result.try_count);
+		prep_stmt->setInt(12, option.seed);
+		prep_stmt->execute();
 		//if (ret != sqlite_ok) {
 		//	throw;
 		//}
 
-		//delete prep_stmt;
+		delete prep_stmt;
+	}
+	catch (std::exception& e)
+	{
+		std::cout << "exception: " << e.what() << std::endl;
+	}
+
+}
+
+void write_to_db_result_table(sql::Connection *con, std::string & query) {
+	try {
+		auto stmt = con->createStatement();
+		stmt->execute(query);
 	}
 	catch (std::exception& e)
 	{
@@ -295,22 +309,23 @@ void write_to_db_result_table(RESULT & result, OPTION & option) {
 }
 
 
+
 // パラメータファイル書き込み(SQLITEに)
 template <class RBM>
-void write_params(RBM & rbm, std::string fname) {
+void write_params(sql::Connection *con, RBM & rbm, std::string fname) {
 	write_to_db_data_table(db, fname, rbm.params.serialize());
 }
 
 // 学習情報書き込み(SQLITEに)
 template <class RBM, class Trainer>
-void write_train_info(RBM & rbm, Trainer & trainer, std::string fname) {
+void write_train_info(sql::Connection *con, RBM & rbm, Trainer & trainer, std::string fname) {
 	auto js = trainer.trainInfoJson(rbm);
 	write_to_db_data_table(db, fname, js);
 }
 
 // (汎化|訓練)誤差情報書き込み(SQLITEに)
 template <class RBMGEN, class RBMTRAIN, class Trainer, class Dataset>
-void write_error_info(RBMGEN & rbm_gen, RBMTRAIN & rbm_train, Trainer & trainer, Dataset & dataset, std::string fname) {
+void write_error_info(sql::Connection *con, RBMGEN & rbm_gen, RBMTRAIN & rbm_train, Trainer & trainer, Dataset & dataset, std::string fname) {
 	auto js = nlohmann::json();
 	js["kld"] = rbmutil::kld(rbm_gen, rbm_train, std::vector<int>{0, 1});
 	js["logLikelihood"] = trainer.logLikeliHood(rbm_train, dataset);
@@ -320,10 +335,12 @@ void write_error_info(RBMGEN & rbm_gen, RBMTRAIN & rbm_train, Trainer & trainer,
 
 // 実行ルーチン
 template<class RBM_G, class RBM_T, class DATASET>
-void run(OPTION & option, int try_count, RBM_G & rbm_gen, RBM_T & rbm_train, DATASET & dataset) {
+void run(sql::Connection *con, OPTION & option, int try_count, RBM_G & rbm_gen, RBM_T & rbm_train, DATASET & dataset) {
 	if (!(option.rbmFlag == 0)) return;
 
 	std::mt19937 random_device(option.seed);
+	auto stmt = con->createStatement();
+	stmt->execute("START TRANSACTION");
 	QUERY query = make_sql_result_insert();
 
 	auto rbm_exact = rbm_train;
@@ -361,6 +378,9 @@ void run(OPTION & option, int try_count, RBM_G & rbm_gen, RBM_T & rbm_train, DAT
 
 		std::string rbm_div = option.realFlag ? "c" : std::to_string(option.divSize);
 
+
+
+
 		// Exact
 		if (option.trainFlag == 0) {
 			rbm_trainer_exact.trainOnceExact(rbm_exact, dataset);
@@ -382,7 +402,7 @@ void run(OPTION & option, int try_count, RBM_G & rbm_gen, RBM_T & rbm_train, DAT
 			result.epoch = epoch_count;
 			result.sparse = 0;
 			result.try_count = try_count;
-//			write_to_db_result_table(result, option);
+			//write_to_db_result_table(con, result, option);
 			make_sql_result_values(query, result);
 		}
 
@@ -407,24 +427,27 @@ void run(OPTION & option, int try_count, RBM_G & rbm_gen, RBM_T & rbm_train, DAT
 			result.epoch = epoch_count;
 			result.sparse = 0;
 			result.try_count = try_count;
-//			write_to_db_result_table(result, option);
+			//			write_to_db_result_table(con, result, option);
 			make_sql_result_values(query, result);
 		}
 	}
-
-	std::cout << query.valuesQuery << std::endl;
+	write_to_db_result_table(con, query.valuesQuery);
+	stmt->execute("COMMIT;");
+	delete stmt;
 }
 
 // 実行ルーチン
 template<class RBM_G, class RBM_T, class DATASET>
-void run_sparse(OPTION & option, int try_count, RBM_G & rbm_gen, RBM_T & rbm_train, DATASET & dataset) {
+void run_sparse(sql::Connection *con, OPTION & option, int try_count, RBM_G & rbm_gen, RBM_T & rbm_train, DATASET & dataset) {
 	if (!(option.rbmFlag == 1)) return;
 	std::mt19937 random_device(option.seed);
+	auto stmt = con->createStatement();
+	stmt->execute("START TRANSACTION");
 	QUERY query = make_sql_result_insert();
 
 
 	auto rbm_exact = rbm_train;
-//	rbm_exact.params.sparse.setConstant(4.0);
+	//	rbm_exact.params.sparse.setConstant(4.0);
 	rbm_exact.params.initParamsXavier(option.seed);
 	rbm_exact.setHiddenMin(-1.0);
 	rbm_exact.setHiddenMax(1.0);
@@ -440,7 +463,7 @@ void run_sparse(OPTION & option, int try_count, RBM_G & rbm_gen, RBM_T & rbm_tra
 
 
 	auto rbm_cd = rbm_train;
-//	rbm_exact.params.sparse.setRandom() *= 0.5;
+	//	rbm_exact.params.sparse.setRandom() *= 0.5;
 	rbm_cd.params.initParamsXavier(option.seed);
 	rbm_cd.setHiddenMin(-1.0);
 	rbm_cd.setHiddenMax(1.0);
@@ -480,7 +503,7 @@ void run_sparse(OPTION & option, int try_count, RBM_G & rbm_gen, RBM_T & rbm_tra
 			result.epoch = epoch_count;
 			result.sparse = 1;
 			result.try_count = try_count;
-//			write_to_db_result_table(result, option);
+			//			write_to_db_result_table(con, result, option);
 			make_sql_result_values(query, result);
 		}
 
@@ -502,12 +525,13 @@ void run_sparse(OPTION & option, int try_count, RBM_G & rbm_gen, RBM_T & rbm_tra
 			result.epoch = epoch_count;
 			result.sparse = 1;
 			result.try_count = try_count;
-//			write_to_db_result_table(result, option);
+			//write_to_db_result_table(con, result, option);
 			make_sql_result_values(query, result);
 		}
 	}
-	std::cout << query.valuesQuery << std::endl;
-
+	write_to_db_result_table(con, query.valuesQuery);
+	stmt->execute("COMMIT;");
+	delete stmt;
 }
 
 
@@ -582,23 +606,35 @@ int main(int argc, char** argv) {
 	//make_table(db);
 
 
-//	auto mysql_host = std::string(std::getenv("KLDMYSQL_HOST"));
-//	auto mysql_user = std::string(std::getenv("KLDMYSQL_USER"));
-//	auto mysql_passwd = std::string(std::getenv("KLDMYSQL_PASSWD"));
+	auto mysql_host = std::string("みちゃいやん");
+	auto mysql_user = std::string("みちゃいやん");
+	auto mysql_passwd = std::string("みちゃいやん");
 
-	//sql::mysql::MySQL_Driver *driver;
+	sql::mysql::MySQL_Driver *driver;
+	sql::Connection *con;
 
-	//driver = sql::mysql::get_mysql_driver_instance();
-	//auto url = std::string("tcp://") + mysql_host + std::string(":3306");
-	//try {
-	//	con = driver->connect(url, mysql_user, mysql_passwd);
-	//}
-	//catch (std::exception & e) {
-	//	std::cout << "MySQL Connection Error..." << std::endl;
-	//}
+	driver = sql::mysql::get_mysql_driver_instance();
+	sql::ConnectOptionsMap connection_properties;
 
-	//auto stmt = con->createStatement();
-	//stmt->execute("USE kld");
+	connection_properties["hostName"] = mysql_host;
+	connection_properties["userName"] = mysql_user;
+	connection_properties["password"] = mysql_passwd;
+	connection_properties["port"] = 3306;
+	connection_properties["OPT_RECONNECT"] = true;
+	connection_properties["CLIENT_COMPRESS"] = true;
+	connection_properties["OPT_CONNECT_TIMEOUT"] = 60;
+
+	auto url = std::string("tcp://") + mysql_host + std::string(":3306");
+	try {
+		con = driver->connect(connection_properties);
+	}
+	catch (std::exception & e) {
+		std::cout << "MySQL Connection Error..." << std::endl;
+		exit(-1);
+	}
+
+	auto stmt = con->createStatement();
+	stmt->execute("USE kld");
 
 
 	for (int try_count = 0; try_count < try_num; try_count++) {
@@ -624,16 +660,16 @@ int main(int argc, char** argv) {
 		auto rbm_train = GeneralizedRBM(option.vSize, option.trainHsize);
 
 		// try rbm 2, 3, 4, 5, cont
-		run(option, try_count, rbm_gen, rbm_train, dataset);
+		run(con, option, try_count, rbm_gen, rbm_train, dataset);
 
 
 		// SparseRBM
 		auto rbm_train_sparse = GeneralizedSparseRBM(option.vSize, option.trainHsize);
-		run_sparse(option, try_count, rbm_gen, rbm_train_sparse, dataset);
+		run_sparse(con, option, try_count, rbm_gen, rbm_train_sparse, dataset);
 
-		try{
+		try {
 
-    		//db.exec("COMMIT");
+			//db.exec("COMMIT");
 			std::cout << "h" << option.genHsize << "(gen) / h" << option.trainHsize << "(train), cimmit: " << try_count << std::endl;
 		}
 		catch (std::exception& e)
@@ -642,6 +678,7 @@ int main(int argc, char** argv) {
 		}
 	}
 
+	con->close();
 
 	return 0;
 }
