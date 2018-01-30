@@ -138,6 +138,9 @@ public:
 	// 隠れ変数の期待値, E[ abs(h_j)](分配関数使いまわし)
 	double expectedValueAbsHid(int hindex, double normalize_constant);
 
+	// 隠れ変数に関する外部磁場と相互作用(スパース)
+	double muStar(int hindex);
+
 	// 隠れ変数の(Abs)した活性化関数的なもの
 	double actHidSparseJ(int hindex);
 

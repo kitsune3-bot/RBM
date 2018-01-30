@@ -75,17 +75,51 @@ inline double Sampler<GeneralizedSparseRBM>::gibbsSamplingHidden(GeneralizedSpar
 	// 連続型
 	auto sample_real = [&] {
 		// TODO: まだ導出していない
-		throw;
+		auto f_less_0 = [&](double t, double mu, double mu_star) {
+			double value = (exp((mu + mu_star) * t) - exp(-(mu + mu_star))) / (mu + mu_star);
+			return value;
+		};
+
+		auto f_more_0 = [&](double t, double mu, double mu_star) {
+			double value = (exp((mu - mu_star) * t) - exp(0)) / (mu - mu_star);
+			return value;
+		};
+
+
+		auto f = [&](double t, double mu, double mu_star) {
+			auto z_j = rbm.miniNormalizeConstantHidden(hindex);
+
+			double value = 0.0;
+			// tの値で分岐せよ
+			if (t < 0) {
+				value = f_less_0(t, mu, mu_star);
+			}
+			else {
+				value = f_less_0(0, mu, mu_star) + f_more_0(t, mu, mu_star);
+			}
+
+			return value;
+		};
+
 		// 連続値は逆関数法で
 		std::uniform_real_distribution<double> dist(0.0, 1.0);
 		auto u = dist(this->randEngine);
 		auto h_max = rbm.getHiddenMax();
 		auto h_min = rbm.getHiddenMin();
 
-		auto mu_j = rbm.mu(hindex);
-		auto z_j = (exp(h_max * mu_j) - exp(h_min * mu_j)) / mu_j;
+		auto mu = rbm.mu(hindex);
+		auto mu_star = rbm.muStar(hindex);
+		auto z_j = rbm.miniNormalizeConstantHidden(hindex, mu);
 
-		double value = log(z_j * u * mu_j + exp(h_min * mu_j)) / mu_j;
+		auto value = 0.0;
+		if (u < f(0, mu, mu_star)) {
+			value = log(z_j * u * (mu + mu_star) + exp(-(mu + mu_star))) / (mu + mu_star);
+		}
+		else {
+			auto top = log((mu - mu_star) * (z_j * u - f_less_0(0, mu, mu_star)) + 1);
+			auto bottom = mu - mu_star;
+			value = top / bottom;
+		}
 
 		return value;
 	};
@@ -93,6 +127,7 @@ inline double Sampler<GeneralizedSparseRBM>::gibbsSamplingHidden(GeneralizedSpar
 	auto value = rbm.isRealHiddenValue() ? sample_real() : sample_discrete();
 
 	return value;
+
 }
 
 inline Eigen::VectorXd & Sampler<GeneralizedSparseRBM>::blockedGibbsSamplingVisible(GeneralizedSparseRBM & rbm) {

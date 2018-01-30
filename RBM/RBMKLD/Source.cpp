@@ -606,9 +606,10 @@ int main(int argc, char** argv) {
 	//make_table(db);
 
 
-	auto mysql_host = std::string("みちゃいやん");
-	auto mysql_user = std::string("みちゃいやん");
-	auto mysql_passwd = std::string("みちゃいやん");
+	auto mysql_host = std::string(std::getenv("KLDMYSQL_HOST"));
+	auto mysql_user = std::string(std::getenv("KLDMYSQL_USER"));
+	auto mysql_passwd = std::string(std::getenv("KLDMYSQL_PASSWD"));
+	std::cout << mysql_user << "@" << mysql_host << std::endl;
 
 	sql::mysql::MySQL_Driver *driver;
 	sql::Connection *con;
